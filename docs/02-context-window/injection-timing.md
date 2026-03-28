@@ -62,23 +62,57 @@ Hooks → ライフサイクルイベントでシェルコマンド実行
 
 新しいルールや情報を追加する時、以下の順で判断する:
 
-```
-その情報は...
+```mermaid
+flowchart TD
+    START(["新しいルール・情報を追加したい"])
+    Q1{"LLM が知るべき内容か？"}
+    Q2{"LLM が「常に」知るべきか？"}
+    Q3{"特定ファイル種別に<br/>限定されるか？"}
+    Q4{"独立コンテキストで<br/>実行すべきか？"}
 
-  LLMが知るべき内容か？
-  ├── No → settings.json / Hooks
-  │         （ランタイムで機械的に処理）
-  │
-  └── Yes → LLMが「常に」知るべきか？
-            ├── Yes → その情報は特定ファイル種別に限定されるか？
-            │         ├── Yes → .claude/rules/（glob条件付き）
-            │         └── No  → CLAUDE.md
-            │                   （200行以内に収まるか常にチェック）
-            │
-            └── No → 特定タスクの時だけ必要
-                     → .claude/skills/（SKILL.md）
-                       複雑な処理を独立コンテキストで実行したい場合
-                       → .claude/agents/
+    R1["⚙️ settings.json / Hooks<br/>ランタイムで機械的に処理"]
+    R2["📋 .claude/rules/<br/>glob 条件付き注入"]
+    R3["📘 CLAUDE.md<br/>⚠️ 200行以内を常にチェック"]
+    R4["🛠️ .claude/skills/<br/>タスク時のみ展開"]
+    R5["🤖 .claude/agents/<br/>独立コンテキストで実行"]
+
+    W1(["⛔ Context Rot の影響を受けない"])
+    W2(["🔸 条件一致時のみコスト発生"])
+    W3(["🔴 毎ターン消費（固定費）"])
+    W4(["🔸 呼び出し時のみコスト発生"])
+    W5(["✅ メインコンテキストを消費しない"])
+
+    START --> Q1
+    Q1 -->|No| R1
+    Q1 -->|Yes| Q2
+    Q2 -->|Yes| Q3
+    Q2 -->|No| Q4
+    Q3 -->|Yes| R2
+    Q3 -->|No| R3
+    Q4 -->|No| R4
+    Q4 -->|Yes| R5
+
+    R1 -.- W1
+    R2 -.- W2
+    R3 -.- W3
+    R4 -.- W4
+    R5 -.- W5
+
+    classDef decision fill:#fef3c7,stroke:#d97706,color:#000
+    classDef runtime fill:#f3f4f6,stroke:#6b7280,color:#000
+    classDef conditional fill:#fef9c3,stroke:#ca8a04,color:#000
+    classDef always fill:#fee2e2,stroke:#dc2626,color:#000
+    classDef ondemand fill:#dbeafe,stroke:#2563eb,color:#000
+    classDef independent fill:#dcfce7,stroke:#16a34a,color:#000
+    classDef note fill:#fff,stroke:#999,color:#666
+
+    class Q1,Q2,Q3,Q4 decision
+    class R1 runtime
+    class R2 conditional
+    class R3 always
+    class R4 ondemand
+    class R5 independent
+    class W1,W2,W3,W4,W5 note
 ```
 
 ---

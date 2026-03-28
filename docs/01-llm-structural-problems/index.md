@@ -50,14 +50,65 @@ LLM には以下の8つの構造的問題がある。これらは「バグ」で
 
 これらの問題は独立して存在するのではなく、相互に増幅し合う。
 
+```mermaid
+graph TD
+    %% ── ノード定義 ──
+    CR["🔴 Context Rot<br/>トークン増で品質劣化"]
+    LM["🟠 Lost in the Middle<br/>中間部の情報喪失"]
+    PS["🟡 Priority Saturation<br/>指示過多で遵守率低下"]
+    HL["🔵 Hallucination<br/>構造的に不可避な幻覚"]
+    SY["🟣 Sycophancy<br/>正確性より同意を優先"]
+    KB["🟤 Knowledge Boundary<br/>「知らない」と言えない"]
+    PM["🟢 Prompt Sensitivity<br/>表現で結果が変動"]
+    ID["⚫ Instruction Decay<br/>長会話でルール忘却"]
+
+    %% ── Context Rot 起点の連鎖 ──
+    CR -->|"注意希薄化で<br/>中間部が死角に"| LM
+    CR -->|"コンテキスト増で<br/>指示の有効性低下"| PS
+    CR -->|"ハルシネーション率<br/>が上昇"| HL
+    CR -->|"劣化に気づかず<br/>追従しやすく"| SY
+
+    %% ── Lost in the Middle からの波及 ──
+    LM -->|"中間の指示が<br/>無視される"| PS
+    LM -->|"制約見落としで<br/>そのまま従う"| SY
+    LM -->|"初期指示の忘却<br/>が加速"| ID
+
+    %% ── Priority Saturation からの波及 ──
+    PS -->|"注意が薄まり<br/>表現に左右される"| PM
+    PS -->|"制約見落としで<br/>不正確な出力"| HL
+
+    %% ── Knowledge Boundary → Hallucination 連鎖 ──
+    KB -->|"知識の限界を超え<br/>誤答を生成"| HL
+    KB -->|"限界を認めず<br/>期待に合わせる"| SY
+
+    %% ── Sycophancy ↔ Hallucination フィードバック ──
+    SY -->|"誤った内容を<br/>追認・増幅"| HL
+    HL -->|"誤答をユーザーの<br/>同意で確定"| SY
+
+    %% ── 全問題 → Instruction Decay（時間軸の複合） ──
+    CR -->|"時間軸で蓄積"| ID
+    PS -->|"新指示で初期指示の<br/>優先度が低下"| ID
+    HL -->|"誤出力が推論基盤<br/>を劣化"| ID
+    SY -->|"軌道修正が<br/>困難に"| ID
+    PM -->|"表現が累積的に<br/>変化しズレる"| ID
+
+    %% ── スタイル ──
+    classDef context fill:#fee2e2,stroke:#dc2626,color:#000
+    classDef output fill:#dbeafe,stroke:#2563eb,color:#000
+    classDef input fill:#dcfce7,stroke:#16a34a,color:#000
+    classDef time fill:#f3f4f6,stroke:#374151,color:#000
+
+    class CR,LM,PS context
+    class HL,SY,KB output
+    class PM input
+    class ID time
 ```
-Context Rot の進行
-  → Lost in the Middle（中間の指示を見落とす）
-  → Priority Saturation（有効な指示数が実質的に減少）
-  → Hallucination の増加
-  → Sycophancy の強化（劣化に気づかず同意）
-  → Instruction Decay（時間とともに全てが複合）
-```
+
+**3つの主要カスケード**:
+
+1. **空間的劣化**: Context Rot → Lost in the Middle → Priority Saturation（コンテキストが長くなるほど加速）
+2. **信頼性の崩壊**: Knowledge Boundary → Hallucination ↔ Sycophancy（フィードバックループ）
+3. **時間的複合**: 全7問題 → Instruction Decay（マルチターンで全てが合流）
 
 ## Claude Code の対策体系
 
