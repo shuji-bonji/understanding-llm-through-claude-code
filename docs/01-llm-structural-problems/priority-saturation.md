@@ -66,8 +66,8 @@ Priority Saturation は以下の問題と複合する:
 
 ## 参考文献
 
-- IFScale Benchmark (2025)
-- ManyIFEval (2025)
+- Jaroslawicz, D., Whiting, B., Shah, P., & Maamari, K. (2025). "How Many Instructions Can LLMs Follow at Once?" Distyl AI. [arXiv:2507.11538](https://arxiv.org/abs/2507.11538) — IFScale ベンチマーク。10〜500 指示密度での遵守率劣化を測定
+- ManyIFEval (2025) — 多数同時指示での遵守率評価。3,000 トークン付近で劣化が顕著になることを示す
 
 ---
 

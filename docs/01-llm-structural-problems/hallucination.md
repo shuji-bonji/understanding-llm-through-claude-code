@@ -64,9 +64,9 @@ LLM のハルシネーション管理:
 
 ## 参考文献
 
-- Xu et al. (2024) - 対角線論法によるハルシネーション不可避性の証明
-- Banerjee et al. (2025) - ゲーデルの不完全性定理との接続
-- Karpowicz (2025) - ハルシネーションと創造性の等価性
+- Xu, Z. et al. (2024). "Hallucination is Inevitable: An Innate Limitation of Large Language Models." [arXiv:2401.11817](https://arxiv.org/abs/2401.11817) — 対角線論法によるハルシネーション不可避性の形式的証明
+- Banerjee, S., Agarwal, A., & Singla, S. (2024). "LLMs Will Always Hallucinate, and We Need to Live With This." [arXiv:2409.05746](https://arxiv.org/abs/2409.05746) — ゲーデルの第一不完全性定理との接続による不可避性の証明
+- Karpowicz, M. P. (2025). "On the Fundamental Impossibility of Hallucination Control in Large Language Models." [arXiv:2506.06382](https://arxiv.org/abs/2506.06382) — メカニズムデザインとスコアリングルールによるハルシネーションと創造性の等価性証明
 
 ---
 

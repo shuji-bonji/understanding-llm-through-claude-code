@@ -79,7 +79,7 @@ Instruction Decay は他の 7 つの問題の**時間軸での集大成**:
 
 ## 参考文献
 
-- Microsoft / Salesforce (2025) - マルチターン会話での性能低下の定量測定
+- Laban, P., Hayashi, H., Zhou, Y., & Neville, J. (2025). "LLMs Get Lost In Multi-Turn Conversation." Microsoft Research & Salesforce Research. [arXiv:2505.06120](https://arxiv.org/abs/2505.06120) — 200,000+ シミュレーション会話での検証。平均39%の性能低下と112%の不安定性増加を測定
 
 ---
 

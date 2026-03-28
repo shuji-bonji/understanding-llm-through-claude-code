@@ -88,7 +88,8 @@ description: >
 
 ## 参考文献
 
-- テイラー展開による Prompt Sensitivity の数学的分析
+- (2024). "Assessing and Understanding the Prompt Sensitivity of LLMs." EMNLP 2024 Findings. [ACL Anthology](https://aclanthology.org/2024.findings-emnlp.108/) — 一次テイラー展開とコーシー・シュワルツの不等式による Prompt Sensitivity の数学的定式化
+- (2024). "Prompts Have Evil Twins." NAACL 2024. [ACL Anthology](https://aclanthology.org/2024.naacl-long.325/) — プロンプトの微小な変更が出力を大きく変えるメカニズムの分析
 
 ---
 

@@ -55,8 +55,8 @@ Lost in the Middle は Context Rot の一部であると同時に、他の問題
 
 ## 参考文献
 
-- Liu et al. (2024) - "Lost in the Middle" 元論文
-- RoPE の注意減衰に関する研究
+- Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., & Liang, P. (2024). "Lost in the Middle: How Language Models Use Long Contexts." *Transactions of the Association for Computational Linguistics*, 12, 157–173. [arXiv:2307.03172](https://arxiv.org/abs/2307.03172) — 長文コンテキストにおける U 字型注意パターンの発見
+- Su, J. et al. (2021). "RoFormer: Enhanced Transformer with Rotary Position Embedding." [arXiv:2104.09864](https://arxiv.org/abs/2104.09864) — RoPE の原論文。位置が離れるほど注意スコアが減衰するメカニズムの基盤
 
 ---
 

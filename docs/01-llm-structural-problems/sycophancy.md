@@ -74,10 +74,10 @@ Context Rot の進行
 
 ## 参考文献
 
-- Sharma et al. (2023/2024) - Anthropic の追従性研究
-- ELEPHANT Benchmark (2025) - 追従性の4次元分類
-- SycEval (2025) - 追従率の定量測定
-- Phare (2025) - 選好スコアとハルシネーション耐性のトレードオフ
+- Sharma, M., Tong, M., Korbak, T. et al. (2024). "Towards Understanding Sycophancy in Language Models." *ICLR 2024*. [arXiv:2310.13548](https://arxiv.org/abs/2310.13548) — Anthropic による追従性の体系的研究
+- ELEPHANT Benchmark (2025). "ELEPHANT: Measuring and Understanding Social Sycophancy in LLMs." [arXiv:2505.13995](https://arxiv.org/abs/2505.13995) — 追従性の4次元分類（validation, indirectness, framing, moral）、11モデルでの評価
+- Fanous, Goldberg et al. (2025). "SycEval: Evaluating LLM Sycophancy." [arXiv:2502.08177](https://arxiv.org/abs/2502.08177) — 数学・医療データセットでの追従率の定量測定
+- Le Jeune, P. et al. (2025). "Phare: A Safety Probe for Large Language Models." Giskard AI. [arXiv:2505.11365](https://arxiv.org/abs/2505.11365) — ユーザー選好スコア（LM Arena ELO）とハルシネーション耐性の乖離を実証
 
 ---
 

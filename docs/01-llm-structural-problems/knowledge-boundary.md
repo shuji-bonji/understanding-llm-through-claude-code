@@ -82,7 +82,7 @@ Knowledge Boundary はハルシネーションの入口として機能する:
 
 ## 参考文献
 
-- Pan et al. - 16モデル×5データセットでの拒否行動の測定
+- Pan et al. (2025). "Can LLMs Refuse Questions They Do Not Know? Measuring Knowledge-Aware Refusal in Factual Tasks." [arXiv:2510.01782](https://arxiv.org/abs/2510.01782) — Refusal Index（RI）メトリクスによる16モデル×5データセットでの拒否行動の定量測定
 
 ---
 
