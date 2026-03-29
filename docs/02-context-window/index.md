@@ -12,6 +12,7 @@ LLM は一つの「コンテキストウィンドウ」の中で思考する。C
 
 | ドキュメント | 内容 |
 |:--|:--|
+| [Token・Context・Context Window](token-context-basics.md) | 3つの基礎概念。本リポジトリ全体の前提知識 |
 | [コンテキストウィンドウとは何か](what-llm-sees.md) | LLM が「見る」ものの全体像 |
 | [注入タイミングの全体像](injection-timing.md) | 各設定ファイルがいつ・どうやってコンテキストに入るか |
 | [コンテキスト予算という考え方](context-budget.md) | 200K トークンをどう配分するかの戦略 |
