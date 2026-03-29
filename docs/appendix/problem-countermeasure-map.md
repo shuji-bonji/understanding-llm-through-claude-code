@@ -404,4 +404,6 @@ graph TD
 
 ---
 
+> **次へ**: [Claude Code 設定ファイル一覧](claude-code-config-reference.md)
+
 > [README の対策マップ表（概要版）](../../README.md) も参照

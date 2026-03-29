@@ -104,7 +104,7 @@ flowchart TD
     classDef always fill:#fee2e2,stroke:#dc2626,color:#000
     classDef ondemand fill:#dbeafe,stroke:#2563eb,color:#000
     classDef independent fill:#dcfce7,stroke:#16a34a,color:#000
-    classDef note fill:#fff,stroke:#999,color:#666
+    classDef note fill:#fff,stroke:#999,color:#000
 
     class Q1,Q2,Q3,Q4 decision
     class R1 runtime
