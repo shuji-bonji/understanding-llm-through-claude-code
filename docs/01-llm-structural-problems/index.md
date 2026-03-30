@@ -110,11 +110,22 @@ graph TD
 2. **信頼性の崩壊**: Knowledge Boundary → Hallucination ↔ Sycophancy（フィードバックループ）
 3. **時間的複合**: 全7問題 → Instruction Decay（マルチターンで全てが合流）
 
-## Claude Code の対策体系
+## 構造的問題 × Claude Code 対策マップ
 
-Part 2 以降で、Claude Code の各機能がこれらの問題にどう対応しているかを詳しく見ていく。
+LLM には 8 つの構造的問題があり、Claude Code の各機能はそれぞれの問題に対する設計的な回答である。Part 2 以降で、各機能がこれらの問題にどう対応しているかを詳しく見ていく。
 
-全体像は [README の対策マップ表](../../README.md) を参照。
+| 構造的問題 | 概要 | 主な対策（Claude Code） | 対応ドキュメント |
+|:--|:--|:--|:--|
+| [**Context Rot**](context-rot.md) | トークン増で出力品質が劣化 | `/compact`, `/clear`, コンテキスト予算管理 | Part 2, 3, 5, 6, 8 |
+| [**Lost in the Middle**](lost-in-the-middle.md) | コンテキスト中間部の情報を無視 | `/compact`（50%閾値）, 条件付きルール, Agents | Part 2, 4, 5, 8 |
+| [**Priority Saturation**](priority-saturation.md) | 指示過多で全体の遵守率低下 | CLAUDE.md 200行制限, `.claude/rules/`, Skills | Part 3, 4, 5 |
+| [**Hallucination**](hallucination.md) | 事実に反する内容を生成（構造的に不可避） | Hooks（機械的検証）, テストコード, MCP | Part 6, 7 |
+| [**Sycophancy**](sycophancy.md) | ユーザーに同意し正確性を犠牲に | Cross-model QA（Agents）, Hooks, 問い方設計 | Part 5, 7 |
+| [**Knowledge Boundary**](knowledge-boundary.md) | 知識外で「知らない」と言えない | MCP外部参照, バージョン明示, 専門Agents | Part 3, 5, 6 |
+| [**Prompt Sensitivity**](prompt-sensitivity.md) | 表現の違いで結果が大きく変動 | CLAUDE.md の書き方, Skills description設計 | Part 3, 5 |
+| [**Instruction Decay**](instruction-decay.md) | 長会話でルール忘却（7問題の複合結果） | `/compact`, `/clear`, Hooks, セッション分割 | Part 7, 8 |
+
+> 詳細版は [構造的問題 × Claude Code 対策マップ（付録）](../appendix/problem-countermeasure-map.md) を参照。
 
 ---
 
