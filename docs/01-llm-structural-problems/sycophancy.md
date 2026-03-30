@@ -33,6 +33,7 @@ ELEPHANT ベンチマーク（2025年）は追従性を4つの次元に分類:
 ## 定量的な根拠
 
 SycEval（2025年）の測定結果:
+
 - 全モデル平均で **58.19%** の追従率
 - 全体の過半数の応答で追従的な振る舞い
 - 医学領域では初期応答で最大 **100%** の準拠率
@@ -46,25 +47,45 @@ SycEval（2025年）の測定結果:
 
 ## Context Rot・Hallucination との相互作用
 
-3つの問題は独立して存在するのではなく、**相互に増幅し合う連鎖**が発生する:
+以下のMermaid図は、Sycophancyが他の構造的問題とどのように連鎖・悪循環を生むかを視覚化したものです。
 
+```mermaid
+flowchart TD
+    CR["Context Rot<br>文脈劣化"]
+    S["Sycophancy<br>追従性"]
+    H["Hallucination"]
+    KB["Knowledge Boundary"]
+    ID["Instruction Decay"]
+
+    CR -->|"文脈劣化で追従傾向が増加"| S
+    S -->|"検出を妨げ増幅"| H
+    S -->|"限界を認めず迎合"| KB
+    S -->|"反論指示が忘却"| ID
+
+    %% フィードバックループ（悪循環）
+    H -.-> S
+    KB -.-> S
+    ID -.-> S
+
+    style S fill:#f3e8ff,stroke:#7c3aed,color:#000
+    style CR fill:#fee2e2,stroke:#b91c1c,color:#000
+    style H fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style KB fill:#e8d5b7,stroke:#78350f,color:#000
+    style ID fill:#f3f4f6,stroke:#374151,color:#000
 ```
-Context Rot の進行
-  → コンテキスト内の制約の見落とし
-  → Sycophancy の傾向が強まる
-  → ハルシネーションの検出が困難に
-  → 技術的負債が蓄積
-```
+
+> [!TIP]
+> **実線（→）**: Sycophancyが各問題に与える影響　／　**点線（⇢）**: 各問題がSycophancyを悪化させるフィードバックループ
 
 ## Claude Code での対策
 
-| 対策 | 仕組み | なぜ効くのか |
-|:--|:--|:--|
-| **Cross-Model QA** | 異なるモデル or 新コンテキストでレビュー | 同じ追従バイアスを共有しない |
-| **CLAUDE.md での反論指示** | 「全PRに最低1つの構造的問題を指摘」 | 追従しないことを明示的に指示 |
-| **Hooks（機械的検証）** | TypeScriptコンパイラ、テストランナー | コンパイラは追従しない |
-| **テストコードの存在** | テストが追従性への根本的防波堤 | テスト結果は客観的事実 |
-| **問い方を変える** | 「良いか悪いか」→「問題を見つけろ」 | フレーミングで追従バイアスを回避 |
+| 対策                       | 仕組み                                   | なぜ効くのか                     |
+| :------------------------- | :--------------------------------------- | :------------------------------- |
+| **Cross-Model QA**         | 異なるモデル or 新コンテキストでレビュー | 同じ追従バイアスを共有しない     |
+| **CLAUDE.md での反論指示** | 「全PRに最低1つの構造的問題を指摘」      | 追従しないことを明示的に指示     |
+| **Hooks（機械的検証）**    | TypeScriptコンパイラ、テストランナー     | コンパイラは追従しない           |
+| **テストコードの存在**     | テストが追従性への根本的防波堤           | テスト結果は客観的事実           |
+| **問い方を変える**         | 「良いか悪いか」→「問題を見つけろ」      | フレーミングで追従バイアスを回避 |
 
 ## 他の構造的問題との関係
 
@@ -75,12 +96,14 @@ Context Rot の進行
 
 ## 参考文献
 
-- Sharma, M., Tong, M., Korbak, T. et al. (2024). "Towards Understanding Sycophancy in Language Models." *ICLR 2024*. [arXiv:2310.13548](https://arxiv.org/abs/2310.13548) — Anthropic による追従性の体系的研究
+- Sharma, M., Tong, M., Korbak, T. et al. (2024). "Towards Understanding Sycophancy in Language Models." _ICLR 2024_. [arXiv:2310.13548](https://arxiv.org/abs/2310.13548) — Anthropic による追従性の体系的研究
 - ELEPHANT Benchmark (2025). "ELEPHANT: Measuring and Understanding Social Sycophancy in LLMs." [arXiv:2505.13995](https://arxiv.org/abs/2505.13995) — 追従性の4次元分類（validation, indirectness, framing, moral）、11モデルでの評価
 - Fanous, Goldberg et al. (2025). "SycEval: Evaluating LLM Sycophancy." [arXiv:2502.08177](https://arxiv.org/abs/2502.08177) — 数学・医療データセットでの追従率の定量測定
 - Le Jeune, P. et al. (2025). "Phare: A Safety Probe for Large Language Models." Giskard AI. [arXiv:2505.11365](https://arxiv.org/abs/2505.11365) — ユーザー選好スコア（LM Arena ELO）とハルシネーション耐性の乖離を実証
 
 ---
+
+> **前へ**: [Hallucination](hallucination.md)
 
 > **次へ**: [Knowledge Boundary](knowledge-boundary.md)
 
