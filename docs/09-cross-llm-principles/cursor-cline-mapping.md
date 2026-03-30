@@ -5,20 +5,20 @@
 
 ## ツール間の機能マッピング
 
-| Claude Code | Cursor | Cline | GitHub Copilot | 共通原理 |
-|:--|:--|:--|:--|:--|
-| `CLAUDE.md` | `.cursorrules` | `.clinerules` | `.github/copilot-instructions.md` | 常駐コンテキスト |
-| `.claude/rules/` | `@` メンション | - | - | 条件付きコンテキスト |
-| `.claude/skills/` | Docs参照 | - | - | オンデマンドコンテキスト |
-| `.claude/agents/` | - | - | - | 独立コンテキスト実行 |
-| `settings.json` | IDE設定 | IDE設定 | IDE設定 | ランタイム制御 |
-| Hooks | - | - | - | ライフサイクル制御 |
-| MCP | MCP | MCP | - | ツール定義注入 |
-| `/compact` | - | - | - | コンテキスト圧縮 |
+| Claude Code       | Cursor         | Cline         | GitHub Copilot                    | 共通原理                 |
+| :---------------- | :------------- | :------------ | :-------------------------------- | :----------------------- |
+| `CLAUDE.md`       | `.cursorrules` | `.clinerules` | `.github/copilot-instructions.md` | 常駐コンテキスト         |
+| `.claude/rules/`  | `@` メンション | -             | -                                 | 条件付きコンテキスト     |
+| `.claude/skills/` | Docs参照       | -             | -                                 | オンデマンドコンテキスト |
+| `.claude/agents/` | -              | -             | -                                 | 独立コンテキスト実行     |
+| `settings.json`   | IDE設定        | IDE設定       | IDE設定                           | ランタイム制御           |
+| Hooks             | -              | -             | -                                 | ライフサイクル制御       |
+| MCP               | MCP            | MCP           | -                                 | ツール定義注入           |
+| `/compact`        | -              | -             | -                                 | コンテキスト圧縮         |
 
 ## 原理の普遍性
 
-ツールが変わっても、以下の原理は同じ:
+ツールが変わっても、以下の原理は同じ。
 
 1. **常駐コンテキストは最小限に**: どのツールでも常駐情報は Priority Saturation を引き起こす
 2. **条件付き注入で分散**: 全ルールを一箇所に集中させない
