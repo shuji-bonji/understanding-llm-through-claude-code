@@ -207,6 +207,6 @@ Part 3 以降で学ぶ Claude Code の各機能は、この Context Window を**
 
 ---
 
-> **次へ**: [コンテキストウィンドウとは何か — LLM が「見る」もの](what-llm-sees.md)
+> **次へ**: [Chat / Session — Context が蓄積する「時間の入れ物」](chat-session.md)
 
 > **Discussion**: [GitHub Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions)
