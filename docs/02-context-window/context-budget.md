@@ -18,20 +18,40 @@
 
 ## 典型的なコンテキスト予算配分
 
-```
-200K トークンのコンテキストウィンドウ
-  ┌─────────────────────────────────────────┐
-  │ System Prompt           ~5K             │ ← 固定（変更不可）
-  │ CLAUDE.md               ~2K             │ ← 200行制限で管理
-  │ Rules (条件付き)        ~1-3K            │ ← glob 一致分のみ
-  │ MCP Tools 定義          ~5-20K          │ ← 20K超は危険
-  │─────────────────────────────────────────│
-  │ 会話履歴                ~30-80K          │ ← 最も変動が大きい
-  │─────────────────────────────────────────│
-  │ Skills (オンデマンド)   ~2-10K            │ ← 必要時のみ
-  │─────────────────────────────────────────│
-  │ 実作業用の余裕          残り               │ ← これが品質に直結
-  └─────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph FIXED ["固定費（毎ターン消費）"]
+        SP["System Prompt<br>~5K tokens<br>（変更不可）"]
+        CM["CLAUDE.md<br>~2K tokens<br>（200行制限）"]
+        MCP["MCP Tools 定義<br>~5-20K tokens<br>（20K超は危険）"]
+    end
+
+    subgraph CONDITIONAL ["条件付き（一致時のみ）"]
+        RL["Rules<br>~1-3K tokens<br>（glob 一致分のみ）"]
+    end
+
+    subgraph VARIABLE ["変動費（最大の消費源）"]
+        CH["会話履歴<br>~30-80K tokens<br>（/compact で圧縮可能）"]
+    end
+
+    subgraph ONDEMAND ["オンデマンド（必要時のみ）"]
+        SK["Skills<br>~2-10K tokens<br>（呼び出し時のみ）"]
+    end
+
+    FREE(["実作業用の余裕<br>← これが品質に直結"])
+
+    FIXED --> FREE
+    CONDITIONAL --> FREE
+    VARIABLE --> FREE
+    ONDEMAND --> FREE
+
+    style SP fill:#fee2e2,stroke:#b91c1c,color:#000
+    style CM fill:#fee2e2,stroke:#b91c1c,color:#000
+    style MCP fill:#fee2e2,stroke:#b91c1c,color:#000
+    style RL fill:#fef9c3,stroke:#a16207,color:#000
+    style CH fill:#ffedd5,stroke:#c2410c,color:#000
+    style SK fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style FREE fill:#dcfce7,stroke:#15803d,color:#000
 ```
 
 ## 予算配分の原則
@@ -88,4 +108,5 @@ MCP が 50K の場合:
 ---
 
 > **前へ**: [注入タイミングの全体像](injection-timing.md)
+
 > **次へ**: [Part 3: 常駐コンテキスト](../03-always-loaded-context/index.md)

@@ -118,4 +118,6 @@ flowchart TD
 
 ---
 
+> **前へ**: [コンテキストウィンドウとは何か](what-llm-sees.md)
+
 > **次へ**: [コンテキスト予算という考え方](context-budget.md)
