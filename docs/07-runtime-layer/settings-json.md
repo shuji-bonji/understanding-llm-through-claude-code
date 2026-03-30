@@ -1,5 +1,6 @@
 # settings.json の役割
 
+> [!NOTE]
 > LLM のコンテキストには注入されない「ランタイム設定」。
 
 ## settings.json とは

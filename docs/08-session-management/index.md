@@ -1,5 +1,6 @@
 # Part 8: セッション管理と記憶の永続化
 
+> [!NOTE]
 > 会話の寿命と記憶の運用。
 > `/compact` と `/clear` はPart 2（理論）ではなくここ（運用）に配置。
 > 理論的根拠は Part 1・2 にあり、ここでは実践的な運用を扱う。
@@ -10,9 +11,10 @@ LLM のセッションは有限である。会話が長くなるほど Context R
 
 ## → Why: どの構造的問題に対応しているか
 
-- **Context Rot**: `/compact` による予防的圧縮でトークン蓄積を抑制
-- **Lost in the Middle**: 50% 使用率前に圧縮することでU字カーブ崩壊を防ぐ
-- **Instruction Decay**: `/clear` によるセッション分割で劣化をリセット
+> [!IMPORTANT]
+> - **Context Rot**: `/compact` による予防的圧縮でトークン蓄積を抑制
+> - **Lost in the Middle**: 50%使用率前に圧縮することでU字カーブ崩壊を防ぐ
+> - **Instruction Decay**: `/clear` によるセッション分割で劣化をリセット
 
 ## このパートのドキュメント
 

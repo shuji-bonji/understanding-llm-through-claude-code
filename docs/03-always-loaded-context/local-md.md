@@ -1,5 +1,6 @@
 # CLAUDE.local.md の運用
 
+> [!NOTE]
 > Git 管理外の個人設定。チームの規約とは独立して管理する。
 
 ## CLAUDE.local.md とは

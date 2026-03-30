@@ -1,5 +1,6 @@
 # Hooks のライフサイクル
 
+> [!IMPORTANT]
 > → Why: **Hallucination** 対策（テスト実行 Hook で機械的に検出）
 > → Why: **Sycophancy** 対策（コンパイラ・テストランナーは追従しない）
 > → Why: **Instruction Decay** 対策（コンテキストに依存しない強制実行）

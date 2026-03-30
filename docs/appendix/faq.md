@@ -1,5 +1,6 @@
 # FAQ — よくある質問と設計判断
 
+> [!NOTE]
 > プロジェクトの [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) で挙がった具体的な疑問と、その回答をまとめたもの。
 > 「なぜそう判断するのか」の思考プロセスを重視している。
 

@@ -1,5 +1,6 @@
 # コンテキストウィンドウとは何か — LLM が「見る」もの
 
+> [!NOTE]
 > [前のページ](token-context-basics.md) で Token・Context・Context Window の基礎概念を学んだ。
 > このページでは、Claude Code が Context Window の中に**具体的に何を配置するか**の全体像を見る。
 

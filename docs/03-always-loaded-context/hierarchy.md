@@ -1,5 +1,6 @@
 # 階層マージの仕組み
 
+> [!IMPORTANT]
 > → Why: **Context Rot** 対策（スコープごとの分離で不要な情報の蓄積を防ぐ）
 
 ## CLAUDE.md の階層構造

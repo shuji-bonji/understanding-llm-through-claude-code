@@ -1,5 +1,6 @@
 # Tool Search / Deferred Loading
 
+> [!NOTE]
 > MCP ツール定義がコンテキストの 10% を超えると自動的に有効化される遅延ロードの仕組み。
 
 ## Tool Search とは

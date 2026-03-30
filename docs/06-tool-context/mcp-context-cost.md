@@ -1,5 +1,6 @@
 # MCP のコンテキストコスト
 
+> [!IMPORTANT]
 > → Why: **Context Rot** 対策（ツール定義の常時消費がコンテキストを圧迫する）
 > → Why: **Knowledge Boundary** 対策（外部知識参照で LLM の内部知識への依存を減らす）
 

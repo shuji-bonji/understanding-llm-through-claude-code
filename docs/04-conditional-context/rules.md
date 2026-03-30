@@ -1,5 +1,6 @@
 # .claude/rules/ の設計原理
 
+> [!IMPORTANT]
 > → Why: **Priority Saturation** 対策（条件付き分散で同時有効指示数を削減）
 > → Why: **Lost in the Middle** 対策（必要なルールだけを高注意位置に注入）
 

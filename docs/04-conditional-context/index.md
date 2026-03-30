@@ -1,5 +1,6 @@
 # Part 4: 条件付きコンテキスト — Rules
 
+> [!NOTE]
 > 必要な時だけ注入する仕組み。
 > CLAUDE.md の Priority Saturation を解決する「条件付き分散」。
 
@@ -9,8 +10,9 @@ CLAUDE.md に全てのルールを書くと、API のバリデーションルー
 
 ## → Why: どの構造的問題に対応しているか
 
-- **Priority Saturation**: 全ルールを常時載せず、条件付きで分散することで同時有効指示数を削減
-- **Lost in the Middle**: 必要なルールだけを末尾（高注意位置）に注入
+> [!IMPORTANT]
+> - **Priority Saturation**: 全ルールを常時載せず、条件付きで分散することで同時有効指示数を削減
+> - **Lost in the Middle**: 必要なルールだけを末尾（高注意位置）に注入
 
 ## このパートのドキュメント
 

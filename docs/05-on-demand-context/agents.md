@@ -1,5 +1,6 @@
 # Agents の設計原理
 
+> [!IMPORTANT]
 > → Why: **Context Rot** 対策（独立したコンテキストウィンドウで実行）
 > → Why: **Sycophancy** 対策（Cross-model QA で追従バイアスを排除）
 > → Why: **Knowledge Boundary** 対策（知識領域を狭めて境界超過確率を低減）

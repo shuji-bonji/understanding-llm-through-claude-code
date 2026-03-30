@@ -1,5 +1,6 @@
 # Claude Code 設定ファイル一覧
 
+> [!NOTE]
 > Claude Code のプロジェクト設定を構成するファイル・ディレクトリの網羅的リファレンス。
 > 「この設定は何のためにあるのか？」を本プロジェクトの各ページへのリンクで辿れるようにしたもの。
 
@@ -76,7 +77,7 @@ User（最低）     ~/.claude/settings.json（グローバル個人）
 |                                        | `.claude/settings.local.json`  | 個人ローカル設定                   | [settings.json](../07-runtime-layer/settings-json.md)        |
 |                                        | `~/.claude/settings.json`      | グローバル個人設定（最低優先）     | [settings.json](../07-runtime-layer/settings-json.md)        |
 |                                        | Hooks                          | LLM の行動前後に自動実行           | [ライフサイクル](../07-runtime-layer/hooks.md)               |
-| **セッション管理**（Part 8）           | `/compact` · `/clear`          | 手動 or 50% 閾値で自動             | [使い分け](../08-session-management/compact-and-clear.md)    |
+| **セッション管理**（Part 8）           | `/compact` · `/clear`          | 手動 or 50%閾値で自動             | [使い分け](../08-session-management/compact-and-clear.md)    |
 |                                        | Memory                         | セッション横断で永続化             | [何を覚えるか](../08-session-management/what-to-remember.md) |
 
 ---

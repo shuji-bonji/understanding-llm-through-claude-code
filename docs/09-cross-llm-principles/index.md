@@ -1,5 +1,6 @@
 # Part 9: 他LLMへの応用
 
+> [!NOTE]
 > Claude Code 固有の知識を他ツール・他LLMに応用可能な形に昇華する。
 > Part 1〜8 で学んだ原理は Claude Code 固有ではなく、LLM を使うあらゆるツールに共通する。
 

@@ -1,5 +1,6 @@
 # Part 5: オンデマンドコンテキスト — Skills & Agents
 
+> [!NOTE]
 > 呼び出された時だけ展開される。
 > Skills は「import」、Agents は「別プロセスへの委譲」。
 
@@ -22,10 +23,11 @@
 
 ## → Why: どの構造的問題に対応しているか
 
-- **Context Rot**: Skills は必要時のみ展開。Agents は独立コンテキストで根本回避
-- **Sycophancy**: Agents による Cross-model QA で追従バイアスを排除
-- **Knowledge Boundary**: 専門 Agents に特定ドメインを委譲し、知識境界を狭める
-- **Prompt Sensitivity**: Skills の description 設計で自動呼び出し精度を向上
+> [!IMPORTANT]
+> - **Context Rot**: Skills は必要時のみ展開。Agents は独立コンテキストで根本回避
+> - **Sycophancy**: Agents による Cross-model QA で追従バイアスを排除
+> - **Knowledge Boundary**: 専門 Agents に特定ドメインを委譲し、知識境界を狭める
+> - **Prompt Sensitivity**: Skills の description 設計で自動呼び出し精度を向上
 
 ## このパートのドキュメント
 
