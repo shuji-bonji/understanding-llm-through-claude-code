@@ -40,6 +40,28 @@ Instruction Decay は単独の現象ではなく、**前の 7 つの構造的問
 
 ## Claude Code での対策
 
+```mermaid
+flowchart TB
+    subgraph phases ["セッション進行と指示遵守率の劣化フェーズ"]
+        direction LR
+        P1["Phase 1<br>0-30%<br>━━━━━<br>安定<br>指示遵守率: 高い"]
+        P2["Phase 2<br>30-50%<br>━━━━━<br>緩やかな劣化<br>⚡ /compact 推奨"]
+        P3["Phase 3<br>50-70%<br>━━━━━<br>顕著な劣化<br>⚡ /clear 推奨"]
+        P4["Phase 4<br>70%+<br>━━━━━<br>崩壊<br>回復困難"]
+        P1 -->|"劣化開始"| P2 -->|"50%閾値超過"| P3 -->|"制御不能"| P4
+    end
+
+    Hooks["Hooks: 全フェーズで有効な外部検証<br>（コンパイラ・テストランナーは劣化しない）"]
+
+    phases --> Hooks
+
+    style P1 fill:#dcfce7,stroke:#15803d,color:#000
+    style P2 fill:#fef9c3,stroke:#a16207,color:#000
+    style P3 fill:#ffedd5,stroke:#c2410c,color:#000
+    style P4 fill:#fee2e2,stroke:#b91c1c,color:#000
+    style Hooks fill:#eff6ff,stroke:#1d4ed8,color:#1e40af
+```
+
 | 対策                             | 仕組み                       | なぜ効くのか                                  |
 | :------------------------------- | :--------------------------- | :-------------------------------------------- |
 | **`/compact`（予防的圧縮）**     | 50%使用率前に会話履歴を圧縮  | Context Rot / Lost in the Middle の蓄積を防ぐ |
@@ -67,8 +89,8 @@ Instruction Decay は単独の現象ではなく、**前の 7 つの構造的問
 Instruction Decay は他の 7 つの問題の**時間軸での集大成**:
 
 ```mermaid
-flowchart TD
-    Start["セッション開始<br>全指示を高い精度で遵守"]
+flowchart TB
+    Start(["セッション開始<br>全指示を高い精度で遵守"])
     CR["Context Rot"]
     LIM["Lost in the Middle"]
     PSat["Priority Saturation"]
