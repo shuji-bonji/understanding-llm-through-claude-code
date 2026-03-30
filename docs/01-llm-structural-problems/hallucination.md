@@ -11,6 +11,26 @@ Hallucination（幻覚）とは、LLM が事実に反する内容を、あたか
 
 ## 3つの数学的根拠
 
+```mermaid
+graph TD
+    A["対角線論法<br>(Xu et al., 2024)"]
+    B["不完全性定理との接続<br>(Banerjee et al., 2025)"]
+    C["創造性との等価性<br>(Karpowicz, 2025)"]
+    D(["ハルシネーションは<br>構造的に排除不可能"])
+    E(["パラダイムシフト:<br>排除から管理へ"])
+
+    A -->|"すべてのLLMに<br>幻覚入力が無限個存在"| D
+    B -->|"全処理段階で<br>確率ゼロ不可"| D
+    C -->|"排除すると<br>創造性も消失"| D
+    D --> E
+
+    style A fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style B fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style C fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style D fill:#fee2e2,stroke:#b91c1c,color:#000
+    style E fill:#dcfce7,stroke:#15803d,color:#000
+```
+
 ### 1. 対角線論法による証明（Xu et al., 2024）
 
 カントールの対角線論法を応用し、**すべての LLM には必ずハルシネーションを起こす入力が無限個存在する**ことが証明された。これはモデルのサイズや訓練データの質に関係なく成立する。
@@ -70,6 +90,8 @@ LLM のハルシネーション管理:
 - Karpowicz, M. P. (2025). "On the Fundamental Impossibility of Hallucination Control in Large Language Models." [arXiv:2506.06382](https://arxiv.org/abs/2506.06382) — メカニズムデザインとスコアリングルールによるハルシネーションと創造性の等価性証明
 
 ---
+
+> **前へ**: [Priority Saturation](priority-saturation.md)
 
 > **次へ**: [Sycophancy](sycophancy.md)
 
