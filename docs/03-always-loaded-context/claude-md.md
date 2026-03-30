@@ -68,11 +68,31 @@ CLAUDE.md には「LLM がコードを読んだだけでは推測できない情
 
 CLAUDE.md は「最初から完璧に書く」のではなく、**失敗を観察してから追加する**のが正しい運用。
 
+```mermaid
+flowchart LR
+    A["1. 最小限の内容で開始"] --> B["LLM の出力を観察"]
+    B --> C["2. 期待と異なる点に<br>ルールを追加"]
+    C --> D{"200行を<br>超えそう？"}
+    D -->|"No"| E["3. 定期的に見直し<br>不要ルールを削除"]
+    D -->|"Yes"| F["4. rules/ や skills/<br>に移動"]
+    E --> B
+    F --> E
+
+    style A fill:#dcfce7,stroke:#15803d,color:#000
+    style B fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style C fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style D fill:#fef9c3,stroke:#a16207,color:#000
+    style E fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style F fill:#ffedd5,stroke:#c2410c,color:#000
+```
+
 1. 最小限の内容で開始
 2. LLM が期待と異なる出力をした時にルールを追加
 3. 定期的に見直し、不要になったルールを削除
 4. 200行を超えそうなら `.claude/rules/` や `.claude/skills/` に移動
 
 ---
+
+> **前へ**: [Part 3: 常駐コンテキスト](index.md)
 
 > **次へ**: [階層マージの仕組み](hierarchy.md)
