@@ -5,15 +5,22 @@
 
 ## 判断フロー
 
-```
-そのタスクは...
+```mermaid
+flowchart TD
+    Q1{"メインのコンテキストを<br>汚染してほしくない？"}
+    Q2{"メインのコンテキスト内で<br>十分処理できる？"}
+    AGENT(["Agent<br>（独立コンテキスト）"])
+    SKILL(["Skill<br>（import / require）"])
 
-  メインのコンテキストを汚染してほしくない？
-  ├── Yes → Agent（独立コンテキスト）
-  │
-  └── No → コンテキスト内で十分？
-            ├── Yes → Skill
-            └── No  → Agent
+    Q1 -->|"Yes"| AGENT
+    Q1 -->|"No"| Q2
+    Q2 -->|"Yes"| SKILL
+    Q2 -->|"No"| AGENT
+
+    style Q1 fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style Q2 fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style AGENT fill:#f3e8ff,stroke:#7c3aed,color:#000
+    style SKILL fill:#dcfce7,stroke:#15803d,color:#000
 ```
 
 ## 比較表
@@ -52,4 +59,5 @@
 ---
 
 > **前へ**: [Agents の設計原理](agents.md)
-> **Part 5 完了**: [Part 6: ツール定義としてのコンテキスト](../06-tool-context/index.md) へ
+
+> **Part 5 完了 → 次へ**: [Part 6: ツール定義としてのコンテキスト](../06-tool-context/index.md)
