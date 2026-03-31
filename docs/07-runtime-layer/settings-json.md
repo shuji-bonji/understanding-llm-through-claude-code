@@ -66,4 +66,6 @@ User（最低）     ~/.claude/settings.json（グローバル個人設定）
 
 ---
 
+> **前へ**: [Part 7: LLMが見ないレイヤー](index.md)
+
 > **次へ**: [Hooks のライフサイクル](hooks.md)

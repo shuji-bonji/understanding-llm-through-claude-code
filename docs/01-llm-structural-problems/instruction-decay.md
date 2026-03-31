@@ -121,6 +121,6 @@ flowchart TB
 
 > **前へ**: [Prompt Sensitivity](prompt-sensitivity.md)
 
-> **Part 1 完了**: [Part 2: コンテキストウィンドウを理解する](../02-context-window/index.md) へ
+> **Part 1 完了 → 次へ**: [Part 2: コンテキストウィンドウを理解する](../02-context-window/index.md)
 
 > **Discussion**: [#13 Instruction Decay](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/13)
