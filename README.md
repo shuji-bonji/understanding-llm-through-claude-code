@@ -106,6 +106,7 @@
 ### 付録
 
 - [構造的問題 × Claude Code 対策マップ（詳細版）](docs/appendix/problem-countermeasure-map.md)
+- [ライフサイクル × 設定マップ](docs/appendix/lifecycle-config-map.md)
 - [Claude Code 設定ファイル一覧](docs/appendix/claude-code-config-reference.md)
 - [FAQ — よくある質問と設計判断](docs/appendix/faq.md)
 - [用語集](docs/appendix/glossary.md)
