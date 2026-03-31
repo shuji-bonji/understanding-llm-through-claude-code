@@ -19,7 +19,7 @@
 
 CLAUDE.md の **Priority Saturation 問題**を解決する仕組み。
 
-全てのルールを CLAUDE.md に書くと、API のバリデーションルールが React のコンポーネント規約と同時に読み込まれ、互いに注意を奪い合う。Rules は「今触っているファイルに関連するルールだけ」を LLM に見せることで、限られたコンテキスト内での指示の効果密度を最大化する。
+全てのルールを CLAUDE.md に書くと、API のバリデーションルールが React のコンポーネント規約と同時に読み込まれ、互いに注意を奪い合う。Rules は「今触っているファイルに関連するルールだけ」を LLM に見せることで、限られたコンテキスト内での指示の効果密度を最大化する。Part 2 で学んだ Context Budget の観点では、条件一致時のみ注入することで常駐コンテキストの消費を抑え、変動枠に余裕を持たせることができる。
 
 ## ルールの書き方
 
@@ -41,13 +41,13 @@ globs: 'src/app/**/*.component.ts'
 
 ## Angular プロジェクトでの設計例
 
-```
+```sh
 .claude/rules/
 ├── ngrx-patterns.md        # globs: "**/*.actions.ts,**/*.effects.ts,**/*.reducer.ts"
-├── rxjs-practices.md        # globs: "**/*.ts"
-├── component-rules.md       # globs: "**/*.component.ts"
-├── testing.md               # globs: "**/*.spec.ts"
-└── e2e-testing.md           # globs: "e2e/**/*.ts"
+├── rxjs-practices.md       # globs: "**/*.ts"
+├── component-rules.md      # globs: "**/*.component.ts"
+├── testing.md              # globs: "**/*.spec.ts"
+└── e2e-testing.md          # globs: "e2e/**/*.ts"
 ```
 
 ## CLAUDE.md から Rules への移動基準
@@ -59,5 +59,7 @@ globs: 'src/app/**/*.component.ts'
 3. **他のルールと注意を奪い合う**: 無関係なドメインのルール同士
 
 ---
+
+> **前へ**: [Part 3: 常駐コンテキストを設計する](../03-always-loaded-context/index.md)
 
 > **次へ**: [globパターン設計の実践](glob-patterns.md)

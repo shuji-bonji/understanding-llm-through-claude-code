@@ -54,4 +54,5 @@ rules/testing-rules.md    # globs: "**/*.spec.ts"
 ---
 
 > **前へ**: [.claude/rules/ の設計原理](rules.md)
-> **Part 4 完了**: [Part 5: オンデマンドコンテキスト](../05-on-demand-context/index.md) へ
+
+> **Part 4 完了 → 次へ**: [Part 5: オンデマンドコンテキスト](../05-on-demand-context/index.md)
