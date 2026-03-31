@@ -23,7 +23,7 @@ CLAUDE.md の **Priority Saturation 問題**を解決する仕組み。
 
 ## ルールの書き方
 
-YAML フロントマターの `globs` フィールドで条件を指定する。
+YAML フロントマターの `globs` フィールドで、**Claude Code が操作（読み取り・編集）するファイル** に対する条件を指定する。
 
 ```markdown
 ---
