@@ -39,15 +39,24 @@
 
 ## 使い分けのフロー
 
-```
-コンテキスト使用率が上がってきた...
+```mermaid
+flowchart LR
+    Q1{"まだ同じタスクの途中？"}
+    Q2{"タスクは完了した？"}
+    COMPACT(["⚡ /compact<br>会話を圧縮して継続"])
+    CLEAR(["🔄 /clear<br>新しいタスクに向けてリセット"])
+    COMPACT2(["⚡ /compact してから判断"])
 
-  まだ同じタスクの途中？
-  ├── Yes → /compact（会話を圧縮して継続）
-  │
-  └── No → タスクは完了した？
-            ├── Yes → /clear（新しいタスクに向けてリセット）
-            └── No  → /compact してから判断
+    Q1 -->|"Yes"| COMPACT
+    Q1 -->|"No"| Q2
+    Q2 -->|"Yes"| CLEAR
+    Q2 -->|"No"| COMPACT2
+
+    style Q1 fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style Q2 fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style COMPACT fill:#fef9c3,stroke:#a16207,color:#000
+    style CLEAR fill:#dcfce7,stroke:#15803d,color:#000
+    style COMPACT2 fill:#fef9c3,stroke:#a16207,color:#000
 ```
 
 ## セッション設計の原則
@@ -58,5 +67,7 @@
 4. **重要な決定は CLAUDE.md や Git コミットに永続化**（セッションをまたいで引き継ぐ）
 
 ---
+
+> **前へ**: [Part 8: セッション管理と記憶の永続化](index.md)
 
 > **次へ**: [なぜメモリが問題になるのか](memory-problem.md)

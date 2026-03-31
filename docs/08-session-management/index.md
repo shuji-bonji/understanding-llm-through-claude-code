@@ -29,4 +29,5 @@ LLM のセッションは有限である。会話が長くなるほど Context R
 ---
 
 > **前へ**: [Part 7: LLMが見ないレイヤー](../07-runtime-layer/index.md)
+
 > **次へ**: [Part 9: 他LLMへの応用](../09-cross-llm-principles/index.md)

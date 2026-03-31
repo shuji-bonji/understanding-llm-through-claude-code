@@ -31,4 +31,6 @@ LLM のセッションには明確な寿命がある。
 
 ---
 
+> **前へ**: [/compact と /clear の使い分け](compact-and-clear.md)
+
 > **次へ**: [何を覚えるか](what-to-remember.md)
