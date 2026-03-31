@@ -26,15 +26,12 @@ Node.js での比較:
 
 ## 階層と優先順位
 
-```
-Managed（最高）  server-managed > MDM > managed-settings.json
-  ↓
-Project          .claude/settings.json（チーム共有、Git管理）
-  ↓
-Project Local    .claude/settings.local.json（個人用、Git管理外）
-  ↓
-User（最低）     ~/.claude/settings.json（グローバル個人設定）
-```
+| 優先度 | 階層 | ファイル | Git管理 |
+|:--|:--|:--|:--|
+| 最高 | Managed | server-managed / MDM / managed-settings.json | — |
+| ↓ | Project | `.claude/settings.json` | する（チーム共有） |
+| ↓ | Project Local | `.claude/settings.local.json` | しない（個人用） |
+| 最低 | User | `~/.claude/settings.json` | — |
 
 **上位が常に勝つ**。プロジェクト設定で deny されたものは、ユーザー設定で allow しても拒否される。
 
