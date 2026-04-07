@@ -46,6 +46,87 @@ CLAUDE.md には「LLM がコードを読んだだけでは推測できない情
 - 特定ファイル種別にしか適用されないルール → `.claude/rules/` へ
 - 特定タスクのワークフロー → `.claude/skills/` へ
 
+## 実例: llms.txt による仕様の外部委譲（e-shiwake）
+
+> [!TIP]
+> CLAUDE.md を軽量に保つ手段は Rules/Skills への移動だけではない。**アプリ自体が提供する仕様ドキュメント**を活用する方法もある。
+
+[e-shiwake](https://github.com/shuji-bonji/e-shiwake) では、[llms.txt](https://llmstxt.org/) という提案仕様を活用して CLAUDE.md の肥大化を防いでいる。llms.txt は Claude Code の機能ではなく、Web サイトが LLM 向けに仕様を公開するための標準フォーマット。
+
+```
+CLAUDE.md に全部書いた場合:
+  CLAUDE.md（開発ルール + 勘定科目体系 + 操作手順 + データモデル + ...）
+  → 数百行に膨張、Priority Saturation で指示遵守率が低下
+
+llms.txt で外部委譲した場合:
+  CLAUDE.md          → 開発ルールと指針だけ（軽量）
+  llms.txt           → アプリ仕様・データモデル・ツール一覧
+  help/*/content.md  → 各機能の詳細ドキュメント（Single Source of Truth）
+  .claude/skills/    → llms.txt や content.md を参照する形でドメイン知識を注入
+```
+
+<details>
+<summary>e-shiwake の CLAUDE.md（抜粋）— 開発ルールに特化し、仕様は含まない</summary>
+
+```markdown
+# e-shiwake
+
+個人事業主向け PWA 仕訳帳アプリ。IndexedDB によるローカルファースト。
+
+## 技術スタック
+
+SvelteKit + TypeScript + shadcn-svelte + Tailwind CSS v4 + Dexie.js
+
+## 重要: IndexedDB 保存時の注意
+
+Svelte 5 の $state は Proxy を生成する。IndexedDB 保存前に必ず
+JSON.parse(JSON.stringify(...)) でプレーンオブジェクトに変換すること。
+
+## ドキュメント同期ルール
+
+- Single Source of Truth: 各ヘルプページの content.md
+- content.md と +page.svelte は必ず同時に更新する
+- 機能変更時は llms.txt/+server.ts も更新する
+```
+
+</details>
+
+<details>
+<summary>e-shiwake の llms.txt（抜粋）— アプリ仕様・データモデル・ツール一覧を公開</summary>
+
+```markdown
+# e-shiwake (電子仕訳)
+
+個人事業主・フリーランス向けの PWA 仕訳帳アプリケーション。
+
+## 機能一覧
+- 仕訳帳（複合仕訳、家事按分、検索、CSV出力）
+- 総勘定元帳 / 試算表 / 損益計算書 / 貸借対照表
+- 消費税集計 / 固定資産台帳 / 請求書管理
+
+## データモデル
+JournalEntry { id, date, description, lines[], evidences[] }
+JournalLine  { accountCode, accountName, debit, credit, taxCategory }
+
+## WebMCP ツール（Chrome 146+）
+search_journals / create_journal / list_accounts / generate_ledger
+generate_trial_balance / generate_profit_loss / calculate_consumption_tax ...
+```
+
+</details>
+
+この設計のポイント:
+
+- **CLAUDE.md の責務が明確になる** — 「開発時に LLM が守るべきルール」だけに絞れる
+- **llms.txt は SvelteKit のプリレンダで生成** — アプリ実装との乖離が起きにくい
+- **Claude 専用ではない** — どの LLM からも参照可能な標準フォーマット
+- **Skills が参照ベースで構成できる** — Skill 内に仕様を重複記載する必要がない
+
+> [!IMPORTANT]
+> 「CLAUDE.md に何を書くか」だけでなく、**「CLAUDE.md に書かないことをどこに置くか」**も設計対象。llms.txt のような外部仕様を活用することで、200行制限の中で開発ルールの密度を最大化できる。
+>
+> → 実プロジェクト: [e-shiwake/.claude/](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude)
+
 ## 効果的な書き方
 
 > [!TIP]

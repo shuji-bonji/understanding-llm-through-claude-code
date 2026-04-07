@@ -9,6 +9,7 @@
 |:--|:--|:--|
 | [Angular/NgRx](./angular-ngrx/) | Angular 18 + NgRx + RxJS | 🚧 準備中 |
 | [SvelteKit](./svelte-kit/) | SvelteKit + Svelte 5 | 🚧 準備中 |
+| [e-shiwake](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude) | SvelteKit + Svelte 5 + Dexie.js（PWA） | ✅ 実プロジェクト |
 
 ## 実例と本編の対応
 
@@ -18,6 +19,7 @@
 |:--|:--|:--|
 | `CLAUDE.md`（200行以内） | [Part 3: 常駐コンテキスト](../docs/03-always-loaded-context/) | Priority Saturation, Prompt Sensitivity |
 | `CLAUDE.local.md` | [Part 3: 常駐コンテキスト](../docs/03-always-loaded-context/) | Context Rot |
+| `llms.txt` + `content.md`（外部仕様委譲） | [Part 3: 常駐コンテキスト](../docs/03-always-loaded-context/) | Priority Saturation |
 | `.claude/rules/`（条件付き） | [Part 4: 条件付きコンテキスト](../docs/04-conditional-context/) | Priority Saturation, Lost in the Middle |
 | `.claude/skills/` | [Part 5: オンデマンドコンテキスト](../docs/05-on-demand-context/) | Context Rot, Knowledge Boundary |
 | Hooks（lint・テスト自動実行） | [Part 7: ランタイムレイヤー](../docs/07-runtime-layer/) | Hallucination, Sycophancy |
