@@ -101,6 +101,7 @@
 
 - [概要](docs/09-cross-llm-principles/index.md)
 - [構造的制約は全モデル共通](docs/09-cross-llm-principles/universal-patterns.md)
+- [ツール支援がない環境での実践](docs/09-cross-llm-principles/prompt-driven-development.md)
 - [Cursor / Cline / Copilot 対応表](docs/09-cross-llm-principles/cursor-cline-mapping.md)
 
 ### 付録
@@ -113,8 +114,10 @@
 
 ### 実践例
 
+- [実践例の概要と本編との対応](examples/index.md)
 - [Angular/NgRx プロジェクト設定例](examples/angular-ngrx/)
 - [SvelteKit プロジェクト設定例](examples/svelte-kit/)
+- [e-shiwake — 実プロジェクトでの設定例](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude)
 
 ## 関連リンク
 

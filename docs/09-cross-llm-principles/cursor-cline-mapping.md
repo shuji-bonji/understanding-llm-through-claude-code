@@ -30,6 +30,6 @@
 > [!WARNING]
 > TODO: 各ツールの詳細な比較を追加予定
 
-> **前へ**: [構造的制約は全モデル共通](universal-patterns.md)
+> **前へ**: [ツール支援がない環境での実践](prompt-driven-development.md)
 
 > **シリーズ完了**: [トップページに戻る](../../README.md)
