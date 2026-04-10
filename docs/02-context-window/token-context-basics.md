@@ -250,6 +250,6 @@ The next page explores the full picture of **what, when, and how** enters the co
 
 > **Next**: [Chat / Session — "Container of Time" Where Context Accumulates](chat-session.md)
 
-> **Previous**: [Part 1: Structural Problems](../01-llm-structural-problems/overview.md)
+> **Previous**: [Part 1: Structural Problems](../01-llm-structural-problems/index.md)
 
 > **Discussion**: [GitHub Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions)

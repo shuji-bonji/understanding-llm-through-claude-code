@@ -34,4 +34,4 @@ Regardless of tools, the following principles remain constant:
 
 > **Previous**: [Practical Application Without Tool Support](prompt-driven-development.md)
 
-> **Series Complete**: [Return to Top Page](../../README.md)
+> **Series Complete**: [Return to Top Page](/)
