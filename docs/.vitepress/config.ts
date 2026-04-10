@@ -90,7 +90,7 @@ export default withMermaid(
 				provider: 'local',
 			},
 			footer: {
-				message: 'Released under the MIT License.',
+				message: 'Released under the CC BY 4.0 License.',
 				copyright: 'Copyright © 2025-2026 shuji-bonji',
 			},
 		},
