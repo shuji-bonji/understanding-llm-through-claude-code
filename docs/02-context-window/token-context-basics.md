@@ -232,15 +232,15 @@ graph LR
 
 Part 3 以降で学ぶ Claude Code の各機能は、この Context Window を**効率的に使う**ための仕組みである。
 
-| Claude Code の機能  | Context Window に対する戦略       |
-| :------------------ | :-------------------------------- |
-| CLAUDE.md 200行制限 | 常駐する Context を最小限に抑える |
-| `.claude/rules/`    | 必要な時だけ Context に注入する   |
-| Skills              | 呼ばれた時だけ Context を消費する |
-| Agents              | 別の Context Window で実行する    |
-| `/compact`          | Context を圧縮して空間を回復する  |
-| `/clear`            | Context をリセットする            |
-| Hooks               | Context を一切消費しない          |
+| Claude Code の機能  | Context Window に対する戦略                       |
+| :------------------ | :------------------------------------------------ |
+| CLAUDE.md 200行制限 | 常駐する Context を最小限に抑える                 |
+| `.claude/rules/`    | glob（条件）一致時のみ Context に注入する         |
+| Skills              | ユーザー呼出 or LLM 判断時のみ Context を消費する |
+| Agents              | 別の Context Window で実行する                    |
+| `/compact`          | Context を圧縮して空間を回復する                  |
+| `/clear`            | Context をリセットする                            |
+| Hooks               | Context を一切消費しない                          |
 
 次のページでは、この Context Window の中に**何が・いつ・どう入るか**の全体像を見ていく。
 
