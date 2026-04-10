@@ -1,39 +1,41 @@
-# Hooks のライフサイクル
+🌐 [日本語](../ja/07-runtime-layer/hooks.md)
+
+# Hooks Lifecycle
 
 > [!IMPORTANT]
-> → Why: **Hallucination** 対策（テスト実行 Hook で機械的に検出）
-> → Why: **Sycophancy** 対策（コンパイラ・テストランナーは追従しない）
-> → Why: **Instruction Decay** 対策（コンテキストに依存しない強制実行）
+> → Why: **Hallucination** mitigation (test execution Hooks detect mechanically)
+> → Why: **Sycophancy** mitigation (compilers and test runners don't follow along)
+> → Why: **Instruction Decay** mitigation (forced execution independent of context)
 
-## Hooks とは
+## What Are Hooks?
 
-Hooks は Claude Code のライフサイクルイベントにフックして実行されるコンテキスト外の処理。LLM のコンテキストウィンドウを消費しない。
+Hooks are context-independent processing triggered by Claude Code lifecycle events. They don't consume the LLM's context window.
 
-| 属性             | 値                                      |
-| :--------------- | :-------------------------------------- |
-| 注入タイミング   | **コンテキストに注入されない**          |
-| コンテキスト消費 | なし（Prompt Hook を除く）              |
-| 実行場所         | Claude Code ランタイム（シェル / HTTP） |
-| 定義場所         | settings.json 内の `hooks` キー         |
+| Attribute | Value |
+| :--- | :--- |
+| Injection Timing | **Not injected into context** |
+| Context Consumption | None (except Prompt Hook) |
+| Execution Location | Claude Code runtime (shell / HTTP) |
+| Definition Location | `hooks` key in settings.json |
 
-## なぜ存在するのか
+## Why They Exist
 
-LLM に「毎回 eslint を実行しろ」と指示すると、
+If you instruct an LLM to "run eslint every time,"
 
-1. コンテキストウィンドウを消費する
-2. Instruction Decay で忘れることがある
-3. Sycophancy で「問題ない」と判断をスキップする可能性がある
+1. It consumes the context window
+2. It may be forgotten due to Instruction Decay
+3. It may skip judgment due to Sycophancy ("looks fine")
 
-Hooks はランタイムレベルで強制実行するため、これらの問題を全て回避する。
+Hooks execute at the runtime level, avoiding all these problems.
 
-## ライフサイクルフロー
+## Lifecycle Flow
 
 ```mermaid
 flowchart TB
     SS@{ shape: circle, label: "SessionStart" }
     SE@{ shape: circle, label: "SessionEnd" }
 
-    subgraph loop ["エージェントループ（繰り返し）"]
+    subgraph loop ["Agent Loop (iterative)"]
         direction TB
         IL["InstructionsLoaded"]
         UPS["UserPromptSubmit"]
@@ -45,18 +47,18 @@ flowchart TB
 
         IL --> UPS
         UPS --> PTU --> PR --> POST --> SUB --> STOP
-        STOP -->|"次のターン"| UPS
+        STOP -->|"Next turn"| UPS
     end
 
     SS --> IL
-    STOP -->|"セッション終了"| SE
+    STOP -->|"Session end"| SE
 
     style SS fill:#dcfce7,stroke:#15803d,color:#000
     style SE fill:#fee2e2,stroke:#b91c1c,color:#000
     style IL fill:#eff6ff,stroke:#1d4ed8,color:#000
     style STOP fill:#fef9c3,stroke:#a16207,color:#000
 
-    subgraph async ["非同期イベント（ループと並行）"]
+    subgraph async ["Async Events (parallel with loop)"]
         direction TB
         NF["Notification"]
         CWD["CwdChanged /<br>FileChanged"]
@@ -66,72 +68,72 @@ flowchart TB
 ```
 
 > [!TIP]
-> **3層構造**: セッション層（`SessionStart` → `SessionEnd`）がエージェントループ層を囲み、非同期イベント層がループと並行して発火する。
+> **Three-layer structure**: Session layer (`SessionStart` → `SessionEnd`) wraps the agent loop layer, and async event layer fires in parallel with the loop.
 
-## イベント一覧
+## Event List
 
-### セッションライフサイクル
+### Session Lifecycle
 
-| イベント           | 発火タイミング         | 主な用途                             |
-| :----------------- | :--------------------- | :----------------------------------- |
-| `SessionStart`     | セッション開始・再開時 | 環境チェック、ログ初期化             |
-| `SessionEnd`       | セッション終了時       | クリーンアップ処理                   |
-| `UserPromptSubmit` | ユーザー入力送信時     | 入力バリデーション、コンテキスト追加 |
-| `Stop`             | レスポンス完了時       | 続行判定、品質ゲート                 |
-| `StopFailure`      | APIエラーによる終了時  | エラーログ、アラート送信             |
+| Event | Fire Timing | Main Use Case |
+| :--- | :--- | :--- |
+| `SessionStart` | Session start/resume | Environment check, log initialization |
+| `SessionEnd` | Session end | Cleanup |
+| `UserPromptSubmit` | User input submission | Input validation, context addition |
+| `Stop` | Response completion | Continuation judgment, quality gate |
+| `StopFailure` | API error termination | Error log, alert sending |
 
-### ツール実行
+### Tool Execution
 
-| イベント             | 発火タイミング       | 主な用途                    |
-| :------------------- | :------------------- | :-------------------------- |
-| `PreToolUse`         | ツール実行前         | 危険なコマンドのブロック    |
-| `PermissionRequest`  | 権限ダイアログ表示時 | 権限の自動承認/拒否         |
-| `PostToolUse`        | ツール成功後         | 自動フォーマット、lint 実行 |
-| `PostToolUseFailure` | ツール失敗後         | エラーログ、リトライ判定    |
+| Event | Fire Timing | Main Use Case |
+| :--- | :--- | :--- |
+| `PreToolUse` | Before tool execution | Block dangerous commands |
+| `PermissionRequest` | Permission dialog display | Auto-approve/deny permissions |
+| `PostToolUse` | After tool success | Auto-format, run lint |
+| `PostToolUseFailure` | After tool failure | Error log, retry judgment |
 
-### サブエージェント・タスク
+### Subagent & Tasks
 
-| イベント        | 発火タイミング         | 主な用途                         |
-| :-------------- | :--------------------- | :------------------------------- |
-| `SubagentStart` | サブエージェント生成時 | エージェントへのコンテキスト注入 |
-| `SubagentStop`  | サブエージェント完了時 | 結果の検証、続行判定             |
-| `TaskCreated`   | タスク作成時           | 命名規則の強制、タスク検証       |
-| `TaskCompleted` | タスク完了時           | 完了条件の検証                   |
-| `TeammateIdle`  | チームメイト待機前     | 品質ゲート、リソース検証         |
+| Event | Fire Timing | Main Use Case |
+| :--- | :--- | :--- |
+| `SubagentStart` | Subagent generation | Context injection to agents |
+| `SubagentStop` | Subagent completion | Result validation, continuation judgment |
+| `TaskCreated` | Task creation | Enforce naming conventions, task validation |
+| `TaskCompleted` | Task completion | Validate completion conditions |
+| `TeammateIdle` | Before teammate waits | Quality gate, resource validation |
 
-### 設定・環境変更
+### Configuration & Environment Changes
 
-| イベント             | 発火タイミング           | 主な用途                       |
-| :------------------- | :----------------------- | :----------------------------- |
-| `InstructionsLoaded` | CLAUDE.md / rules 読込時 | 監査ログ、コンプライアンス追跡 |
-| `ConfigChange`       | 設定ファイル変更時       | セキュリティ監査、ポリシー強制 |
-| `CwdChanged`         | 作業ディレクトリ変更時   | 環境変数管理（direnv 等）      |
-| `FileChanged`        | 監視ファイル変更時       | ファイル変更トリガーの自動化   |
-| `Notification`       | 通知発生時               | デスクトップ通知               |
+| Event | Fire Timing | Main Use Case |
+| :--- | :--- | :--- |
+| `InstructionsLoaded` | CLAUDE.md / rules loaded | Audit log, compliance tracking |
+| `ConfigChange` | Configuration file change | Security audit, policy enforcement |
+| `CwdChanged` | Working directory change | Environment variable management (direnv, etc.) |
+| `FileChanged` | Watched file change | Automate file change triggers |
+| `Notification` | Notification occurs | Desktop notification |
 
-### コンテキスト管理
+### Context Management
 
-| イベント      | 発火タイミング     | 主な用途     |
-| :------------ | :----------------- | :----------- |
-| `PreCompact`  | コンテキスト圧縮前 | 圧縮前の検証 |
-| `PostCompact` | コンテキスト圧縮後 | 圧縮後の検証 |
+| Event | Fire Timing | Main Use Case |
+| :--- | :--- | :--- |
+| `PreCompact` | Before context compression | Pre-compression validation |
+| `PostCompact` | After context compression | Post-compression validation |
 
-### ワークツリー・MCP
+### Worktree & MCP
 
-| イベント            | 発火タイミング       | 主な用途               |
-| :------------------ | :------------------- | :--------------------- |
-| `WorktreeCreate`    | ワークツリー作成時   | Git 動作の置き換え     |
-| `WorktreeRemove`    | ワークツリー削除時   | クリーンアップ処理     |
-| `Elicitation`       | MCP 入力リクエスト時 | ユーザー入力の自動化   |
-| `ElicitationResult` | MCP 入力応答時       | 応答データの検証・修正 |
+| Event | Fire Timing | Main Use Case |
+| :--- | :--- | :--- |
+| `WorktreeCreate` | Worktree creation | Replace Git operations |
+| `WorktreeRemove` | Worktree deletion | Cleanup |
+| `Elicitation` | MCP input request | Automate user input |
+| `ElicitationResult` | MCP input response | Validate/correct response data |
 
 > [!NOTE]
-> イベントの詳細（JSON 入出力スキーマ、matcher の仕様、非同期 Hook 等）は公式リファレンスを参照:
+> For detailed event information (JSON input/output schema, matcher specification, async Hooks, etc.), refer to the official reference:
 > [Hooks reference](https://code.claude.com/docs/en/hooks) | [Hooks guide](https://code.claude.com/docs/en/hooks-guide)
 
-## Hook の種類
+## Hook Types
 
-### Command Hook（最も一般的）
+### Command Hook (most common)
 
 ```jsonc
 {
@@ -151,7 +153,7 @@ flowchart TB
 }
 ```
 
-### Prompt Hook（唯一コンテキストに影響する）
+### Prompt Hook (only one affecting context)
 
 ```jsonc
 {
@@ -159,14 +161,14 @@ flowchart TB
     "UserPromptSubmit": [
       {
         "type": "prompt",
-        "prompt": "必ず変更前にgit stashしてください",
+        "prompt": "Always git stash before making changes",
       },
     ],
   },
 }
 ```
 
-### HTTP Hook（外部サービス連携）
+### HTTP Hook (external service integration)
 
 ```jsonc
 {
@@ -182,9 +184,9 @@ flowchart TB
 }
 ```
 
-### Agent Hook（マルチターン検証）
+### Agent Hook (multi-turn validation)
 
-ファイルの読み取りやコマンド実行が必要な検証に使用。サブエージェントを起動し、最大50ターンのツール使用で条件を確認する。
+Used for validations requiring file reading or command execution. Spawns a subagent to verify conditions with up to 50 turns of tool use.
 
 ```jsonc
 {
@@ -192,7 +194,7 @@ flowchart TB
     "Stop": [
       {
         "type": "agent",
-        "prompt": "全てのユニットテストが通るか検証してください。テストスイートを実行し結果を確認してください。",
+        "prompt": "Verify that all unit tests pass. Run the test suite and check the results.",
         "timeout": 120,
       },
     ],
@@ -200,16 +202,16 @@ flowchart TB
 }
 ```
 
-## Exit Code の意味
+## Exit Code Meanings
 
-| Exit Code | 意味                                                      |
-| :-------- | :-------------------------------------------------------- |
-| 0         | 操作を許可（そのまま続行。stdout をコンテキストに追加可） |
-| 2         | 操作をブロック（stderr の内容を Claude にフィードバック） |
-| その他    | 操作は続行。stderr はログに記録されるが Claude には非表示 |
+| Exit Code | Meaning |
+| :--- | :--- |
+| 0 | Allow operation (continue as is. stdout may be added to context) |
+| 2 | Block operation (stderr content fed back to Claude) |
+| Other | Continue operation. stderr logged but not shown to Claude |
 
 ---
 
-> **前へ**: [settings.json の役割](settings-json.md)
+> **前へ**: [The Role of settings.json](settings-json.md)
 
-> **次へ**: [なぜLLMに見せないのか](why-not-in-context.md)
+> **次へ**: [Why Not Show LLMs](why-not-in-context.md)

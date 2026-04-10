@@ -1,29 +1,31 @@
-# .claude/rules/ の設計原理
+🌐 [日本語](../ja/04-conditional-context/rules.md)
+
+# Design Principles of .claude/rules/
 
 > [!IMPORTANT]
-> → Why: **Priority Saturation** 対策（条件付き分散で同時有効指示数を削減）
-> → Why: **Lost in the Middle** 対策（必要なルールだけを高注意位置に注入）
+> → Why: **Priority Saturation** mitigation (reduces simultaneously active instructions through conditional distribution)
+> → Why: **Lost in the Middle** mitigation (injects only necessary rules at high-attention positions)
 
-## Rules とは
+## What are Rules?
 
-`.claude/rules/` は glob パターンに一致するファイルを操作する時だけ、コンテキストに注入されるルールファイル。
+`.claude/rules/` are rule files that get injected into the context only when you operate on files matching glob patterns.
 
-| 属性             | 値                                        |
-| :--------------- | :---------------------------------------- |
-| 注入タイミング   | glob パターンに一致するファイル操作時のみ |
-| コンテキスト消費 | 条件一致時のみ                            |
-| LLM からの見え方 | CLAUDE.md と同じ優先度のプロジェクト指示  |
-| 推奨サイズ       | 1ファイル1ドメイン、焦点を絞る            |
+| Attribute | Value |
+| :--- | :--- |
+| Injection timing | Only when operating on files matching glob patterns |
+| Context consumption | Only when condition is met |
+| How LLM sees it | Project instructions with same priority as CLAUDE.md |
+| Recommended size | One domain per file, maintain focus |
 
-## なぜ存在するのか
+## Why It Exists
 
-CLAUDE.md の **Priority Saturation 問題**を解決する仕組み。
+It's a mechanism to solve the **Priority Saturation problem** in CLAUDE.md.
 
-全てのルールを CLAUDE.md に書くと、API のバリデーションルールが React のコンポーネント規約と同時に読み込まれ、互いに注意を奪い合う。Rules は「今触っているファイルに関連するルールだけ」を LLM に見せることで、限られたコンテキスト内での指示の効果密度を最大化する。Part 2 で学んだ Context Budget の観点では、条件一致時のみ注入することで常駐コンテキストの消費を抑え、変動枠に余裕を持たせることができる。
+If you write all rules in CLAUDE.md, API validation rules are loaded simultaneously with React component conventions, competing for attention. Rules maximize the effective density of instructions within limited context by showing the LLM "only rules relevant to the file being modified." From the Context Budget perspective (Part 2), injecting only when conditions match allows you to reduce always-resident context consumption and maintain flexibility in the variable frame.
 
-## ルールの書き方
+## How to Write Rules
 
-YAML フロントマターの `globs` フィールドで、**Claude Code が操作（読み取り・編集）するファイル** に対する条件を指定する。
+In the YAML frontmatter's `globs` field, specify conditions for **files that Claude Code operates on** (reads or edits).
 
 ```markdown
 ---
@@ -32,14 +34,14 @@ globs: 'src/app/**/*.component.ts'
 
 # Angular Component Rules
 
-- OnPush変更検知を必須とする
-- templateUrlではなくinline templateを使用
-- @Input()には必ずset/getでイミュータブルな扱いをする
+- OnPush change detection is mandatory
+- Use inline templates, not templateUrl
+- @Input() must always use set/get with immutable handling
 ```
 
-この場合、`src/app/` 配下の `.component.ts` ファイルを編集する時だけ注入される。
+In this case, the rules are injected only when editing `.component.ts` files under `src/app/`.
 
-## Angular プロジェクトでの設計例
+## Design Example in an Angular Project
 
 ```sh
 .claude/rules/
@@ -50,106 +52,106 @@ globs: 'src/app/**/*.component.ts'
 └── e2e-testing.md          # globs: "e2e/**/*.ts"
 ```
 
-## 実例: e-shiwake の Rules（SvelteKit + PWA）
+## Real Example: e-shiwake Rules (SvelteKit + PWA)
 
-[e-shiwake](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude/rules) では、3つの異なるパターンの Rules を運用している。
+[e-shiwake](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude/rules) operates three distinct patterns of Rules.
 
 ```sh
 .claude/rules/
-├── help-sync.md          # ドキュメント同期ルール
-├── indexeddb-proxy.md    # フレームワーク固有のワークアラウンド
-└── route-change.md       # ルート変更時のチェックリスト
+├── help-sync.md          # Documentation synchronization rules
+├── indexeddb-proxy.md    # Framework-specific workarounds
+└── route-change.md       # Checklist for route changes
 ```
 
-### パターン 1: 同期ルール（help-sync.md）
+### Pattern 1: Synchronization Rules (help-sync.md)
 
-ページや UI コンポーネントを変更したら、対応するヘルプドキュメント（`content.md` + `+page.svelte`）も同時に更新することを強制する。LLM は「機能を直す」ことには注力するが、「ドキュメントも直す」ことを忘れやすい。このルールがないと、コードとドキュメントが乖離する。
+When changing a page or UI component, enforce simultaneous updates to corresponding help documentation (`content.md` + `+page.svelte`). The LLM tends to focus on "fixing the feature" but forgets "updating the documentation." Without this rule, code and documentation diverge.
 
 <details>
-<summary>help-sync.md の実際の内容</summary>
+<summary>Actual content of help-sync.md</summary>
 
 ```markdown
-# ヘルプドキュメント同期ルール
+# Help Documentation Synchronization Rule
 
-以下のファイルを変更した場合、対応するヘルプページも更新すること。
+When modifying the following files, also update the corresponding help page.
 
-| 変更対象 | 更新すべきヘルプ |
+| File to change | Help to update |
 |---|---|
 | src/routes/{slug}/+page.svelte | src/routes/help/{slug}/content.md + +page.svelte |
-| src/lib/components/** | 関連するヘルプページ |
+| src/lib/components/** | Related help pages |
 
-- content.md と +page.svelte は必ず同時に更新する（片方だけの更新は禁止）
-- content.md がその機能の仕様における Single Source of Truth
-- 機能一覧に影響がある場合は llms.txt/+server.ts も更新する
+- Always update content.md and +page.svelte simultaneously (updating only one is prohibited)
+- content.md is the Single Source of Truth for that feature's specification
+- If the feature list is affected, also update llms.txt/+server.ts
 ```
 
 </details>
 
-### パターン 2: 技術的ワークアラウンド（indexeddb-proxy.md）
+### Pattern 2: Technical Workarounds (indexeddb-proxy.md)
 
-Svelte 5 の `$state` が生成する Proxy オブジェクトは IndexedDB に直接保存できない。`$state.snapshot()` だけでは不十分で、`JSON.parse(JSON.stringify($state.snapshot(value)))` が必要。LLM の学習データにはこの知識が十分含まれていない可能性が高く、Rules で明示する価値が大きい。
+Svelte 5's `$state` generates Proxy objects that cannot be directly stored in IndexedDB. `$state.snapshot()` alone is insufficient; you need `JSON.parse(JSON.stringify($state.snapshot(value)))`. This knowledge is likely not sufficiently included in the LLM's training data, making it highly valuable to specify in Rules.
 
 <details>
-<summary>indexeddb-proxy.md の実際の内容</summary>
+<summary>Actual content of indexeddb-proxy.md</summary>
 
 ```markdown
-# Svelte 5 + IndexedDB: Proxy 問題
+# Svelte 5 + IndexedDB: Proxy Problem
 
-Svelte 5 の $state が生成する Proxy オブジェクトは
-IndexedDB に直接保存できない。
+Svelte 5's $state generates Proxy objects that cannot be
+directly stored in IndexedDB.
 
-## 安全な変換パターン
+## Safe Conversion Pattern
 JSON.parse(JSON.stringify($state.snapshot(value)))
 
-## NG パターン
-- structuredClone() → DataCloneError が発生
-- $state.snapshot() のみ → ネストした配列・オブジェクトが Proxy のまま残る
+## NG Patterns
+- structuredClone() → DataCloneError occurs
+- $state.snapshot() only → Nested arrays/objects remain as Proxy
 
-対象パス: src/lib/db/**/*.ts, src/lib/components/**/*.svelte
+Target paths: src/lib/db/**/*.ts, src/lib/components/**/*.svelte
 ```
 
 </details>
 
-### パターン 3: チェックリスト（route-change.md）
+### Pattern 3: Checklists (route-change.md)
 
-SvelteKit でルートを追加・削除する際に更新すべきファイル一覧（`svelte.config.js`、`sitemap.xml`、`CLAUDE.md`、`README.md`、`llms.txt`）を列挙。Instruction Decay によって長いセッション中に手順を忘れることを防ぐ。
+Enumerate the list of files that must be updated when adding/deleting routes in SvelteKit (`svelte.config.js`, `sitemap.xml`, `CLAUDE.md`, `README.md`, `llms.txt`). Prevents forgetting procedures during long sessions due to Instruction Decay.
 
 <details>
-<summary>route-change.md の実際の内容</summary>
+<summary>Actual content of route-change.md</summary>
 
 ```markdown
-# ルート変更時の必須チェックリスト
+# Required Checklist for Route Changes
 
-ルートの追加・削除・変更時は以下を全て更新すること。
+When adding, deleting, or changing routes, update all of the following.
 
-1. svelte.config.js — prerender.entries を更新
-2. static/sitemap.xml — URL を追加・削除
-3. CLAUDE.md — サイトマップセクションを更新
-4. README.md — ページ構成セクションを更新
+1. svelte.config.js — Update prerender.entries
+2. static/sitemap.xml — Add/delete URLs
+3. CLAUDE.md — Update sitemap section
+4. README.md — Update page structure section
 
-ヘルプページの場合はさらに:
-5. content.md の作成・削除
-6. llms.txt/+server.ts のヘルプリンク一覧を更新
+Additionally, for help pages:
+5. Create/delete content.md
+6. Update help link list in llms.txt/+server.ts
 ```
 
 </details>
 
 > [!TIP]
-> 3つの Rules がそれぞれ異なる構造的問題に対応している点に注目:
-> - **help-sync.md** → 変更の波及先を忘れる問題（Instruction Decay）
-> - **indexeddb-proxy.md** → LLM が知らない知識の補完（Knowledge Boundary）
-> - **route-change.md** → 手順の抜け漏れ防止（Instruction Decay, Priority Saturation）
+> Note how the three Rules address different structural problems:
+> - **help-sync.md** → Problem of forgetting propagation points of changes (Instruction Decay)
+> - **indexeddb-proxy.md** → Complementing knowledge the LLM doesn't have (Knowledge Boundary)
+> - **route-change.md** → Preventing omissions in procedures (Instruction Decay, Priority Saturation)
 
-## CLAUDE.md から Rules への移動基準
+## Criteria for Moving Rules from CLAUDE.md to Rules
 
-以下の条件を満たすルールは CLAUDE.md から Rules に移動すべき。
+Rules meeting the following conditions should be moved from CLAUDE.md to Rules.
 
-1. **特定のファイル種別にしか適用されない**: `.component.ts` 専用のルールなど
-2. **CLAUDE.md が 200 行を超えそう**: 優先度の低いルールから移動
-3. **他のルールと注意を奪い合う**: 無関係なドメインのルール同士
+1. **Applicable only to specific file types**: Rules specific to `.component.ts`, etc.
+2. **CLAUDE.md is approaching 200 lines**: Move lower-priority rules
+3. **Rules compete for attention with each other**: Rules from unrelated domains
 
 ---
 
-> **前へ**: [Part 3: 常駐コンテキストを設計する](../03-always-loaded-context/index.md)
+> **Previous**: [Part 3: Designing Always-Loaded Context](../03-always-loaded-context/index.md)
 
-> **次へ**: [globパターン設計の実践](glob-patterns.md)
+> **Next**: [Practical glob Pattern Design](glob-patterns.md)

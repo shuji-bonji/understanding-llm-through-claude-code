@@ -1,35 +1,37 @@
-# Token・Context・Context Window — 3つの基礎概念
+🌐 [日本語](../ja/02-context-window/token-context-basics.md)
+
+# Token, Context, and Context Window — Three Foundational Concepts
 
 > [!NOTE]
-> このページは Part 2 の出発点であり、本リポジトリ全体の前提知識となる。
-> Part 1 の構造的問題も、Part 3 以降の設計判断も、この3概念の理解なしには「なぜ」が見えない。
+> This page is the starting point for Part 2 and serves as prerequisite knowledge for the entire repository.
+> Neither the structural problems in Part 1 nor the design decisions from Part 3 onward will make sense without understanding these three concepts.
 
-## Token — LLM の「文字」
+## Token — The "Character" Unit of LLMs
 
-### Token とは何か
+### What Is a Token?
 
-LLM はテキストを「文字」単位でも「単語」単位でもなく、**Token**（トークン）という独自の単位で処理する。
+LLMs don't process text by individual characters or even words. Instead, they use their own unit called a **Token**.
 
 ```
-入力テキスト:  "Claude Code でコードを書く"
-                ↓ トークナイザーが分割
-トークン列:    ["Claude", " Code", " で", "コード", "を", "書", "く"]
+Input text:    "Claude Code でコードを書く"
+               ↓ tokenizer splits it
+Token stream:  ["Claude", " Code", " で", "コード", "を", "書", "く"]
 ```
 
-英語は概ね「1単語 ≈ 1〜1.3 トークン」、日本語は「1文字 ≈ 1〜3 トークン」になる。同じ内容でも日本語の方がトークン消費が多い。
+In English, roughly "1 word ≈ 1–1.3 tokens," while in Japanese "1 character ≈ 1–3 tokens." The same content consumes more tokens in Japanese.
 
-### なぜ Token 単位なのか
+### Why Tokens?
 
-LLM の内部は**数値ベクトルの演算**で動いている。テキストを直接は処理できないため、テキスト → トークン（整数 ID） → ベクトルに変換する必要がある。
+The internal machinery of an LLM is built on **arithmetic with numerical vectors**. Since text cannot be processed directly, it must be converted: text → token (integer ID) → vector.
 
 ```mermaid
 graph LR
-    TEXT["テキスト<br/>『コードを書く』"]
-    TOKENIZER(["トークナイザー"])
-    TOKENS["トークン列<br/>[15234, 835, 9021]"]
-    VECTORS["ベクトル列<br/>[[0.12, -0.34, ...], ...]"]
-    LLM(["LLM（Transformer）"])
-    OUTPUT["出力トークン"]
+    TEXT["Text<br/>『Writing Code』"]
+    TOKENIZER(["Tokenizer"])
+    TOKENS["Token Stream<br/>[15234, 835, 9021]"]
+    VECTORS["Vector Sequence<br/>[[0.12, -0.34, ...], ...]"]
+    LLM(["LLM (Transformer)"])
+    OUTPUT["Output Token"]
 
     TEXT --> TOKENIZER
     TOKENIZER --> TOKENS
@@ -43,51 +45,51 @@ graph LR
     class TEXT,TOKENS,VECTORS,OUTPUT data
 ```
 
-このパイプライン全体を「トークン」という単位が貫いている。だから LLM の能力も制約も、全てトークン単位で語られる。
+The token unit threads through this entire pipeline. That's why every capability and constraint of an LLM is discussed in token terms.
 
-### Token の実感を掴む
+### Getting a Feel for Tokens
 
-| 目安                            | トークン数                            |
-| :------------------------------ | :------------------------------------ |
-| 英語 1 単語                     | ~1 トークン                           |
-| 日本語 1 文字                   | ~1〜3 トークン                        |
-| この README.md（約 135 行）     | ~2,000 トークン                       |
-| 一般的なソースファイル（200行） | ~1,000〜3,000 トークン                |
-| Claude の 200K コンテキスト     | 英語の本 約2冊分 / 日本語の本 約1冊分 |
+| Reference                        | Token Count                    |
+| :------------------------------- | :------------------------------ |
+| 1 English word                   | ~1 token                        |
+| 1 Japanese character             | ~1–3 tokens                     |
+| This README.md (~135 lines)       | ~2,000 tokens                   |
+| A typical source file (200 lines) | ~1,000–3,000 tokens             |
+| Claude's 200K context            | ~2 books in English / ~1 book in Japanese |
 
 > [!TIP]
-> **開発者向けの比喩**: Token はメモリのバイトに相当する。CPU（LLM）がデータを処理する最小単位であり、メモリ容量（コンテキストウィンドウ）もバイト（トークン）で測る。
+> **Developer analogy**: A token is like a byte in memory. It's the smallest unit that the CPU (LLM) processes, and the memory capacity (context window) is measured in bytes (tokens).
 
-## Context — LLM に渡す「全情報」
+## Context — All "Information" Passed to an LLM
 
-### Context とは何か
+### What Is Context?
 
-Context（コンテキスト）とは、**LLM が1回の応答を生成するために参照する全てのテキスト**のこと。
+Context is **all the text that an LLM reads to generate a single response**.
 
-開発者の日常で例えると:
+As a developer, you might think of it this way:
 
-| 比喩            | Context に相当するもの               |
-| :-------------- | :----------------------------------- |
-| 関数呼び出し    | 引数として渡される全データ           |
-| HTTP リクエスト | リクエストボディ全体                 |
-| コンパイル      | コンパイラに渡されるソースファイル群 |
+| Analogy          | What Corresponds to Context     |
+| :--------------- | :------------------------------ |
+| Function call    | All data passed as arguments    |
+| HTTP request     | The entire request body         |
+| Compilation      | All source files passed to compiler |
 
-LLM はステートレスである。過去の会話を「覚えている」のではなく、**毎回、会話履歴を含む全てのテキストが Context として渡され、それを読んで応答を生成する**。
+LLMs are stateless. They don't "remember" past conversations; instead, **each time, the entire conversation history is passed as Context, and the LLM reads it to generate a response**.
 
 ```mermaid
 graph TD
-    subgraph CONTEXT["Context（LLM に渡される全テキスト）"]
+    subgraph CONTEXT["Context (All text passed to LLM)"]
         direction TB
-        SP["System Prompt<br/>（LLM の振る舞いを定義）"]
-        CLAUDE["CLAUDE.md<br/>（プロジェクト知識）"]
-        RULES["Rules<br/>（条件付きルール）"]
-        HISTORY["会話履歴<br/>（ユーザー入力 + 過去の応答）"]
-        TOOLS["MCP ツール定義"]
+        SP["System Prompt<br/>(Defines LLM behavior)"]
+        CLAUDE["CLAUDE.md<br/>(Project knowledge)"]
+        RULES["Rules<br/>(Conditional rules)"]
+        HISTORY["Conversation History<br/>(User input + past responses)"]
+        TOOLS["MCP Tool Definitions"]
     end
 
-    USER["ユーザーの新しい入力"]
-    LLM_PROC(["LLM が Context 全体を読んで応答を生成"])
-    RESPONSE["応答"]
+    USER["User's New Input"]
+    LLM_PROC(["LLM reads entire Context and generates response"])
+    RESPONSE["Response"]
 
     USER --> CONTEXT
     CONTEXT --> LLM_PROC
@@ -101,9 +103,9 @@ graph TD
     class USER,RESPONSE io
 ```
 
-### 「ステートレス」の意味
+### What "Stateless" Means
 
-REST API に馴染みのある開発者なら直感的に分かるはず。LLM の応答生成は HTTP リクエストと同じで、**リクエストごとに独立**している。
+If you're familiar with REST APIs, this should be intuitive. LLM response generation works like an HTTP request: **each invocation is independent**.
 
 ```mermaid
 block-beta
@@ -112,18 +114,18 @@ block-beta
   block:all:5
     columns 8
 
-    t1["ターン 1"]:8
-    sp1["System Prompt"] cm1["CLAUDE.md"] u1["ユーザー入力1"] r1<["→ 応答1"]>(right) space:4
+    t1["Turn 1"]:8
+    sp1["System Prompt"] cm1["CLAUDE.md"] u1["User Input 1"] r1<["→ Response 1"]>(right) space:4
 
     space:8
 
-    t2["ターン 2"]:8
-    sp2["System Prompt"] cm2["CLAUDE.md"] u2a["ユーザー入力1"] a1["応答1"] u2b["ユーザー入力2"] r2<["→ 応答2"]>(right) space:2
+    t2["Turn 2"]:8
+    sp2["System Prompt"] cm2["CLAUDE.md"] u2a["User Input 1"] a1["Response 1"] u2b["User Input 2"] r2<["→ Response 2"]>(right) space:2
 
     space:8
 
-    t3["ターン 3"]:8
-    sp3["System Prompt"] cm3["CLAUDE.md"] u3a["ユーザー入力1"] a2["応答1"] u3b["ユーザー入力2"] a3["応答2"] u3c["ユーザー入力3"] r3<["→ 応答3"]>(right)
+    t3["Turn 3"]:8
+    sp3["System Prompt"] cm3["CLAUDE.md"] u3a["User Input 1"] a2["Response 1"] u3b["User Input 2"] a3["Response 2"] u3c["User Input 3"] r3<["→ Response 3"]>(right)
   end
 
   style t1 fill:#e5e7eb,stroke:none,color:#000
@@ -154,45 +156,45 @@ block-beta
   style a3 fill:#f3e8ff,stroke:#7c3aed,color:#000
 ```
 
-LLM は過去の会話を「覚えている」のではなく、毎ターン全履歴を「読んでいる」。ターンが進むほど Context が膨らむ。これが Part 1 で学んだ **Context Rot** と **Instruction Decay** の物理的な原因である。
+The LLM doesn't "remember" past conversations; it "reads" the entire history on each turn. As turns progress, the Context grows. This is the physical cause of the **Context Rot** and **Instruction Decay** we learned in Part 1.
 
-## Context Window — 有限の「思考空間」
+## Context Window — The Finite "Thinking Space"
 
-### Context Window とは何か
+### What Is a Context Window?
 
-Context Window（コンテキストウィンドウ）とは、**LLM が一度に処理できる Context の最大サイズ**である。
+A Context Window is **the maximum size of Context that an LLM can process at one time**.
 
-| モデル                       | Context Window サイズ           |
-| :--------------------------- | :------------------------------ |
-| Claude Sonnet 4.6 / Opus 4.6 | 1M トークン（200K超も標準料金） |
-| Claude Sonnet 4 / Opus 4     | 200K トークン                   |
-| GPT-4o                       | 128K トークン                   |
-| Gemini 2.5 Pro               | 1M トークン                     |
+| Model                        | Context Window Size         |
+| :--------------------------- | :--------------------------- |
+| Claude Sonnet 4.6 / Opus 4.6 | 1M tokens (200K+ at standard rate) |
+| Claude Sonnet 4 / Opus 4     | 200K tokens                 |
+| GPT-4o                       | 128K tokens                 |
+| Gemini 2.5 Pro               | 1M tokens                   |
 
 > [!TIP]
-> **開発者向けの比喩**: Context Window はプロセスに割り当てられたメモリ空間。サイズを超えると OOM（Out of Memory）するのと同じように、Context Window を超えるとトークンが切り捨てられる。
+> **Developer analogy**: A context window is like the memory space allocated to a process. Just as exceeding this space causes OOM (Out of Memory), exceeding the context window results in tokens being truncated.
 
-### 「大きければ安全」ではない
+### "Bigger Isn't Safer"
 
-ここが最も重要なポイントであり、Part 1 で学んだ構造的問題との接続点になる。
+This is the most crucial point and where the structural problems from Part 1 connect.
 
 ```mermaid
 graph TD
-    CW["Context Window<br/>200K〜1M トークン"]
+    CW["Context Window<br/>200K–1M tokens"]
 
-    SAFE["実効的に安全な範囲<br/>~50K トークン"]
-    DANGER["劣化が進行する範囲<br/>50K以降"]
+    SAFE["Effectively Safe Range<br/>~50K tokens"]
+    DANGER["Range Where Degradation Progresses<br/>50K and Beyond"]
 
     CW --> SAFE
     CW --> DANGER
 
-    CR["Context Rot<br/>トークン増で品質劣化"]
-    LM["Lost in the Middle<br/>中間部の情報喪失"]
-    PS["Priority Saturation<br/>~3,000トークンの指示で飽和"]
+    CR["Context Rot<br/>Quality degradation with token growth"]
+    LM["Lost in the Middle<br/>Information loss at middle positions"]
+    PS["Priority Saturation<br/>Saturation at ~3,000 token instructions"]
 
-    DANGER -->|"50K超で発現"| CR
-    DANGER -->|"50%超でU字崩壊"| LM
-    SAFE -->|"指示量が閾値を超えると"| PS
+    DANGER -->|"Emerges beyond 50K"| CR
+    DANGER -->|"U-shaped collapse beyond 50%"| LM
+    SAFE -->|"When instruction volume exceeds threshold"| PS
 
     classDef window fill:#eff6ff,stroke:#1d4ed8,color:#000,font-weight:bold
     classDef safe fill:#dcfce7,stroke:#15803d,color:#000
@@ -204,48 +206,50 @@ graph TD
     class CR,LM,PS problem
 ```
 
-Context Window は「容量いっぱいまで使える」のではなく、「容量のうち、品質を保てるのは一部」と理解すべきである。1M に拡張されても、この原則は変わらない。この定量的な話は [コンテキスト予算](context-budget.md) で詳しく扱う。
+A context window should not be thought of as "usable up to full capacity," but rather "of the available capacity, only a portion can maintain quality." This principle holds regardless of whether the window is expanded to 1M tokens. We'll cover the quantitative details in [Context Budget](context-budget.md).
 
-## 3概念の関係
+## The Relationship Between the Three Concepts
 
 ```mermaid
 graph LR
-    TOKEN["Token<br/>LLM の最小処理単位"]
-    CONTEXT["Context<br/>LLM に渡す全テキスト<br/>（Token の集合）"]
-    CW["Context Window<br/>Context の最大サイズ<br/>（Token 数で制限）"]
+    TOKEN["Token<br/>Smallest processing unit of LLM"]
+    CONTEXT["Context<br/>All text passed to LLM<br/>(Collection of tokens)"]
+    CW["Context Window<br/>Maximum size of Context<br/>(Limited by token count)"]
 
-    TOKEN -->|"集まって構成する"| CONTEXT
-    CONTEXT -->|"サイズが制限される"| CW
-    CW -->|"サイズの単位は"| TOKEN
+    TOKEN -->|"Grouped together to form"| CONTEXT
+    CONTEXT -->|"Size is limited by"| CW
+    CW -->|"Measured in units of"| TOKEN
 
     classDef concept fill:#eff6ff,stroke:#1d4ed8,color:#000,font-weight:bold
     class TOKEN,CONTEXT,CW concept
 ```
 
-| 概念               | 一言で           | 開発者向けの比喩      |
+| Concept            | In One Word      | Developer Analogy     |
 | :----------------- | :--------------- | :-------------------- |
-| **Token**          | LLM の処理単位   | メモリのバイト        |
-| **Context**        | LLM への入力全体 | HTTP リクエストボディ |
-| **Context Window** | 入力の最大サイズ | プロセスのメモリ空間  |
+| **Token**          | LLM's processing unit | Memory bytes         |
+| **Context**        | All input to LLM | HTTP request body     |
+| **Context Window** | Input size limit | Process memory space  |
 
-## Claude Code の設計は全て Context Window の制約に基づく
+## All Claude Code Design Is Based on Context Window Constraints
 
-Part 3 以降で学ぶ Claude Code の各機能は、この Context Window を**効率的に使う**ための仕組みである。
+Every Claude Code feature you'll learn in Part 3 and beyond is a mechanism to **use the context window efficiently**.
 
-| Claude Code の機能  | Context Window に対する戦略                       |
-| :------------------ | :------------------------------------------------ |
-| CLAUDE.md 200行制限 | 常駐する Context を最小限に抑える                 |
-| `.claude/rules/`    | glob（条件）一致時のみ Context に注入する         |
-| Skills              | ユーザー呼出 or LLM 判断時のみ Context を消費する |
-| Agents              | 別の Context Window で実行する                    |
-| `/compact`          | Context を圧縮して空間を回復する                  |
-| `/clear`            | Context をリセットする                            |
-| Hooks               | Context を一切消費しない                          |
+| Claude Code Feature | Context Window Strategy                 |
+| :------------------ | :--------------------------------------- |
+| CLAUDE.md 200-line limit | Keep resident Context to a minimum  |
+| `.claude/rules/`    | Inject Context only on glob match        |
+| Skills              | Consume Context only on user call or LLM decision |
+| Agents              | Run in a separate context window         |
+| `/compact`          | Compress Context to recover space        |
+| `/clear`            | Reset Context                            |
+| Hooks               | Consume zero Context                     |
 
-次のページでは、この Context Window の中に**何が・いつ・どう入るか**の全体像を見ていく。
+The next page explores the full picture of **what, when, and how** enters the context window.
 
 ---
 
-> **次へ**: [Chat / Session — Context が蓄積する「時間の入れ物」](chat-session.md)
+> **Next**: [Chat / Session — "Container of Time" Where Context Accumulates](chat-session.md)
+
+> **Previous**: [Part 1: Structural Problems](../01-llm-structural-problems/overview.md)
 
 > **Discussion**: [GitHub Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions)

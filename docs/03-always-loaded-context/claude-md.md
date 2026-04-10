@@ -1,161 +1,163 @@
-# CLAUDE.md の設計原理
+🌐 [日本語](../ja/03-always-loaded-context/claude-md.md)
+
+# Design Principles of CLAUDE.md
 
 > [!IMPORTANT]
-> → Why: **Priority Saturation** 対策（200行制限の根拠）
-> → Why: **Prompt Sensitivity** 対策（具体的・命令的記述）
+> → Why: **Priority Saturation** mitigation (rationale for the 200-line limit)
+> → Why: **Prompt Sensitivity** mitigation (concrete, directive language)
 
-## CLAUDE.md とは
+## What Is CLAUDE.md?
 
-CLAUDE.md はセッション開始時に自動で読み込まれ、**毎ターン**コンテキストウィンドウを消費し続ける「常駐メモリ」。LLM からはシステムリマインダーとして注入される。
+CLAUDE.md is automatically loaded when a session starts and continues consuming context window space **every turn**—it's "resident memory." The LLM sees it as a system reminder injected at the beginning.
 
-| 属性             | 値                             |
-| :--------------- | :----------------------------- |
-| 注入タイミング   | セッション開始時に自動読み込み |
-| コンテキスト消費 | 常時（毎ターン消費し続ける）   |
-| LLM からの見え方 | システムリマインダーとして注入 |
-| 推奨サイズ       | **200行以内**                  |
+| Attribute | Value |
+| :--- | :--- |
+| Injection Timing | Automatically loaded at session start |
+| Context Consumption | Continuous (consumed every turn) |
+| How LLM Sees It | Injected as a system reminder |
+| Recommended Size | **200 lines or fewer** |
 
-## なぜ 200 行以内なのか
+## Why 200 Lines Maximum?
 
-→ **Priority Saturation** の研究知見に基づく。
+→ Based on Priority Saturation research findings.
 
-- 200行 ≈ 約 2,000〜3,000 トークン
-- ManyIFEval が示した劣化閾値（~3,000 トークン）とほぼ一致
-- 200行内に収めることで約 30〜40 個のアクティブな指示を維持
-- 個々の指示の遵守率を実用的なレベルに保つ
+- 200 lines ≈ roughly 2,000–3,000 tokens
+- Aligns closely with ManyIFEval's degradation threshold (~3,000 tokens)
+- Staying within 200 lines maintains approximately 30–40 active instructions
+- Preserves individual instruction adherence at a practical level
 
 > [!IMPORTANT]
-> 詳細: [Priority Saturation](../01-llm-structural-problems/priority-saturation.md)
+> Details: [Priority Saturation](../01-llm-structural-problems/priority-saturation.md)
 
-## 何を書くべきか
+## What Should You Write?
 
-CLAUDE.md には「LLM がコードを読んだだけでは推測できない情報」を書く。
+CLAUDE.md should contain "information that the LLM cannot infer just by reading code."
 
-### 書くべき内容
+### What to Include
 
-- プロジェクトの技術スタック（Angular 18 + NgRx + .NET 8）
-- フレームワークレベルの設計判断
-- ビルド・テストコマンド（`npm run test:ci`）
-- コミット規約（Conventional Commits）
-- 禁止事項（any型禁止、console.log禁止）
+- Project tech stack (Angular 18 + NgRx + .NET 8)
+- Framework-level design decisions
+- Build and test commands (`npm run test:ci`)
+- Commit conventions (Conventional Commits)
+- Prohibitions (no `any` type, no `console.log`)
 
-### 書くべきでない内容
+### What NOT to Include
 
-- コードスタイル（.editorconfig / eslint が担当）
-- LLM がコードベースから推測できるパターン
-- 特定ファイル種別にしか適用されないルール → `.claude/rules/` へ
-- 特定タスクのワークフロー → `.claude/skills/` へ
+- Code style rules (handled by .editorconfig / eslint)
+- Patterns the LLM can infer from the codebase
+- Rules that apply only to specific file types → move to `.claude/rules/`
+- Workflow for specific tasks → move to `.claude/skills/`
 
-## 実例: llms.txt による仕様の外部委譲（e-shiwake）
+## Example: Delegating Specifications via llms.txt (e-shiwake)
 
 > [!TIP]
-> CLAUDE.md を軽量に保つ手段は Rules/Skills への移動だけではない。**アプリ自体が提供する仕様ドキュメント**を活用する方法もある。
+> Keeping CLAUDE.md lightweight doesn't rely solely on moving content to Rules/Skills. **Using specification documents that the app itself provides** is another approach.
 
-[e-shiwake](https://github.com/shuji-bonji/e-shiwake) では、[llms.txt](https://llmstxt.org/) という提案仕様を活用して CLAUDE.md の肥大化を防いでいる。llms.txt は Claude Code の機能ではなく、Web サイトが LLM 向けに仕様を公開するための標準フォーマット。
+[e-shiwake](https://github.com/shuji-bonji/e-shiwake) uses [llms.txt](https://llmstxt.org/), a proposed standard for applications to publish specifications for LLMs. Note that llms.txt is not a Claude Code feature; it's a standard format for websites to publish specifications for LLM consumption.
 
 ```
-CLAUDE.md に全部書いた場合:
-  CLAUDE.md（開発ルール + 勘定科目体系 + 操作手順 + データモデル + ...）
-  → 数百行に膨張、Priority Saturation で指示遵守率が低下
+If everything went into CLAUDE.md:
+  CLAUDE.md (development rules + chart of accounts + procedures + data models + ...)
+  → Balloons to hundreds of lines, Priority Saturation reduces instruction adherence
 
-llms.txt で外部委譲した場合:
-  CLAUDE.md          → 開発ルールと指針だけ（軽量）
-  llms.txt           → アプリ仕様・データモデル・ツール一覧
-  help/*/content.md  → 各機能の詳細ドキュメント（Single Source of Truth）
-  .claude/skills/    → llms.txt や content.md を参照する形でドメイン知識を注入
+With specifications delegated to llms.txt:
+  CLAUDE.md          → Development rules and guidelines only (lightweight)
+  llms.txt           → App specs, data models, tool inventory
+  help/*/content.md  → Detailed docs for each feature (Single Source of Truth)
+  .claude/skills/    → Domain knowledge injected by referencing llms.txt and content.md
 ```
 
 <details>
-<summary>e-shiwake の CLAUDE.md（抜粋）— 開発ルールに特化し、仕様は含まない</summary>
+<summary>e-shiwake's CLAUDE.md (excerpt) — focused on development rules, excludes specifications</summary>
 
 ```markdown
 # e-shiwake
 
-個人事業主向け PWA 仕訳帳アプリ。IndexedDB によるローカルファースト。
+Personal accounting PWA ledger app. Local-first with IndexedDB.
 
-## 技術スタック
+## Tech Stack
 
 SvelteKit + TypeScript + shadcn-svelte + Tailwind CSS v4 + Dexie.js
 
-## 重要: IndexedDB 保存時の注意
+## Critical: IndexedDB Persistence
 
-Svelte 5 の $state は Proxy を生成する。IndexedDB 保存前に必ず
-JSON.parse(JSON.stringify(...)) でプレーンオブジェクトに変換すること。
+Svelte 5's $state generates Proxies. Before persisting to IndexedDB, always convert
+to a plain object using JSON.parse(JSON.stringify(...)).
 
-## ドキュメント同期ルール
+## Documentation Sync Rules
 
-- Single Source of Truth: 各ヘルプページの content.md
-- content.md と +page.svelte は必ず同時に更新する
-- 機能変更時は llms.txt/+server.ts も更新する
+- Single Source of Truth: each help page's content.md
+- content.md and +page.svelte must always be updated together
+- When features change, also update llms.txt and +server.ts
 ```
 
 </details>
 
 <details>
-<summary>e-shiwake の llms.txt（抜粋）— アプリ仕様・データモデル・ツール一覧を公開</summary>
+<summary>e-shiwake's llms.txt (excerpt) — publishes app specs, data models, and tool inventory</summary>
 
 ```markdown
-# e-shiwake (電子仕訳)
+# e-shiwake (Electronic Ledger)
 
-個人事業主・フリーランス向けの PWA 仕訳帳アプリケーション。
+A PWA ledger application for sole proprietors and freelancers.
 
-## 機能一覧
-- 仕訳帳（複合仕訳、家事按分、検索、CSV出力）
-- 総勘定元帳 / 試算表 / 損益計算書 / 貸借対照表
-- 消費税集計 / 固定資産台帳 / 請求書管理
+## Feature List
+- Ledger (compound entries, household allocation, search, CSV export)
+- General Ledger / Trial Balance / Income Statement / Balance Sheet
+- Consumption Tax Summary / Fixed Asset Register / Invoice Management
 
-## データモデル
+## Data Model
 JournalEntry { id, date, description, lines[], evidences[] }
 JournalLine  { accountCode, accountName, debit, credit, taxCategory }
 
-## WebMCP ツール（Chrome 146+）
+## WebMCP Tools (Chrome 146+)
 search_journals / create_journal / list_accounts / generate_ledger
 generate_trial_balance / generate_profit_loss / calculate_consumption_tax ...
 ```
 
 </details>
 
-この設計のポイント:
+Key aspects of this design:
 
-- **CLAUDE.md の責務が明確になる** — 「開発時に LLM が守るべきルール」だけに絞れる
-- **llms.txt は SvelteKit のプリレンダで生成** — アプリ実装との乖離が起きにくい
-- **Claude 専用ではない** — どの LLM からも参照可能な標準フォーマット
-- **Skills が参照ベースで構成できる** — Skill 内に仕様を重複記載する必要がない
+- **CLAUDE.md's responsibilities become clear** — limited to "rules the LLM must follow during development"
+- **llms.txt is generated via SvelteKit prerender** — reduces drift between docs and implementation
+- **Not Claude-specific** — any LLM can reference this standard format
+- **Skills can be reference-based** — no need to duplicate specs within skills
 
 > [!IMPORTANT]
-> 「CLAUDE.md に何を書くか」だけでなく、**「CLAUDE.md に書かないことをどこに置くか」**も設計対象。llms.txt のような外部仕様を活用することで、200行制限の中で開発ルールの密度を最大化できる。
+> Beyond "what to write in CLAUDE.md" lies an equally important question: **"where do I put what doesn't go in CLAUDE.md?"** By leveraging external specifications like llms.txt, you maximize the density of development rules within the 200-line limit.
 >
-> → 実プロジェクト: [e-shiwake/.claude/](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude)
+> → Real project: [e-shiwake/.claude/](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude)
 
-## 効果的な書き方
+## Writing Effectively
 
 > [!TIP]
-> **Prompt Sensitivity** 対策として、具体的・命令的な記述が重要。
+> As mitigation for **Prompt Sensitivity**, concrete and directive language is essential.
 
 ```markdown
-# ❌ 曖昧（Prompt Sensitivity が高い）
+# ❌ Vague (High Prompt Sensitivity)
 
-- テストをちゃんと書いてね
-- コードはきれいにしてほしい
+- Write tests properly
+- Keep code clean
 
-# ✅ 具体的（Prompt Sensitivity が低い）
+# ✅ Concrete (Low Prompt Sensitivity)
 
-- 全ての public メソッドに対して Jasmine テストを作成する
-- テストファイルは \*.spec.ts に配置する
-- describe/it の構造で記述する
+- Create Jasmine tests for all public methods
+- Place test files in *.spec.ts
+- Structure tests using describe/it blocks
 ```
 
-## Start Small 原則
+## Start Small Principle
 
-CLAUDE.md は「最初から完璧に書く」のではなく、**失敗を観察してから追加する**のが正しい運用。
+CLAUDE.md should not be written "perfectly from the start." The correct approach is to **observe failures and add rules as needed**.
 
 ```mermaid
 flowchart LR
-    A["1. 最小限の内容で開始"] --> B["LLM の出力を観察"]
-    B --> C["2. 期待と異なる点に<br>ルールを追加"]
-    C --> D{"200行を<br>超えそう？"}
-    D -->|"No"| E["3. 定期的に見直し<br>不要ルールを削除"]
-    D -->|"Yes"| F["4. rules/ や skills/<br>に移動"]
+    A["1. Start with minimal<br>content"] --> B["Observe LLM<br>output"]
+    B --> C["2. Add rules where<br>output diverges<br>from expectations"]
+    C --> D{"Will exceed<br>200 lines?"}
+    D -->|"No"| E["3. Periodically review<br>and remove obsolete rules"]
+    D -->|"Yes"| F["4. Move to rules/<br>or skills/"]
     E --> B
     F --> E
 
@@ -167,13 +169,13 @@ flowchart LR
     style F fill:#ffedd5,stroke:#c2410c,color:#000
 ```
 
-1. 最小限の内容で開始
-2. LLM が期待と異なる出力をした時にルールを追加
-3. 定期的に見直し、不要になったルールを削除
-4. 200行を超えそうなら `.claude/rules/` や `.claude/skills/` に移動
+1. Start with minimal content
+2. When the LLM produces unexpected output, add a rule
+3. Periodically review and remove rules that are no longer needed
+4. If approaching 200 lines, move content to `.claude/rules/` or `.claude/skills/`
 
 ---
 
-> **前へ**: [Part 3: 常駐コンテキスト](index.md)
+> **Previous**: [Part 3: Always-Loaded Context](index.md)
 
-> **次へ**: [階層マージの仕組み](hierarchy.md)
+> **Next**: [How Hierarchical Merging Works](hierarchy.md)

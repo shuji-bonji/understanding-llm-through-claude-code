@@ -1,43 +1,45 @@
-# CLAUDE.local.md の運用
+🌐 [日本語](../ja/03-always-loaded-context/local-md.md)
+
+# Operating CLAUDE.local.md
 
 > [!NOTE]
-> Git 管理外の個人設定。チームの規約とは独立して管理する。
+> Personal configuration outside Git. Managed independently from team rules.
 
-## CLAUDE.local.md とは
+## What Is CLAUDE.local.md?
 
-CLAUDE.local.md は自動で `.gitignore` に追加されるローカル専用の CLAUDE.md。チーム共有の `./CLAUDE.md` にマージされるが、Git リポジトリには含まれない。
+CLAUDE.local.md is automatically added to `.gitignore` and is a local-only version of CLAUDE.md. It merges with the team-shared `./CLAUDE.md` but is not included in the Git repository.
 
 ```sh
 my-project/
-├── CLAUDE.md              # チーム共有
-├── CLAUDE.local.md        # ← 個人専用（.gitignore）
+├── CLAUDE.md              # Team-shared
+├── CLAUDE.local.md        # ← Personal (in .gitignore)
 └── src/
     └── CLAUDE.md
 ```
 
-## いつ使うか
+## When to Use It
 
-- ローカルの DB 接続先（`localhost:5432`）
-- 個人の API キー参照方法
-- 実験的な設定やワークフロー
-- ローカル環境固有のビルドオプション
+- Local database connection endpoints (`localhost:5432`)
+- Personal API key reference methods
+- Experimental configurations or workflows
+- Local environment-specific build options
 
-## `settings.local.json` との違い
+## Difference from `settings.local.json`
 
-|              | `CLAUDE.local.md`               | `.claude/settings.local.json` |
-| :----------- | :------------------------------ | :---------------------------- |
-| 対象         | LLM への指示                    | ランタイム設定                |
-| LLM が見るか | **見る**                        | 見ない                        |
-| 内容例       | 「ローカルDBは localhost:5432」 | ローカル MCP サーバー設定     |
+| | `CLAUDE.local.md` | `.claude/settings.local.json` |
+| :--- | :--- | :--- |
+| Target | LLM instructions | Runtime configuration |
+| Does LLM see it? | **Yes** | No |
+| Example content | "Local DB is localhost:5432" | Local MCP server settings |
 
-## 運用のポイント
+## Operations Best Practices
 
-- チームの `./CLAUDE.md` と内容が重複しないようにする
-- 環境依存の情報（ポート番号、パス）をここに書く
-- 実験的なルールをここでテストしてから、チーム用に昇格させる（`CLAUDE.local.md` で検証 → 有効なら `./CLAUDE.md` へ移動）
+- Avoid duplicating content from the team's `./CLAUDE.md`
+- Put environment-dependent information here (port numbers, paths)
+- Test experimental rules in `CLAUDE.local.md` first, then promote to the team version (`CLAUDE.local.md` → validate → move to `./CLAUDE.md`)
 
 ---
 
-> **前へ**: [階層マージの仕組み](hierarchy.md)
+> **Previous**: [How Hierarchical Merging Works](hierarchy.md)
 
-> **Part 3 完了 → 次へ**: [Part 4: 条件付きコンテキスト](../04-conditional-context/index.md)
+> **Part 3 Complete → Next**: [Part 4: Conditional Context](../04-conditional-context/index.md)

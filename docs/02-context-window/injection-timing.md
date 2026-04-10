@@ -1,87 +1,89 @@
-# 注入タイミングの全体像
+🌐 [日本語](../ja/02-context-window/injection-timing.md)
+
+# Injection Timing Overview
 
 > [!NOTE]
-> 各設定ファイルは「いつ」「どのように」LLM のコンテキストウィンドウに注入されるかが決まっている。
-> この仕組みを理解することで、他の LLM ツール（Cursor、Cline、Copilot 等）にも応用できる原理が見えてくる。
+> Each configuration file has a defined "when" and "how" it gets injected into the LLM's context window.
+> Understanding this mechanism reveals principles that apply to other LLM tools (Cursor, Cline, Copilot, etc.).
 
-## 注入タイミング一覧
+## Injection Timing Inventory
 
-| レイヤー           | 対象             | 注入タイミング             | コンテキスト消費                         |
-| :----------------- | :--------------- | :------------------------- | :--------------------------------------- |
-| **常駐**           | System Prompt    | セッション開始時           | 常時（毎ターン）                         |
-| **常駐**           | CLAUDE.md        | セッション開始時           | 常時（毎ターン）                         |
-| **条件付き**       | `.claude/rules/` | glob パターン一致時        | 条件一致時のみ                           |
-| **オンデマンド**   | Skills           | ユーザー呼出 or LLM 判断時 | 呼び出し時のみ                           |
-| **オンデマンド**   | Agents           | Agent() ツール呼び出し時   | **別コンテキスト**（メインを消費しない） |
-| **ツール定義**     | MCP Tools        | セッション開始時           | 常時（ツール定義として）                 |
-| **蓄積**           | 会話履歴         | 毎ターン追加               | 累積（/compact で圧縮可能）              |
-| **コンテキスト外** | settings.json    | -                          | なし                                     |
-| **コンテキスト外** | Hooks            | -                          | なし（Prompt Hook を除く）               |
+| Layer              | Target           | Injection Timing           | Context Consumption                  |
+| :----------------- | :--------------- | :------------------------- | :----------------------------------- |
+| **Resident**       | System Prompt    | Session start              | Always (every turn)                  |
+| **Resident**       | CLAUDE.md        | Session start              | Always (every turn)                  |
+| **Conditional**    | `.claude/rules/` | Glob pattern match         | Only when conditions match           |
+| **On-Demand**      | Skills           | User call or LLM decision  | Only when invoked                    |
+| **On-Demand**      | Agents           | Agent() tool invocation    | **Separate context** (no main consumption) |
+| **Tool Definition**| MCP Tools        | Session start              | Always (as tool definitions)         |
+| **Accumulated**    | Conversation history | Added each turn          | Cumulative (compressible via /compact) |
+| **Outside Context**| settings.json    | -                          | None                                 |
+| **Outside Context**| Hooks            | -                          | None (except Prompt Hook)            |
 
-## 注入の4つのパターン
+## Four Injection Patterns
 
-### 1. 常駐注入（Always Loaded）
+### 1. Resident Injection (Always Loaded)
 
-セッション開始時に読み込まれ、**毎ターン消費し続ける**。
+Loaded at session start and **consumed every turn**.
 
 ```
-セッション開始 → System Prompt + CLAUDE.md を注入
-ターン1: [System Prompt][CLAUDE.md][ユーザー入力1]
-ターン2: [System Prompt][CLAUDE.md][ユーザー入力1][応答1][ユーザー入力2]
+Session start → Inject System Prompt + CLAUDE.md
+Turn 1: [System Prompt][CLAUDE.md][User Input 1]
+Turn 2: [System Prompt][CLAUDE.md][User Input 1][Response 1][User Input 2]
 ...
 ```
 
-常駐するため、コンテキスト予算への影響が最も大きい。→ CLAUDE.md の 200 行制限の根拠
+Because it's always resident, the impact on context budget is largest. → This is the basis for the 200-line limit in CLAUDE.md
 
-### 2. 条件付き注入（Conditional）
+### 2. Conditional Injection
 
-特定の条件（glob パターン一致）を満たした時だけ注入される。
+Injected only when specific conditions (glob pattern match) are met.
 
 ```
-*.component.ts を編集 → component-rules が注入される
-*.spec.ts を編集 → testing-rules が注入される
-*.cs を編集 → 上記のルールは注入されない
+Edit *.component.ts → component-rules are injected
+Edit *.spec.ts → testing-rules are injected
+Edit *.cs → the above rules are not injected
 ```
 
-→ Priority Saturation 対策。必要な時だけ必要なルールを注入。
+→ Countermeasure for Priority Saturation. Inject needed rules only when needed.
 
-### 3. オンデマンド注入（On-Demand）
+### 3. On-Demand Injection
 
-ユーザーの呼び出し、または LLM の自動判断で注入される。
+Injected via user invocation or LLM's automatic decision.
 
-Skills は**メインコンテキスト内**に展開される（import に相当）。
-Agents は**独立したコンテキスト**で実行される（別プロセスに相当）。
+Skills are **deployed within the main context** (equivalent to import).
+Agents **execute in independent context** (equivalent to separate process).
 
-### 4. コンテキスト外（Runtime Layer）
+### 4. Outside Context (Runtime Layer)
 
-LLM のコンテキストウィンドウに一切入らない。Claude Code のランタイムが処理する。
+Never enters the LLM's context window. Claude Code's runtime handles it.
 
-settings.json → 権限制御、環境変数
-Hooks → ライフサイクルイベントでシェルコマンド実行
+settings.json → Permission control, environment variables
+Hooks → Execute shell commands on lifecycle events
 
-## 設計判断のフローチャート
+## Design Decision Flowchart
 
-新しいルールや情報を追加する時、以下の順で判断する。
+When adding new rules or information, decide in the following order.
 
 ```mermaid
 flowchart TD
-    START(["新しいルール・情報を追加したい"])
-    Q1{"LLM が知るべき内容か？"}
-    Q2{"LLM が「常に」知るべきか？"}
-    Q3{"特定ファイル種別に<br/>限定されるか？"}
-    Q4{"独立コンテキストで<br/>実行すべきか？"}
+    START(["Want to add new rule or information"])
+    Q1{"Should the LLM know this?"}
+    Q2{"Should the LLM know this<br/>at ALL times?"}
+    Q3{"Limited to specific<br/>file types?"}
+    Q4{"Should it run in<br/>independent context?"}
 
-    R1["⚙️ settings.json / Hooks<br/>ランタイムで機械的に処理"]
-    R2["📋 .claude/rules/<br/>glob 条件付き注入"]
-    R3["📘 CLAUDE.md<br/>⚠️ 200行以内を常にチェック"]
-    R4["🛠️ .claude/skills/<br/>タスク時のみ展開"]
-    R5["🤖 .claude/agents/<br/>独立コンテキストで実行"]
+    R1["⚙️ settings.json / Hooks<br/>Processed mechanically at runtime"]
+    R2["📋 .claude/rules/<br/>Conditional glob injection"]
+    R3["📘 CLAUDE.md<br/>⚠️ Always verify 200 lines max"]
+    R4["🛠️ .claude/skills/<br/>Deployed only when task runs"]
+    R5["🤖 .claude/agents/<br/>Runs in independent context"]
 
-    W1(["⛔ Context Rot の影響を受けない"])
-    W2(["🔸 条件一致時のみコスト発生"])
-    W3(["🔴 毎ターン消費（固定費）"])
-    W4(["🔸 呼び出し時のみコスト発生"])
-    W5(["✅ メインコンテキストを消費しない"])
+    W1(["⛔ Not affected by Context Rot"])
+    W2(["🔸 Cost occurs only when conditions match"])
+    W3(["🔴 Consumed every turn (fixed cost)"])
+    W4(["🔸 Cost occurs only when invoked"])
+    W5(["✅ Does not consume main context"])
 
     START --> Q1
     Q1 -->|No| R1
@@ -118,6 +120,6 @@ flowchart TD
 
 ---
 
-> **前へ**: [コンテキストウィンドウとは何か](what-llm-sees.md)
+> **Previous**: [What the LLM Sees in the Context Window](what-llm-sees.md)
 
-> **次へ**: [コンテキスト予算という考え方](context-budget.md)
+> **Next**: [Context Budget as a Concept](context-budget.md)

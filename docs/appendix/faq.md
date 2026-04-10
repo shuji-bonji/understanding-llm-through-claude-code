@@ -1,36 +1,38 @@
-# FAQ — よくある質問と設計判断
+🌐 [日本語](../ja/appendix/faq.md)
+
+# FAQ — Frequently Asked Questions and Design Decisions
 
 > [!NOTE]
-> プロジェクトの [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) で挙がった具体的な疑問と、その回答をまとめたもの。
-> 「なぜそう判断するのか」の思考プロセスを重視している。
+> A compilation of specific questions raised in the project's [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) and their answers.
+> We prioritize the thinking process behind "why we make these decisions."
 
-## 設定の配置判断
+## Configuration Placement Decisions
 
-### Q: 「Mermaid図には mcp-mermaid を使え」はどこに書くべき？
+### Q: "Use mcp-mermaid for Mermaid diagrams" — where should this go?
 
 > [Discussion #14](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/14)
 
-**結論: `CLAUDE.md` に書く。**
+**Conclusion: Write it in `CLAUDE.md`.**
 
-一見 `.claude/rules/` に `globs: "**/*.md"` で書けそうだが、この指示は Markdown 編集に限らない。PR説明文、Issue、コメントなど glob に引っかからない場面でも Mermaid 図を生成する可能性がある。
+It might seem like it could be written in `.claude/rules/` with `globs: "**/*.md"`, but this instruction applies beyond just editing Markdown. Mermaid diagrams may appear in PR descriptions, Issues, comments, and other contexts where glob patterns don't apply.
 
-**判断の根拠:**
+**Reasoning:**
 
-| 観点             | 内容                                               |
-| ---------------- | -------------------------------------------------- |
-| 適用範囲         | `.md` ファイルだけでなく、あらゆる場面で適用すべき |
-| ファイル種別依存 | 特定の glob パターンに限定できない                 |
-| 指示の性質       | 「ツール選択の方針」= プロジェクト全体の行動指針   |
+| Perspective | Content |
+| --- | --- |
+| Scope of Application | Should apply not just to `.md` files, but across all contexts |
+| File Type Dependency | Cannot be limited to specific glob patterns |
+| Nature of Instruction | "Tool selection policy" = behavior guideline for the entire project |
 
-**配置判断フロー:**
+**Configuration Placement Flow:**
 
 ```mermaid
 graph LR
-    Q1{"特定のファイル種別に<br>限定されるか？"}
-    Q1 -->|Yes| R1([".claude/rules/<br>（glob で条件付き注入）"])
-    Q1 -->|No| Q2{"プロジェクト全体の/<br>方針か？"}
-    Q2 -->|Yes| R2(["CLAUDE.md/<br>（常駐）"])
-    Q2 -->|No| Q3{"個人だけの/<br>設定か？"}
+    Q1{"Limited to<br>specific file types?"}
+    Q1 -->|Yes| R1([".claude/rules/<br>(conditional injection via glob)"])
+    Q1 -->|No| Q2{"Project-wide<br>policy?"}
+    Q2 -->|Yes| R2(["CLAUDE.md/<br>(resident)"])
+    Q2 -->|No| Q3{"Personal<br>settings only?"}
     Q3 -->|Yes| R3(["CLAUDE.local.md"])
     Q3 -->|No| R2
 
@@ -42,18 +44,18 @@ graph LR
     style R3 fill:#f3e8ff,stroke:#7c3aed,color:#000
 ```
 
-**比較例:**
+**Comparison Examples:**
 
-| 指示                                            | 配置先            | 理由                           |
-| ----------------------------------------------- | ----------------- | ------------------------------ |
-| 「Mermaid図には mcp-mermaid を使え」            | `CLAUDE.md`       | ファイル種別を問わない全体方針 |
-| 「`*.component.ts` には OnPush 変更検知を必須」 | `.claude/rules/`  | 特定ファイル種別に限定される   |
-| 「ローカルの Ollama サーバーを使え」            | `CLAUDE.local.md` | 個人環境依存の設定             |
+| Instruction | Location | Reason |
+| --- | --- | --- |
+| "Use mcp-mermaid for Mermaid diagrams" | `CLAUDE.md` | Project-wide policy regardless of file type |
+| "Require OnPush change detection in `*.component.ts`" | `.claude/rules/` | Limited to specific file type |
+| "Use local Ollama server" | `CLAUDE.local.md` | Personal environment-specific setting |
 
-**関連ページ:** [CLAUDE.md の設計原理](../03-always-loaded-context/claude-md.md)、[.claude/rules/ の設計原理](../04-conditional-context/rules.md)
+**Related Pages:** [CLAUDE.md Design Principles](../03-always-loaded-context/claude-md.md), [.claude/rules/ Design Principles](../04-conditional-context/rules.md)
 
 ---
 
-> **前へ**: [Claude Code 設定ファイル一覧](claude-code-config-reference.md)
+> **Previous**: [Claude Code Configuration File Reference](claude-code-config-reference.md)
 
-> 新しい質問や議論は [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) へ
+> New questions or discussions: [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions)

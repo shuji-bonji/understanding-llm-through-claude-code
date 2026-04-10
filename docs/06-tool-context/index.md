@@ -1,27 +1,29 @@
-# Part 6: ツール定義としてのコンテキスト — MCP
+🌐 [日本語](../ja/06-tool-context/index.md)
+
+# Part 6: Context as Tool Definitions — MCP
 
 > [!NOTE]
-> ツールが消費するコンテキスト。
-> MCP サーバーを接続するほど、実作業用のコンテキストが減る。
+> Context consumed by tools.
+> As more MCP servers are connected, the context available for actual work decreases.
 
-## なぜ重要なのか
+## Why This Matters
 
-MCP サーバーを接続すると、ツール定義（名前、パラメータスキーマ、説明文）が**毎ターン**コンテキストウィンドウに注入される。複数の MCP を接続すると、ツール定義だけで 20K トークン以上消費し、実作業に使えるコンテキストが激減する。
+When you connect an MCP server, tool definitions (name, parameter schema, description) are injected into the context window **every turn**. When multiple MCPs are connected, tool definitions alone can consume 20K+ tokens, drastically reducing the context available for actual work.
 
-## → Why: どの構造的問題に対応しているか
+## → Why: Which Structural Problems Does This Address?
 
-- **Context Rot**: ツール定義の常時消費がコンテキストを圧迫
-- **Knowledge Boundary**: MCP による外部知識参照で、LLM の内部知識への依存を減らす
+- **Context Rot**: The constant consumption of tool definitions puts pressure on context
+- **Knowledge Boundary**: External knowledge retrieval via MCP reduces dependency on the LLM's internal knowledge
 
-## このパートのドキュメント
+## Documentation in This Part
 
-| ドキュメント | 内容 |
+| Document | Content |
 |:--|:--|
-| [MCPのコンテキストコスト](mcp-context-cost.md) | ツール定義が消費するトークン量の実態 |
-| [Tool Search / Deferred Loading](tool-search.md) | 10%超で自動有効化される遅延ロード |
+| [MCP Context Cost](mcp-context-cost.md) | The reality of how many tokens tool definitions consume |
+| [Tool Search / Deferred Loading](tool-search.md) | Lazy loading automatically enabled above 10% |
 
 ---
 
-> **前へ**: [Part 5: オンデマンドコンテキスト](../05-on-demand-context/index.md)
+> **Previous**: [Part 5: On-Demand Context](../05-on-demand-context/index.md)
 
-> **次へ**: [Part 7: LLMが見ないレイヤー](../07-runtime-layer/index.md)
+> **Next**: [Part 7: The Layer LLMs Don't See](../07-runtime-layer/index.md)

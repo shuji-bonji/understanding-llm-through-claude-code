@@ -1,16 +1,18 @@
-# import vs 別プロセスの判断基準
+🌐 [日本語](../ja/05-on-demand-context/skill-vs-agent.md)
+
+# Criteria for Skill vs Agent
 
 > [!TIP]
-> Skills と Agents のどちらを使うべきかの判断フロー。
+> Decision flow for choosing between Skills and Agents.
 
-## 判断フロー
+## Decision Flow
 
 ```mermaid
 flowchart TD
-    Q1{"メインのコンテキストを<br>汚染してほしくない？"}
-    Q2{"メインのコンテキスト内で<br>十分処理できる？"}
-    AGENT(["Agent<br>（独立コンテキスト）"])
-    SKILL(["Skill<br>（import / require）"])
+    Q1{"Do you not want to<br>pollute main context?"}
+    Q2{"Can it be adequately<br>processed in main context?"}
+    AGENT(["Agent<br>(Independent Context)"])
+    SKILL(["Skill<br>(import / require)"])
 
     Q1 -->|"Yes"| AGENT
     Q1 -->|"No"| Q2
@@ -23,41 +25,41 @@ flowchart TD
     style SKILL fill:#dcfce7,stroke:#15803d,color:#000
 ```
 
-## 比較表
+## Comparison Table
 
-| 観点 | Skill | Agent |
+| Perspective | Skill | Agent |
 |:--|:--|:--|
-| コンテキスト | メインと共有 | 独立（別のコンテキストウィンドウ） |
-| メインへの影響 | コンテキストを消費する | 結果の要約のみ返す |
-| 実行速度 | 速い（読み込みのみ） | やや遅い（新規プロセス） |
-| 適用場面 | 手順書、テンプレート、参照情報 | レビュー、分析、独立タスク |
-| プログラミング比喩 | `import` / `require` | 別プロセス / Worker Thread |
+| Context | Shared with main | Independent (separate context window) |
+| Impact on Main | Consumes context | Returns only result summary |
+| Execution Speed | Fast (load only) | Slightly slower (new process) |
+| Use Cases | Procedures, templates, references | Reviews, analysis, independent tasks |
+| Programming Analogy | `import` / `require` | Separate process / Worker Thread |
 
-## Skills を選ぶべき場面
+## When to Use Skills
 
-- コンポーネント生成の手順書
-- コーディング規約の参照
-- テンプレートファイルの適用
-- 短時間で完了する定型タスク
+- Component generation procedures
+- Coding standards reference
+- Template file application
+- Short-duration standard tasks
 
-## Agents を選ぶべき場面
+## When to Use Agents
 
-- **コードレビュー**: 追従性（Sycophancy）を避けるため、独立コンテキストで実行
-- **大規模な分析**: メインコンテキストを圧迫しない
-- **専門ドメインのタスク**: 知識境界（Knowledge Boundary）対策
-- **品質検証**: Cross-Model QA として異なるモデルでのチェック
+- **Code review**: Run in independent context to avoid Sycophancy
+- **Large-scale analysis**: Does not burden main context
+- **Specialist domain tasks**: Address Knowledge Boundary
+- **Quality verification**: Cross-model QA with different models
 
-## 組み合わせパターン
+## Combination Patterns
 
 ```
-ユーザー: 「新しい Feature Module を作って」
-  ├─ Skill: component-generator（手順書を参照して生成）
+User: "Create a new Feature Module"
+  ├─ Skill: component-generator (generate by referencing procedures)
   │
-  └─ Agent: code-reviewer（生成結果を独立コンテキストでレビュー）
+  └─ Agent: code-reviewer (review generated result in independent context)
 ```
 
 ---
 
-> **前へ**: [Agents の設計原理](agents.md)
+> **Previous**: [Agents Design Principles](agents.md)
 
-> **Part 5 完了 → 次へ**: [Part 6: ツール定義としてのコンテキスト](../06-tool-context/index.md)
+> **Part 5 Complete → Next**: [Part 6: Context as Tool Definition](../06-tool-context/index.md)

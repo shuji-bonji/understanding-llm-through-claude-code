@@ -1,35 +1,37 @@
-# Cursor / Cline / Copilot 対応表
+🌐 [日本語](../ja/09-cross-llm-principles/cursor-cline-mapping.md)
+
+# Cursor / Cline / Copilot Reference Table
 
 > [!NOTE]
-> Claude Code の「コンテキスト注入制御」という原理は、他の LLM ツールにも共通する。
+> The principle of "context window injection control" in Claude Code is shared with other LLM tools.
 
-## ツール間の機能マッピング
+## Feature Mapping Across Tools
 
-| Claude Code       | Cursor         | Cline         | GitHub Copilot                    | 共通原理                 |
-| :---------------- | :------------- | :------------ | :-------------------------------- | :----------------------- |
-| `CLAUDE.md`       | `.cursorrules` | `.clinerules` | `.github/copilot-instructions.md` | 常駐コンテキスト         |
-| `.claude/rules/`  | `@` メンション | -             | -                                 | 条件付きコンテキスト     |
-| `.claude/skills/` | Docs参照       | -             | -                                 | オンデマンドコンテキスト |
-| `.claude/agents/` | -              | -             | -                                 | 独立コンテキスト実行     |
-| `settings.json`   | IDE設定        | IDE設定       | IDE設定                           | ランタイム制御           |
-| Hooks             | -              | -             | -                                 | ライフサイクル制御       |
-| MCP               | MCP            | MCP           | -                                 | ツール定義注入           |
-| `/compact`        | -              | -             | -                                 | コンテキスト圧縮         |
+| Claude Code | Cursor | Cline | GitHub Copilot | Common Principle |
+| :--- | :--- | :--- | :--- | :--- |
+| `CLAUDE.md` | `.cursorrules` | `.clinerules` | `.github/copilot-instructions.md` | Resident context |
+| `.claude/rules/` | `@` mentions | - | - | Conditional context |
+| `.claude/skills/` | Docs reference | - | - | On-demand context |
+| `.claude/agents/` | - | - | - | Independent context execution |
+| `settings.json` | IDE settings | IDE settings | IDE settings | Runtime control |
+| Hooks | - | - | - | Lifecycle control |
+| MCP | MCP | MCP | - | Tool definition injection |
+| `/compact` | - | - | - | Context compression |
 
-## 原理の普遍性
+## Universality of Principles
 
-ツールが変わっても、以下の原理は同じ。
+Regardless of tools, the following principles remain constant:
 
-1. **常駐コンテキストは最小限に**: どのツールでも常駐情報は Priority Saturation を引き起こす
-2. **条件付き注入で分散**: 全ルールを一箇所に集中させない
-3. **機械的検証はコンテキスト外で**: テスト、lint、CI/CD は LLM に依存しない
-4. **セッションは短く保つ**: Context Rot と Instruction Decay は全モデル共通
+1. **Keep resident context minimal**: Resident information in any tool triggers Priority Saturation
+2. **Distribute with conditional injection**: Don't concentrate all rules in one place
+3. **Mechanical validation outside context**: Testing, linting, CI/CD don't depend on LLMs
+4. **Keep sessions short**: Context Rot and Instruction Decay are universal across all models
 
 ---
 
 > [!WARNING]
-> TODO: 各ツールの詳細な比較を追加予定
+> TODO: Detailed comparison of each tool to be added
 
-> **前へ**: [ツール支援がない環境での実践](prompt-driven-development.md)
+> **Previous**: [Practical Application Without Tool Support](prompt-driven-development.md)
 
-> **シリーズ完了**: [トップページに戻る](../../README.md)
+> **Series Complete**: [Return to Top Page](../../README.md)

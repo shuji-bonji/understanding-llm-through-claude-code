@@ -1,74 +1,76 @@
-# Context Rot（文脈腐敗）— トークンが増えると出力品質が低下する
+🌐 [日本語](../ja/01-llm-structural-problems/context-rot.md)
+
+# Context Rot — Output Quality Degrades as Token Count Increases
 
 > [!NOTE]
-> **一言で言うと**: LLM の入力トークン数が増えるにつれて、出力品質が劣化する現象。
-> 200K トークンの容量があっても、50K トークンで既に劣化が始まる。
-> エラーにならないため気づきにくい、LLM 最大の構造的制約。
+> **In short**: A phenomenon where LLM output quality deteriorates as the number of input tokens increases.
+> Even with a 200K token capacity, degradation begins around 50K tokens.
+> Because it doesn't produce errors, it's the most insidious structural constraint in LLMs.
 
-## Context Rot とは何か
+## What is Context Rot?
 
-Context Rot とは、**入力長が増えるごとにパフォーマンスが低下する**現象である。
+Context Rot is a **phenomenon where performance degrades as input length increases**.
 
-Chroma の 2025 年研究で、GPT-4.1 や Claude Opus 4 など 18 のモデル全てで確認された。重要なのは、これがコンテキストウィンドウの**オーバーフロー（容量超過）ではない**ということ。200K 容量のモデルが 50K トークンで既に劣化する。エラーにならないため気づきにくいのが特徴である。
+Confirmed across all 18 models—including GPT-4.1 and Claude Opus 4—in Chroma's 2025 research. Critically, this is *not* a **context window overflow**. Models with 200K capacity already degrade at 50K tokens. It's difficult to notice because it doesn't manifest as errors.
 
-## 3つのメカニズム
+## Three Mechanisms
 
-Context Rot は単一の現象ではなく、3つの異なるメカニズムの複合である。
+Context Rot is not a single phenomenon but a compound of three distinct mechanisms.
 
-### 1. Lost in the Middle（中間部の情報喪失）
+### 1. Lost in the Middle (Information Loss in the Middle Ranks)
 
-LLM は先頭と末尾のトークンに強い注意を向ける一方、中間部への注意は著しく低下する（U字カーブ）。50%を超えるとU字カーブが変化し、直近トークン優先になる。
+LLMs direct strong attention to beginning and ending tokens while attention to middle sections drops dramatically (U-curve pattern). Beyond 50%, the U-curve shifts, prioritizing the most recent tokens instead.
 
-→ 詳細は [Lost in the Middle](lost-in-the-middle.md) を参照
+→ See [Lost in the Middle](lost-in-the-middle.md) for details
 
-### 2. Attention Dilution（注意の希薄化）
+### 2. Attention Dilution
 
-Transformer の自己注意機構は O(N²) のペアワイズ計算を行う。トークン数が 10 倍になると処理ペアは 100 倍に増加し、個々のトークンへの注意が相対的に低下する。
+The Transformer self-attention mechanism performs O(N²) pairwise computations. When token count increases 10-fold, processing pairs grow 100-fold, causing relative attention to each token to decrease proportionally.
 
-### 3. Distractor Interference（妨害情報の干渉）
+### 3. Distractor Interference
 
-無関係だが類似した情報がモデルを誤導する。構造化されたテキストほど誤った結果を生成しやすい。コーディングでは特に深刻で、類似した関数名やインポート文が干渉を引き起こす。
+Unrelated but semantically similar information misleads the model. Structured text is particularly prone to generating incorrect outputs. This is especially severe in coding, where similar function names and import statements cause interference.
 
-## セマンティック理解への影響
+## Impact on Semantic Understanding
 
-Context Rot はコーディングタスクで最も深刻になる。コードの理解には広い文脈のセマンティック理解が必要であり、変数の追跡、依存関係の把握、設計パターンの認識が全てコンテキスト長に依存するためである。
+Context Rot becomes most severe in coding tasks. Understanding code requires broad contextual semantic comprehension—tracking variables, grasping dependencies, and recognizing design patterns all depend on context length.
 
-## 定量的な根拠
+## Quantitative Evidence
 
-| モデル        | 短コンテキスト精度 | 長コンテキスト精度 | 低下幅             |
-| :------------ | :----------------- | :----------------- | :----------------- |
-| GPT-4.1       | 高                 | 中                 | 有意な低下         |
-| Claude Opus 4 | 高                 | 中                 | 有意な低下         |
-| 全18モデル    | -                  | -                  | **全モデルで確認** |
+| Model        | Short Context Accuracy | Long Context Accuracy | Degradation |
+| :----------- | :--------------------- | :--------------------- | :---------- |
+| GPT-4.1      | High                   | Medium                 | Significant |
+| Claude Opus 4 | High                   | Medium                 | Significant |
+| All 18 models | —                      | —                      | **Confirmed across all models** |
 
 > [!IMPORTANT]
-> **重要**: 「LLMが賢くない」のではなく「入力設計が悪い」という視点が重要です。
+> **Critical insight**: The problem is not "LLMs are unintelligent" but "input design is poor."
 
-## Claude Code での対策
+## Mitigation in Claude Code
 
-| 対策                    | 仕組み                                           | 対応するメカニズム                          |
-| :---------------------- | :----------------------------------------------- | :------------------------------------------ |
-| **`/compact`**          | 会話履歴を要約・圧縮し、トークン数を削減         | Attention Dilution, Distractor Interference |
-| **`/clear`**            | セッションをリセットし、新鮮なコンテキストで再開 | 全メカニズム                                |
-| **CLAUDE.md 200行制限** | 常駐コンテキストの消費量を最小化                 | Attention Dilution                          |
-| **`.claude/rules/`**    | 条件に一致する時だけルールを注入                 | Distractor Interference                     |
-| **Skills**              | 必要な時だけ専門知識を展開                       | Attention Dilution, Distractor Interference |
-| **Agents**              | 独立したコンテキストウィンドウで実行             | 全メカニズム（根本的回避）                  |
-| **Hooks**               | コンテキスト外で機械的に検証                     | Context Rot の影響を受けない                |
-| **MCP Tool Search**     | ツール定義を遅延ロード                           | Attention Dilution                          |
+| Mitigation              | Mechanism                                      | Addresses Mechanism(s)                   |
+| :---------------------- | :---------------------------------------------- | :---------------------------------------- |
+| **`/compact`**          | Summarizes and compresses conversation history | Attention Dilution, Distractor Interference |
+| **`/clear`**            | Resets session for fresh context               | All mechanisms                            |
+| **CLAUDE.md 200-line limit** | Minimizes resident context consumption    | Attention Dilution                        |
+| **`.claude/rules/`**    | Injects rules only when conditions match       | Distractor Interference                   |
+| **Skills**              | Loads specialized knowledge only when needed   | Attention Dilution, Distractor Interference |
+| **Agents**              | Execute in independent context windows         | All mechanisms (fundamental mitigation)   |
+| **Hooks**               | Mechanical verification outside context        | Unaffected by Context Rot                 |
+| **MCP Tool Search**     | Lazy-loads tool definitions                    | Attention Dilution                        |
 
-## 関連する構造的問題
+## Related Structural Problems
 
-- [Lost in the Middle](lost-in-the-middle.md) — Context Rot の最も具体的な発現
-- [Priority Saturation](priority-saturation.md) — 指示密度の観点からの劣化
-- [Instruction Decay](instruction-decay.md) — 時間軸での Context Rot の蓄積
+- [Lost in the Middle](lost-in-the-middle.md) — Most concrete manifestation of Context Rot
+- [Priority Saturation](priority-saturation.md) — Degradation from instruction density perspective
+- [Instruction Decay](instruction-decay.md) — Accumulation of Context Rot over time
 
-## 参考文献
+## References
 
-- Hong, K., Troynikov, A., & Huber, J. (2025). "Context Rot: How Increasing Input Tokens Impacts LLM Performance." Chroma Research. [research.trychroma.com](https://research.trychroma.com/context-rot) — 18モデルでの Context Rot 定量測定
+- Hong, K., Troynikov, A., & Huber, J. (2025). "Context Rot: How Increasing Input Tokens Impacts LLM Performance." Chroma Research. [research.trychroma.com](https://research.trychroma.com/context-rot) — Quantitative measurement of Context Rot across 18 models
 
 ---
 
-> **次へ**: [Lost in the Middle](lost-in-the-middle.md)
+> **Next**: [Lost in the Middle](lost-in-the-middle.md)
 
 > **Discussion**: [#6 Context Rot](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/6)

@@ -1,41 +1,43 @@
-# 用語集
+🌐 [日本語](../ja/appendix/glossary.md)
 
-## LLM 構造的問題
+# Glossary
 
-| 用語 | 説明 |
+## LLM Structural Problems
+
+| Term | Definition |
 |:--|:--|
-| **Context Rot** | 入力トークン数が増えるにつれて出力品質が劣化する現象 |
-| **Lost in the Middle** | コンテキスト中間部の情報への注意が低下する現象 |
-| **Priority Saturation** | 同時指示数が増えるほど個々の指示への遵守率が低下する現象 |
-| **Hallucination** | 事実に反する内容を自信を持って生成する現象 |
-| **Sycophancy** | ユーザーに同意し正確性を犠牲にする傾向 |
-| **Knowledge Boundary** | LLM が自分の知識の限界を認識できない問題 |
-| **Prompt Sensitivity** | 意味的に同等なプロンプトで異なる出力を生成する現象 |
-| **Instruction Decay** | 長い会話で初期指示への遵守率が低下する現象 |
+| **Context Rot** | Degradation of output quality as input token count increases |
+| **Lost in the Middle** | Reduction in attention to information in the middle of context |
+| **Priority Saturation** | Decrease in compliance with individual instructions as simultaneous instruction count increases |
+| **Hallucination** | Generation of false content with confidence |
+| **Sycophancy** | Tendency to agree with users at the expense of accuracy |
+| **Knowledge Boundary** | Inability of LLMs to recognize the limits of their own knowledge |
+| **Prompt Sensitivity** | Generation of different outputs from semantically equivalent prompts |
+| **Instruction Decay** | Decrease in compliance with initial instructions during long conversations |
 
-## Claude Code の機能
+## Claude Code Features
 
-| 用語 | 説明 |
+| Term | Definition |
 |:--|:--|
-| **CLAUDE.md** | プロジェクト知識・規約を記述する常駐コンテキストファイル |
-| **`.claude/rules/`** | glob パターンで条件付き注入されるルールファイル |
-| **Skills** | オンデマンドで展開されるタスク固有の手順書 |
-| **Agents** | 独立したコンテキストウィンドウで実行されるサブエージェント |
-| **Hooks** | ライフサイクルイベントで実行されるコンテキスト外の処理 |
-| **MCP** | Model Context Protocol。外部ツール・サービスとの接続 |
-| **settings.json** | Claude Code ランタイムの設定ファイル（LLM には注入されない） |
-| **`/compact`** | 会話履歴を要約・圧縮するコマンド |
-| **`/clear`** | セッションをリセットするコマンド |
-| **Tool Search** | MCP ツール定義を遅延ロードする仕組み（コンテキスト10%超で自動有効化） |
+| **CLAUDE.md** | Persistent context file for documenting project knowledge and conventions |
+| **`.claude/rules/`** | Rule files conditionally injected via glob patterns |
+| **Skills** | Task-specific procedures deployed on demand |
+| **Agents** | Sub-agents executed in independent context windows |
+| **Hooks** | Context-external processing executed at lifecycle events |
+| **MCP** | Model Context Protocol. Connection to external tools and services |
+| **settings.json** | Configuration file for Claude Code runtime (not injected to LLM) |
+| **`/compact`** | Command to summarize and compress conversation history |
+| **`/clear`** | Command to reset a session |
+| **Tool Search** | Mechanism for lazy-loading MCP tool definitions (automatically enabled when context exceeds 10%) |
 
-## 技術用語
+## Technical Terms
 
-| 用語 | 説明 |
+| Term | Definition |
 |:--|:--|
-| **コンテキストウィンドウ** | LLM が一度に処理できる入力の最大範囲（Claude 4.6 系: 1M トークン） |
-| **トークン** | LLM が処理する最小単位。日本語では1文字≈1-2トークン |
-| **Transformer** | 現代のLLMの基盤アーキテクチャ。自己注意機構を持つ |
-| **RLHF** | Reinforcement Learning from Human Feedback。人間のフィードバックによる強化学習 |
-| **RoPE** | Rotary Position Embedding。位置情報をエンコードする手法 |
-| **Cross-Model QA** | 異なるモデルで出力をレビューする品質保証手法 |
-| **U字カーブ** | コンテキスト内の注意分布パターン。先頭と末尾が高く中間が低い |
+| **Context Window** | Maximum range of input an LLM can process at once (Claude 4.6 series: 1M tokens) |
+| **Token** | Smallest unit processed by LLM. In Japanese, approximately 1-2 tokens per character |
+| **Transformer** | Foundational architecture of modern LLMs. Features self-attention mechanisms |
+| **RLHF** | Reinforcement Learning from Human Feedback |
+| **RoPE** | Rotary Position Embedding. Method for encoding positional information |
+| **Cross-Model QA** | Quality assurance technique for reviewing outputs across different models |
+| **U-Curve** | Attention distribution pattern in context. High at beginning and end, low in middle |

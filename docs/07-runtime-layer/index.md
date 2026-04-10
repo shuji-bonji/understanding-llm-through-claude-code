@@ -1,33 +1,35 @@
-# Part 7: LLMが見ないレイヤー — Settings & Hooks
+🌐 [日本語](../ja/07-runtime-layer/index.md)
+
+# Part 7: The Layer LLMs Don't See — Settings & Hooks
 
 > [!NOTE]
-> コンテキスト外の制御。コンテキスト予算を**一切消費しない**。
-> LLM の判断に依存しない検証手段をここに配置する。
+> Control outside the context. **Consumes zero context budget**.
+> Place verification mechanisms here that don't rely on LLM judgment.
 
-## なぜ存在するのか
+## Why It Exists
 
-LLM に「毎回 eslint を実行しろ」と指示すると、コンテキストウィンドウを消費し、しかも忘れることがある（Instruction Decay）。Hooks はランタイムレベルで強制実行するため、LLM の指示枠を消費せず、確実に実行される。
+If you instruct an LLM to "run eslint every time," it consumes context window capacity and may forget (Instruction Decay). Hooks enforce execution at the runtime level, consuming no instruction frame in the LLM and ensuring reliable execution.
 
-**原則: ルールで判断が必要なものは CLAUDE.md / Rules に、機械的に強制できるものは Hooks に書く。**
+**Principle: Place rules requiring judgment in CLAUDE.md / Rules; place mechanically enforceable rules in Hooks.**
 
-## → Why: どの構造的問題に対応しているか
+## → Why: Which Structural Problems Does It Address?
 
 > [!IMPORTANT]
-> - **Hallucination**: テスト実行 Hook でハルシネーションした出力を機械的に検出
-> - **Sycophancy**: コンパイラ・テストランナーは追従しない。客観的な検証
-> - **Instruction Decay**: コンテキストに依存しないため、長い会話でも確実に実行される
-> - **コンテキスト予算**: 予算消費ゼロ。最も予算効率が良い対策
+> - **Hallucination**: Test execution Hooks mechanically detect hallucinated outputs
+> - **Sycophancy**: Compilers and test runners don't follow along. Objective verification
+> - **Instruction Decay**: Not dependent on context, ensuring reliable execution even in long conversations
+> - **Context Budget**: Zero budget consumption. The most budget-efficient solution
 
-## このパートのドキュメント
+## Documentation for This Part
 
-| ドキュメント | 内容 |
+| Document | Content |
 |:--|:--|
-| [settings.json の役割](settings-json.md) | ランタイム設定。権限制御、環境変数 |
-| [Hooks のライフサイクル](hooks.md) | イベント一覧、Hook の種類、Exit Code |
-| [なぜLLMに見せないのか](why-not-in-context.md) | コンテキスト外に置く設計判断の根拠 |
+| [The Role of settings.json](settings-json.md) | Runtime configuration. Permission control, environment variables |
+| [Hooks Lifecycle](hooks.md) | Event list, Hook types, Exit Codes |
+| [Why Not Show LLMs](why-not-in-context.md) | Design rationale for placing outside context |
 
 ---
 
-> **前へ**: [Part 6: ツール定義としてのコンテキスト](../06-tool-context/index.md)
+> **前へ**: [Part 6: Context as Tool Definition](../06-tool-context/index.md)
 
-> **次へ**: [Part 8: セッション管理と記憶の永続化](../08-session-management/index.md)
+> **次へ**: [Part 8: Session Management and Memory Persistence](../08-session-management/index.md)

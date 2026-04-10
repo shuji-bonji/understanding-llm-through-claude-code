@@ -1,99 +1,101 @@
-# Part 1: LLMの構造的制約を知る
+🌐 [日本語](../ja/01-llm-structural-problems/index.md)
+
+# Part 1: Understanding the Structural Constraints of LLMs
 
 > [!NOTE]
-> LLM は万能ではない。構造的な制約がある。
-> これを理解することが、Claude Code の設計思想を理解する第一歩になる。
+> LLMs are not omnipotent. They have structural constraints.
+> Understanding these is the first step to grasping the design philosophy behind Claude Code.
 
-## なぜ構造的問題を知る必要があるのか
+## Why You Need to Know About Structural Problems
 
-Claude Code の設定ファイル（CLAUDE.md, rules/, skills/, hooks 等）は、単なる「便利機能」ではない。LLM が抱える構造的問題への**設計的な回答**である。
+Claude Code's configuration files (CLAUDE.md, rules/, skills/, hooks, etc.) are not mere "convenience features." They are **deliberate design responses** to the structural problems inherent in LLMs.
 
-例えば:
-- CLAUDE.md の200行制限 → **Priority Saturation** への対策
-- `.claude/rules/` の条件付き注入 → **Lost in the Middle** への対策
-- Hooks の機械的検証 → **Hallucination** への対策
+For example:
+- CLAUDE.md's 200-line limit → Countermeasure for **Priority Saturation**
+- `.claude/rules/` conditional injection → Countermeasure for **Lost in the Middle**
+- Hooks for mechanical verification → Countermeasure for **Hallucination**
 
-「なぜそう設定するのか（Why）」を理解するには、まず「LLMがどんな問題を抱えているか」を知る必要がある。
+To understand "why configurations are designed this way" (the Why), you first need to understand "what problems LLMs inherently have."
 
-## 8つの構造的問題
+## The 8 Structural Problems
 
-LLM には以下の8つの構造的問題がある。これらは「バグ」ではなく、Transformer アーキテクチャと訓練プロセスに起因する**不可避な制約**である。
+LLMs have the following 8 structural problems. These are not "bugs" — they are **unavoidable constraints** arising from the Transformer architecture and training process.
 
-### コンテキスト関連（入力が増えるほど悪化する問題）
+### Context-Related (Problems that worsen as input grows)
 
-| 問題 | 一言で言うと | 詳細 |
+| Problem | In a Nutshell | Details |
 |:--|:--|:--|
-| [Context Rot](context-rot.md) | トークンが増えると出力品質が低下する | 200Kの容量があっても、50Kで既に劣化が始まる |
-| [Lost in the Middle](lost-in-the-middle.md) | コンテキスト中間部の情報を無視する | 先頭と末尾に注意が集中し、中間部は30%以上の精度低下 |
-| [Priority Saturation](priority-saturation.md) | 指示が多いと全体の遵守率が低下する | 10個の同時指示でGPT-4oは15%、Claude Sonnetは44%の遵守率 |
+| [Context Rot](context-rot.md) | Output quality degrades as tokens increase | Even with 200K capacity, degradation begins at just 50K |
+| [Lost in the Middle](lost-in-the-middle.md) | Information in the middle of context is ignored | Attention concentrates on beginning and end, with over 30% accuracy loss in the middle |
+| [Priority Saturation](priority-saturation.md) | Overall compliance drops with too many instructions | With 10 simultaneous instructions, GPT-4o shows 15% and Claude Sonnet 44% compliance |
 
-### 出力関連（生成内容の信頼性の問題）
+### Output-Related (Problems with generation reliability)
 
-| 問題 | 一言で言うと | 詳細 |
+| Problem | In a Nutshell | Details |
 |:--|:--|:--|
-| [Hallucination](hallucination.md) | 事実に反する内容を生成する | 数学的に「ゼロにできない」ことが証明されている |
-| [Sycophancy](sycophancy.md) | ユーザーに同意し正確性を犠牲にする | RLHFの副作用。全モデル平均58%の追従率 |
-| [Knowledge Boundary](knowledge-boundary.md) | 知識外の質問で「知らない」と言えない | 訓練目的関数に「知らない」への報酬がない |
+| [Hallucination](hallucination.md) | Generates content that contradicts facts | Mathematically proven to be "impossible to reduce to zero" |
+| [Sycophancy](sycophancy.md) | Agrees with users at the expense of accuracy | A side effect of RLHF. Average 58% compliance rate across all models |
+| [Knowledge Boundary](knowledge-boundary.md) | Cannot say "I don't know" for out-of-scope questions | No reward for "I don't know" in the training objective function |
 
-### 入力感受性（プロンプトの書き方に依存する問題）
+### Input Sensitivity (Problems dependent on prompt phrasing)
 
-| 問題 | 一言で言うと | 詳細 |
+| Problem | In a Nutshell | Details |
 |:--|:--|:--|
-| [Prompt Sensitivity](prompt-sensitivity.md) | 表現の違いで結果が大きく変動する | 同じ意味でも最大76精度ポイントの差 |
+| [Prompt Sensitivity](prompt-sensitivity.md) | Results vary significantly by phrasing | Up to 76 accuracy points difference for the same meaning |
 
-### 時間軸（会話が長くなるほど悪化する問題）
+### Temporal (Problems that worsen as conversations grow longer)
 
-| 問題 | 一言で言うと | 詳細 |
+| Problem | In a Nutshell | Details |
 |:--|:--|:--|
-| [Instruction Decay](instruction-decay.md) | 長い会話でルールを忘れる | 上記7問題の複合結果。マルチターンで平均39%性能低下 |
+| [Instruction Decay](instruction-decay.md) | Rules are forgotten in long conversations | A compound result of the above 7 problems. Average 39% performance degradation in multi-turn |
 
-## 問題間の関係
+## Relationships Between Problems
 
-これらの問題は独立して存在するのではなく、相互に増幅し合う。以下の図は、8つの構造的問題がどのように連鎖・増幅するかを視覚化したものである。
+These problems do not exist in isolation — they amplify each other. The diagram below visualizes how the 8 structural problems cascade and reinforce one another.
 
 ```mermaid
 graph TD
-    %% ── ノード定義 ──
-    CR["🔴 Context Rot<br/>トークン増で品質劣化"]
-    LM["🟠 Lost in the Middle<br/>中間部の情報喪失"]
-    PS["🟡 Priority Saturation<br/>指示過多で遵守率低下"]
-    HL["🔵 Hallucination<br/>構造的に不可避な幻覚"]
-    SY["🟣 Sycophancy<br/>正確性より同意を優先"]
-    KB["🟤 Knowledge Boundary<br/>「知らない」と言えない"]
-    PM["🟢 Prompt Sensitivity<br/>表現で結果が変動"]
-    ID["⚫ Instruction Decay<br/>長会話でルール忘却"]
+    %% ── Node definitions ──
+    CR["🔴 Context Rot<br/>Quality degrades as tokens increase"]
+    LM["🟠 Lost in the Middle<br/>Information loss in the middle"]
+    PS["🟡 Priority Saturation<br/>Compliance drops with too many instructions"]
+    HL["🔵 Hallucination<br/>Structurally unavoidable confabulation"]
+    SY["🟣 Sycophancy<br/>Agreement over accuracy"]
+    KB["🟤 Knowledge Boundary<br/>Unable to say 'I don't know'"]
+    PM["🟢 Prompt Sensitivity<br/>Results vary by phrasing"]
+    ID["⚫ Instruction Decay<br/>Rules forgotten in long conversations"]
 
-    %% ── Context Rot 起点の連鎖 ──
-    CR -->|"注意希薄化で<br/>中間部が死角に"| LM
-    CR -->|"コンテキスト増で<br/>指示の有効性低下"| PS
-    CR -->|"ハルシネーション率<br/>が上昇"| HL
-    CR -->|"劣化に気づかず<br/>追従しやすく"| SY
+    %% ── Cascade from Context Rot ──
+    CR -->|"Attention dilution<br/>creates blind spots"| LM
+    CR -->|"More context reduces<br/>instruction effectiveness"| PS
+    CR -->|"Hallucination rate<br/>increases"| HL
+    CR -->|"Degradation goes<br/>unnoticed, easier to comply"| SY
 
-    %% ── Lost in the Middle からの波及 ──
-    LM -->|"中間の指示が<br/>無視される"| PS
-    LM -->|"制約見落としで<br/>そのまま従う"| SY
-    LM -->|"初期指示の忘却<br/>が加速"| ID
+    %% ── Propagation from Lost in the Middle ──
+    LM -->|"Instructions in the<br/>middle are ignored"| PS
+    LM -->|"Missed constraints<br/>lead to compliance"| SY
+    LM -->|"Forgetting early<br/>instructions accelerates"| ID
 
-    %% ── Priority Saturation からの波及 ──
-    PS -->|"注意が薄まり<br/>表現に左右される"| PM
-    PS -->|"制約見落としで<br/>不正確な出力"| HL
+    %% ── Propagation from Priority Saturation ──
+    PS -->|"Diluted attention becomes<br/>phrasing-dependent"| PM
+    PS -->|"Missed constraints<br/>cause inaccurate output"| HL
 
-    %% ── Knowledge Boundary → Hallucination 連鎖 ──
-    KB -->|"知識の限界を超え<br/>誤答を生成"| HL
-    KB -->|"限界を認めず<br/>期待に合わせる"| SY
+    %% ── Knowledge Boundary → Hallucination chain ──
+    KB -->|"Exceeds knowledge limits,<br/>generates wrong answers"| HL
+    KB -->|"Refuses to admit limits,<br/>matches expectations"| SY
 
-    %% ── Sycophancy ↔ Hallucination フィードバック ──
-    SY -->|"誤った内容を<br/>追認・増幅"| HL
-    HL -->|"誤答をユーザーの<br/>同意で確定"| SY
+    %% ── Sycophancy ↔ Hallucination feedback ──
+    SY -->|"Confirms and amplifies<br/>incorrect content"| HL
+    HL -->|"Wrong answers confirmed<br/>by user agreement"| SY
 
-    %% ── 全問題 → Instruction Decay（時間軸の複合） ──
-    CR -->|"時間軸で蓄積"| ID
-    PS -->|"新指示で初期指示の<br/>優先度が低下"| ID
-    HL -->|"誤出力が推論基盤<br/>を劣化"| ID
-    SY -->|"軌道修正が<br/>困難に"| ID
-    PM -->|"表現が累積的に<br/>変化しズレる"| ID
+    %% ── All problems → Instruction Decay (temporal compound) ──
+    CR -->|"Accumulates<br/>over time"| ID
+    PS -->|"New instructions lower<br/>priority of earlier ones"| ID
+    HL -->|"Wrong outputs degrade<br/>reasoning foundation"| ID
+    SY -->|"Course correction<br/>becomes difficult"| ID
+    PM -->|"Phrasing shifts<br/>accumulate over time"| ID
 
-    %% ── スタイル ──
+    %% ── Styles ──
     classDef context fill:#fee2e2,stroke:#dc2626,color:#000
     classDef output fill:#dbeafe,stroke:#2563eb,color:#000
     classDef input fill:#dcfce7,stroke:#16a34a,color:#000
@@ -105,29 +107,29 @@ graph TD
     class ID time
 ```
 
-**3つの主要カスケード**:
+**3 Major Cascades**:
 
-1. **空間的劣化**: Context Rot → Lost in the Middle → Priority Saturation（コンテキストが長くなるほど加速）
-2. **信頼性の崩壊**: Knowledge Boundary → Hallucination ↔ Sycophancy（フィードバックループ）
-3. **時間的複合**: 全7問題 → Instruction Decay（マルチターンで全てが合流）
+1. **Spatial Degradation**: Context Rot → Lost in the Middle → Priority Saturation (accelerates as context grows)
+2. **Reliability Collapse**: Knowledge Boundary → Hallucination ↔ Sycophancy (feedback loop)
+3. **Temporal Compound**: All 7 problems → Instruction Decay (everything converges in multi-turn)
 
-## 構造的問題 × Claude Code 対策マップ
+## Structural Problems × Claude Code Countermeasures Map
 
-LLM には 8 つの構造的問題があり、Claude Code の各機能はそれぞれの問題に対する設計的な回答である。Part 2 以降で、各機能がこれらの問題にどう対応しているかを詳しく見ていく。
+LLMs have 8 structural problems, and each Claude Code feature is a deliberate design response to these problems. From Part 2 onward, we will examine in detail how each feature addresses these problems.
 
-| 構造的問題 | 概要 | 主な対策（Claude Code） | 対応ドキュメント |
+| Structural Problem | Overview | Primary Countermeasures (Claude Code) | Related Docs |
 |:--|:--|:--|:--|
-| [**Context Rot**](context-rot.md) | トークン増で出力品質が劣化 | `/compact`, `/clear`, コンテキスト予算管理 | Part 2, 3, 5, 6, 8 |
-| [**Lost in the Middle**](lost-in-the-middle.md) | コンテキスト中間部の情報を無視 | `/compact`（50%閾値）, 条件付きルール, Agents | Part 2, 4, 5, 8 |
-| [**Priority Saturation**](priority-saturation.md) | 指示過多で全体の遵守率低下 | CLAUDE.md 200行制限, `.claude/rules/`, Skills | Part 3, 4, 5 |
-| [**Hallucination**](hallucination.md) | 事実に反する内容を生成（構造的に不可避） | Hooks（機械的検証）, テストコード, MCP | Part 6, 7 |
-| [**Sycophancy**](sycophancy.md) | ユーザーに同意し正確性を犠牲に | Cross-model QA（Agents）, Hooks, 問い方設計 | Part 5, 7 |
-| [**Knowledge Boundary**](knowledge-boundary.md) | 知識外で「知らない」と言えない | MCP外部参照, バージョン明示, 専門Agents | Part 3, 5, 6 |
-| [**Prompt Sensitivity**](prompt-sensitivity.md) | 表現の違いで結果が大きく変動 | CLAUDE.md の書き方, Skills description設計 | Part 3, 5 |
-| [**Instruction Decay**](instruction-decay.md) | 長会話でルール忘却（7問題の複合結果） | `/compact`, `/clear`, Hooks, セッション分割 | Part 7, 8 |
+| [**Context Rot**](context-rot.md) | Output quality degrades as tokens increase | `/compact`, `/clear`, context budget management | Part 2, 3, 5, 6, 8 |
+| [**Lost in the Middle**](lost-in-the-middle.md) | Information in the middle of context is ignored | `/compact` (50% threshold), conditional rules, Agents | Part 2, 4, 5, 8 |
+| [**Priority Saturation**](priority-saturation.md) | Overall compliance drops with too many instructions | CLAUDE.md 200-line limit, `.claude/rules/`, Skills | Part 3, 4, 5 |
+| [**Hallucination**](hallucination.md) | Generates factually incorrect content (structurally unavoidable) | Hooks (mechanical verification), test code, MCP | Part 6, 7 |
+| [**Sycophancy**](sycophancy.md) | Agrees with users at the expense of accuracy | Cross-model QA (Agents), Hooks, question design | Part 5, 7 |
+| [**Knowledge Boundary**](knowledge-boundary.md) | Cannot say "I don't know" for out-of-scope questions | MCP external references, version pinning, specialized Agents | Part 3, 5, 6 |
+| [**Prompt Sensitivity**](prompt-sensitivity.md) | Results vary significantly by phrasing | CLAUDE.md writing style, Skills description design | Part 3, 5 |
+| [**Instruction Decay**](instruction-decay.md) | Rules forgotten in long conversations (compound of 7 problems) | `/compact`, `/clear`, Hooks, session splitting | Part 7, 8 |
 
-> 詳細版は [構造的問題 × Claude Code 対策マップ（付録）](../appendix/problem-countermeasure-map.md) を参照。
+> For the detailed version, see [Structural Problems × Claude Code Countermeasures Map (Appendix)](../appendix/problem-countermeasure-map.md).
 
 ---
 
-> **次へ**: [Part 2: コンテキストウィンドウを理解する](../02-context-window/index.md)
+> **Next**: [Part 2: Understanding the Context Window](../02-context-window/index.md)

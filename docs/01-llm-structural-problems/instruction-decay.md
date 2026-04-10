@@ -1,57 +1,59 @@
-# Instruction Decay（指示遵守の減衰）— 長い会話でルールを忘れる
+🌐 [日本語](../ja/01-llm-structural-problems/instruction-decay.md)
+
+# Instruction Decay — Forgetting Rules in Long Conversations
 
 > [!NOTE]
-> **一言で言うと**: LLM は長い会話の中で初期指示への遵守率が低下する。
-> マルチターン会話での性能は平均 39% 低下する。
-> これは前の 7 つの構造的問題が時間軸に沿って複合的に発生した結果である。
+> **In brief**: LLMs' adherence to initial instructions degrades throughout long conversations.
+> Performance in multi-turn conversations drops by an average of 39%.
+> This results from the seven preceding structural problems compounding over time.
 
-## Instruction Decay とは何か
+## What Is Instruction Decay?
 
-Instruction Decay とは、LLM が長い会話の中で**初期に与えられた指示への遵守率が徐々に低下する**現象である。Microsoft / Salesforce の 2025 年研究によると、マルチターン会話での LLM の性能は**平均 39% 低下する**。
+Instruction Decay is the phenomenon where LLMs **gradually lose adherence to initial instructions as conversations become longer**. According to 2025 research from Microsoft and Salesforce, LLM performance in multi-turn conversations **drops by an average of 39%**.
 
-## 劣化の性質
+## The Nature of Degradation
 
-重要なのは、これが**能力低下ではなく信頼性の崩壊**として現れること。モデルが「できなくなる」のではなく、「できる時とできない時の振れ幅が大きくなる」状態。
+Importantly, this manifests as **reliability collapse, not capability loss**. The model doesn't "stop being able"—it enters a state where **performance becomes highly variable, succeeding at some moments and failing at others**.
 
-### 回復の困難性
+### Difficulty of Recovery
 
-LLM が会話途中で誤った方向に進むと、そこから**回復できない**という重要な発見がある。誤った前提に基づいた推論が蓄積され、後の応答の品質を継続的に低下させる。
+A critical finding: once an LLM drifts in a conversation, **recovery becomes nearly impossible**. Flawed assumptions accumulate and continuously degrade the quality of subsequent responses.
 
-## 複合的な原因
+## Compound Causes
 
-Instruction Decay は単独の現象ではなく、**前の 7 つの構造的問題が時間軸に沿って複合的に発生した結果**である:
+Instruction Decay is not an isolated phenomenon but the **result of the seven preceding structural problems compounding along the time axis**:
 
-| 問題                    | 時間経過での影響                                       |
-| :---------------------- | :----------------------------------------------------- |
-| **Context Rot**         | 会話が長くなるほどコンテキストが増加し、品質劣化       |
-| **Lost in the Middle**  | 初期指示がコンテキスト中間部に押しやられ、無視される   |
-| **Priority Saturation** | 会話の中で新しい指示が追加され、初期指示の優先度が低下 |
-| **Hallucination**       | 誤った出力が蓄積され、以降の推論の基盤が劣化           |
-| **Sycophancy**          | ユーザーの方向性を追認し続け、軌道修正が困難に         |
-| **Knowledge Boundary**  | 知識の限界を超えた回答が蓄積                           |
-| **Prompt Sensitivity**  | 会話の流れでプロンプトの文脈が変化し、初期意図からズレ |
+| Problem | Impact Over Time |
+| :--- | :--- |
+| **Context Rot** | Longer conversations increase context volume, degrading quality |
+| **Lost in the Middle** | Initial instructions get pushed into the middle of context, being ignored |
+| **Priority Saturation** | New instructions added to conversation lower priority of initial instructions |
+| **Hallucination** | Erroneous outputs accumulate, degrading the foundation for subsequent reasoning |
+| **Sycophancy** | Continuous agreement with user direction makes course correction difficult |
+| **Knowledge Boundary** | Answers beyond knowledge limits accumulate |
+| **Prompt Sensitivity** | Conversational flow shifts prompt context away from original intent |
 
-## コーディングにおける影響
+## Impact on Coding
 
-- 序盤に決めたアーキテクチャ方針が、長いセッション後に無視される
-- テスト方針（TDD、カバレッジ目標）が徐々に省略される
-- コーディング規約（命名規則、エラーハンドリング方針）の遵守率が低下
-- Git コミット粒度が、セッション後半で大きくなる
+- Architectural decisions made early in session are ignored later
+- Test approaches (TDD, coverage targets) gradually get omitted
+- Adherence to coding conventions (naming rules, error handling patterns) declines
+- Git commit granularity increases as sessions progress
 
-## Claude Code での対策
+## Mitigation in Claude Code
 
 ```mermaid
 flowchart TB
-    subgraph phases ["セッション進行と指示遵守率の劣化フェーズ"]
+    subgraph phases ["Session Progression and Instruction Adherence Degradation Phases"]
         direction LR
-        P1["Phase 1<br>0-30%<br>━━━━━<br>安定<br>指示遵守率: 高い"]
-        P2["Phase 2<br>30-50%<br>━━━━━<br>緩やかな劣化<br>⚡ /compact 推奨"]
-        P3["Phase 3<br>50-70%<br>━━━━━<br>顕著な劣化<br>⚡ /clear 推奨"]
-        P4["Phase 4<br>70%+<br>━━━━━<br>崩壊<br>回復困難"]
-        P1 -->|"劣化開始"| P2 -->|"50%閾値超過"| P3 -->|"制御不能"| P4
+        P1["Phase 1<br>0-30%<br>━━━━━<br>Stable<br>High adherence rate"]
+        P2["Phase 2<br>30-50%<br>━━━━━<br>Gradual degradation<br>⚡ /compact recommended"]
+        P3["Phase 3<br>50-70%<br>━━━━━<br>Noticeable degradation<br>⚡ /clear recommended"]
+        P4["Phase 4<br>70%+<br>━━━━━<br>Collapse<br>Recovery difficult"]
+        P1 -->|"Degradation begins"| P2 -->|"50% threshold exceeded"| P3 -->|"Uncontrollable"| P4
     end
 
-    Hooks["Hooks: 全フェーズで有効な外部検証<br>（コンパイラ・テストランナーは劣化しない）"]
+    Hooks["Hooks: External validation effective across all phases<br>(Compilers and test runners do not degrade)"]
 
     phases --> Hooks
 
@@ -62,35 +64,35 @@ flowchart TB
     style Hooks fill:#eff6ff,stroke:#1d4ed8,color:#1e40af
 ```
 
-| 対策                             | 仕組み                       | なぜ効くのか                                  |
-| :------------------------------- | :--------------------------- | :-------------------------------------------- |
-| **`/compact`（予防的圧縮）**     | 50%使用率前に会話履歴を圧縮  | Context Rot / Lost in the Middle の蓄積を防ぐ |
-| **`/clear`（セッション分割）**   | セッションをリセット         | 全ての蓄積された劣化をリセット                |
-| **Hooks**                        | コンテキスト外で機械的に検証 | LLM の指示遵守に依存しない                    |
-| **Agents**                       | 独立したコンテキストで実行   | 新鮮なコンテキストでタスクを実行              |
-| **小単位の Git コミット**        | 変更を頻繁にコミット         | 劣化した出力のロールバックを容易にする        |
-| **Stop Hook でのセッションログ** | セッション終了時にログを記録 | 次のセッションへの引継ぎを確保                |
+| Strategy | Mechanism | Why It Works |
+| :--- | :--- | :--- |
+| **`/compact` (Preventive compression)** | Compress conversation history before 50% usage | Prevents accumulation of Context Rot and Lost in the Middle |
+| **`/clear` (Session segmentation)** | Reset session | Resets all accumulated degradation |
+| **Hooks** | Mechanical validation outside context | Independent of LLM instruction adherence |
+| **Agents** | Execute in independent contexts | Executes tasks with fresh context |
+| **Small granule Git commits** | Commit changes frequently | Simplifies rollback of degraded outputs |
+| **Session log at Stop Hook** | Record log at session end | Ensures handoff to next session |
 
-## セッション設計の原則
+## Session Design Principles
 
 ```
-原則1: セッションは短く保つ
-  → 1セッション = 1タスク（または関連する小タスクの集合）
+Principle 1: Keep sessions short
+  → 1 session = 1 task (or a set of related small tasks)
 
-原則2: 検証機構はコンテキスト外に配置する
-  → Hooks, テスト, CI/CD は LLM の指示遵守に依存しない
+Principle 2: Place validation outside context
+  → Hooks, tests, CI/CD do not depend on LLM instruction adherence
 
-原則3: 状態は外部に永続化する
-  → Git コミット, CLAUDE.md, メモリツールで次セッションに引き継ぐ
+Principle 3: Persist state externally
+  → Carry over to next session via Git commits, CLAUDE.md, memory tools
 ```
 
-## 他の構造的問題との関係
+## Relationship to Other Structural Problems
 
-Instruction Decay は他の 7 つの問題の**時間軸での集大成**:
+Instruction Decay is the **temporal consolidation of all seven preceding problems**:
 
 ```mermaid
 flowchart TB
-    Start(["セッション開始<br>全指示を高い精度で遵守"])
+    Start(["Session start<br>High accuracy in following all instructions"])
     CR["Context Rot"]
     LIM["Lost in the Middle"]
     PSat["Priority Saturation"]
@@ -98,7 +100,7 @@ flowchart TB
     S["Sycophancy"]
     KB["Knowledge Boundary"]
     PS["Prompt Sensitivity"]
-    End(["セッション後半<br>初期指示の遵守率が著しく低下<br>= Instruction Decay"])
+    End(["Session later stages<br>Adherence to initial instructions significantly declines<br>= Instruction Decay"])
 
     Start --> CR --> LIM --> PSat --> H --> S --> KB --> PS --> End
 
@@ -113,14 +115,14 @@ flowchart TB
     style End fill:#f3f4f6,stroke:#374151,color:#000
 ```
 
-## 参考文献
+## References
 
-- Laban, P., Hayashi, H., Zhou, Y., & Neville, J. (2025). "LLMs Get Lost In Multi-Turn Conversation." Microsoft Research & Salesforce Research. [arXiv:2505.06120](https://arxiv.org/abs/2505.06120) — 200,000+ シミュレーション会話での検証。平均39%の性能低下と112%の不安定性増加を測定
+- Laban, P., Hayashi, H., Zhou, Y., & Neville, J. (2025). "LLMs Get Lost In Multi-Turn Conversation." Microsoft Research & Salesforce Research. [arXiv:2505.06120](https://arxiv.org/abs/2505.06120) — Validation across 200,000+ simulated conversations. Measured average 39% performance degradation and 112% increase in instability.
 
 ---
 
-> **前へ**: [Prompt Sensitivity](prompt-sensitivity.md)
+> **Previous**: [Prompt Sensitivity](prompt-sensitivity.md)
 
-> **Part 1 完了 → 次へ**: [Part 2: コンテキストウィンドウを理解する](../02-context-window/index.md)
+> **Part 1 Complete → Next**: [Part 2: Understanding Context Windows](../02-context-window/index.md)
 
 > **Discussion**: [#13 Instruction Decay](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/13)

@@ -1,57 +1,59 @@
-# 階層マージの仕組み
+🌐 [日本語](../ja/03-always-loaded-context/hierarchy.md)
+
+# How Hierarchical Merging Works
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（スコープごとの分離で不要な情報の蓄積を防ぐ）
-> → Why: **Priority Saturation** 対策（必要な階層だけをマージし常駐トークンを最小化）
+> → Why: **Context Rot** mitigation (scope-based separation prevents accumulation of unnecessary information)
+> → Why: **Priority Saturation** mitigation (merge only necessary layers to minimize resident tokens)
 
-## CLAUDE.md の階層構造
+## CLAUDE.md Hierarchy
 
-CLAUDE.md は複数の場所に配置でき、階層的にマージされる。
+CLAUDE.md can be placed in multiple locations and is hierarchically merged.
 
 ```sh
 ~/.claude/
-└── CLAUDE.md                  # グローバル（全プロジェクト共通・最上位）
+└── CLAUDE.md                  # Global (shared across all projects, top-level)
 
-my-project/                    # プロジェクトルート
-├── CLAUDE.md                  # プロジェクト共通（Git管理推奨）
-├── CLAUDE.local.md            # ローカル専用（.gitignore推奨）
-└── src/                       # 作業ディレクトリ例
-    ├── CLAUDE.md              # サブディレクトリ専用（作業時のみマージ）
+my-project/                    # Project root
+├── CLAUDE.md                  # Project-wide (Git-tracked recommended)
+├── CLAUDE.local.md            # Local only (.gitignore recommended)
+└── src/                       # Working directory example
+    ├── CLAUDE.md              # Subdirectory-specific (merged only when working here)
     └── features/
-        └── CLAUDE.md          # さらに深い階層も可能
+        └── CLAUDE.md          # Even deeper nesting is possible
 
 ```
 
-**重要な原則**: より具体的（深い階層）な指示が、より一般的な指示を上書きする。
+**Key principle**: More specific (deeper) instructions override more general (shallower) instructions.
 
-## 各階層の役割
+## Role of Each Layer
 
-| ファイル              | Git管理 | 用途                             | 例                               |
-| :-------------------- | :------ | :------------------------------- | :------------------------------- |
-| `~/.claude/CLAUDE.md` | 管理外  | 個人の好み（全プロジェクト共通） | 「日本語で応答」「関数型を優先」 |
-| `./CLAUDE.md`         | する    | チーム規約・プロジェクト概要     | 技術スタック、テスト方針         |
-| `./CLAUDE.local.md`   | しない  | 個人のローカル環境情報           | ローカルDBの接続先、実験的設定   |
-| `./src/CLAUDE.md`     | する    | サブディレクトリ固有の設計方針   | feature moduleの責務分離ルール   |
+| File | Git-Tracked | Purpose | Example |
+| :--- | :--- | :--- | :--- |
+| `~/.claude/CLAUDE.md` | No | Personal preferences (all projects) | "Respond in English," "prefer functional style" |
+| `./CLAUDE.md` | Yes | Team rules and project overview | Tech stack, testing approach |
+| `./CLAUDE.local.md` | No | Personal local environment info | Local DB connection, experimental settings |
+| `./src/CLAUDE.md` | Yes | Subdirectory-specific design decisions | Feature module responsibility separation rules |
 
-## なぜ階層マージなのか
+## Why Hierarchical Merging?
 
-### Context Rot 対策
+### Context Rot Mitigation
 
-サブディレクトリの CLAUDE.md は、そのディレクトリで作業している時だけ追加でマージされる。つまり、`src/features/` で作業していない時はその CLAUDE.md はコンテキストを消費しない。これにより、常駐する指示の総量を最小限に抑え、Priority Saturation のリスクも軽減できる。
+A subdirectory's CLAUDE.md is merged only when you're working in that directory. If you're not working in `src/features/`, its CLAUDE.md doesn't consume your context. This minimizes the total resident instructions and reduces Priority Saturation risk.
 
-### チーム vs 個人の分離
+### Team vs. Personal Separation
 
-`./CLAUDE.md`（チーム共有）と `./CLAUDE.local.md`（個人用）を分けることで、チームの規約と個人の好みを独立に管理できる。
+By separating `./CLAUDE.md` (team-shared) and `./CLAUDE.local.md` (personal), you manage team conventions and personal preferences independently.
 
-## 設計のガイドライン
+## Design Guidelines
 
-- **グローバル**: 言語設定、個人の好みなど全プロジェクトに適用する情報のみ
-- **プロジェクトルート**: チーム全員が従うべき規約。200行以内を厳守
-- **ローカル**: Git管理しない個人設定。環境依存の情報
-- **サブディレクトリ**: そのディレクトリ固有の設計方針。プロジェクトルートの CLAUDE.md を補完
+- **Global**: Only information that applies across all projects—language settings, personal preferences
+- **Project root**: Rules everyone on the team must follow. Enforce the 200-line limit strictly
+- **Local**: Personal settings not tracked in Git. Environment-dependent information
+- **Subdirectory**: Design decisions specific to that directory. Complements the project root CLAUDE.md
 
 ---
 
-> **前へ**: [CLAUDE.md の設計原理](claude-md.md)
+> **Previous**: [Design Principles of CLAUDE.md](claude-md.md)
 
-> **次へ**: [CLAUDE.local.md の運用](local-md.md)
+> **Next**: [Operating CLAUDE.local.md](local-md.md)

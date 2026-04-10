@@ -1,95 +1,97 @@
-# Knowledge Boundary（知識境界）— LLMは「知らない」と言えない
+🌐 [日本語](../ja/01-llm-structural-problems/knowledge-boundary.md)
+
+# Knowledge Boundary — LLMs Cannot Admit What They Don't Know
 
 > [!NOTE]
-> **一言で言うと**: LLM は自分の知識の限界を正確に把握できない。
-> 知らないことについて「知らない」と答える代わりに、高い確信度で誤った回答を生成する。
-> この「較正（calibration）の不良」はハルシネーションの直接的な原因であり、
-> コーディングエージェントの最も危険な故障モードを生む。
+> **In a nutshell**: LLMs cannot accurately identify the limits of their own knowledge.
+> Instead of answering "I don't know" to questions about unfamiliar topics, they generate incorrect responses with high confidence.
+> This "poor calibration" is a direct source of hallucination and creates
+> the most dangerous failure mode in coding agents.
 
-## Knowledge Boundary とは何か
+## What is Knowledge Boundary?
 
-Knowledge Boundary（知識境界）とは、LLM が正しく回答できる知識と回答できない知識の境界線のこと。問題は、**LLM 自身がこの境界線を正確に認識できない**こと。
+Knowledge Boundary refers to the line separating what an LLM can answer correctly from what it cannot. The problem is that **LLMs themselves cannot accurately recognize this boundary**.
 
-人間は知らないことについて「知らない」と言えるが、LLM は知らないことについても高い確信度で誤った回答を生成する。
+Humans can say "I don't know" about unfamiliar topics, but LLMs generate incorrect answers with high confidence about things they don't understand.
 
-## なぜ「知らない」と言えないのか
+## Why Can't They Admit Ignorance?
 
-### 1. 次トークン予測という目的関数
+### 1. The Objective Function: Next-Token Prediction
 
-LLM の訓練目的は「次のトークンを予測する」こと。この目的関数には**「知らない」という出力に対する報酬がない**。「分かりません」という応答は訓練データ内で圧倒的に少なく、人間が書いた文章の大半は何かを主張する形式である。
+LLMs are trained to "predict the next token." This objective function offers **no reward for outputs that express uncertainty**. Responses like "I don't know" are vastly underrepresented in training data, as most human-written text is structured around making claims rather than admitting ignorance.
 
-### 2. RLHF による過剰な自信の強化
+### 2. Overconfidence Reinforced by RLHF
 
-RLHF の過程で、人間の評価者は**回答する応答を拒否する応答より高く評価する**傾向がある。結果として、モデルは「回答すること」に報酬を受け、「知らなくても答えようとする」バイアスが強化される。
+During RLHF, human evaluators tend to **rate responsive answers higher than refusals**. As a result, models are rewarded for "providing answers," and the bias toward "attempting to answer even when uncertain" becomes stronger.
 
-### 3. 不確実性を表現する訓練データの不足
+### 3. Insufficient Training Data for Expressing Uncertainty
 
-訓練データの大半は「X は Y である」という断定的な主張で構成されており、不確実性を明示する表現が構造的に不足している。
+The vast majority of training data consists of definitive claims ("X is Y"), with structural scarcity of expressions that explicitly convey uncertainty.
 
-### 4. 知識の種類による境界の曖昧さ
+### 4. Ambiguity in Knowledge Boundaries Across Types
 
-知識を4つの層に分類できる:
+Knowledge can be classified into four layers:
 
-| 層  | 名称                 | 説明                                       | 危険度   |
-| :-- | :------------------- | :----------------------------------------- | :------- |
-| 1   | 既知の既知           | 確実に知っている知識                       | 低       |
-| 2   | プロンプト依存の既知 | 聞き方によって正しく答えたり間違えたりする | 中       |
-| 3   | 既知の未知           | 「知らない」と認識できる領域               | 低       |
-| 4   | **未知の未知**       | **LLM が自分の無知を認識できない領域**     | **最高** |
+| Layer | Category | Description | Risk Level |
+| :--- | :--- | :--- | :--- |
+| 1 | Known-Known | Knowledge the model is certain about | Low |
+| 2 | Prompt-Dependent Known | Answers correctly or incorrectly depending on how the question is framed | Medium |
+| 3 | Known-Unknown | Areas where the model recognizes its lack of knowledge | Low |
+| 4 | **Unknown-Unknown** | **Areas where the model cannot recognize its own ignorance** | **Highest** |
 
-最も危険なのは「未知の未知」 —— LLM が自分の無知を認識できない領域。
+The most dangerous category is "unknown-unknown" — domains where the LLM cannot recognize its own knowledge gap.
 
-## コーディングにおける影響
+## Impact on Code Generation
 
-### パターン1: 古い知識でコードを生成
+### Pattern 1: Generating Code from Outdated Knowledge
 
-LLM の訓練データが Angular 16 までの知識で、ユーザーの環境が Angular 18 の場合、古い書き方のコードを自信を持って生成する。
+If an LLM was trained on Angular 16 knowledge but the user needs Angular 18, it confidently generates code using older patterns.
 
-### パターン2: 存在しない API を呼び出す
+### Pattern 2: Calling Nonexistent APIs
 
-バージョン間の微妙な違いを正確に把握していないため、存在しない API やメソッドを呼び出すコードを生成する。
+Without precise version-to-version knowledge, it generates code that calls APIs or methods that don't exist.
 
-### パターン3: 社内コードに対する「知ったかぶり」
+### Pattern 3: Pretending to Know Internal Tooling
 
-社内ツールのメソッドについて質問しても、存在しないメソッドの型定義を自信を持って生成する。
+When asked about methods in proprietary tools, it confidently generates type definitions for methods that don't exist.
 
-### パターン4: プロンプト依存の不安定な知識
+### Pattern 4: Prompt-Dependent Unstable Knowledge
 
-同じ質問でも聞き方によって正しく答えたり間違えたりする。知識が「ある/ない」の二値ではなく、プロンプトに依存する連続的な確信度であることを示している。
+The same question can be answered correctly or incorrectly depending on how it's phrased. This shows that knowledge is not a binary "know/don't know" state but a continuous confidence level dependent on the prompt.
 
-## Claude Code での対策
+## Mitigation Strategies in Claude Code
 
-| 対策                           | 仕組み                              | なぜ効くのか                                   |
-| :----------------------------- | :---------------------------------- | :--------------------------------------------- |
-| **MCP（外部知識参照）**        | 外部の信頼できるソースを直接参照    | LLM の内部知識に依存せず、知識境界を外部に拡張 |
-| **テストコード**               | 生成コードの正しさを外部検証        | 知識境界を超えた出力の「結果」を検出           |
-| **CLAUDE.md でバージョン明示** | 使用バージョンを明記                | 「どの時点の知識を使うべきか」を指定           |
-| **Agents（知識の分離）**       | 専門エージェントに委譲              | 知識領域を狭めることで境界を超える確率を低減   |
-| **問い方の設計**               | 「確信がないAPIは確認が必要」と指示 | LLM に「知らない」と言う許可を明示的に与える   |
+| Mitigation | Mechanism | Why It Works |
+| :--- | :--- | :--- |
+| **MCP (External Knowledge Reference)** | Query external trusted sources directly | Extends knowledge boundaries beyond the LLM's internal knowledge |
+| **Test Code** | Externally verify generated code correctness | Detects outputs that exceed knowledge boundaries through their results |
+| **Version Declaration in CLAUDE.md** | Explicitly specify library versions | Clarifies "which version's knowledge should be used?" |
+| **Agents (Knowledge Isolation)** | Delegate to specialized agents | Shrinks knowledge domains, reducing the probability of boundary exceedance |
+| **Prompt Design** | Instruct "unconfident APIs require verification" | Explicitly permits the LLM to say "I don't know" |
 
-## 他の構造的問題との関係
+## Relationship to Other Structural Problems
 
-Knowledge Boundary はハルシネーションの入口として機能する:
+Knowledge Boundary acts as an entry point for Hallucination:
 
 ```mermaid
 flowchart TD
-    Q["知識境界を超えた質問"]
-    KB["Knowledge Boundary<br>知識の限界"]
-    H["Hallucination<br>誤答生成"]
-    S["Sycophancy<br>ユーザーが同意"]
-    CR["Context Rot<br>検証能力低下"]
-    ID["Instruction Decay<br>「確認しろ」指示忘却"]
-    D(["技術的負債の蓄積"])
+    Q["Question exceeds<br>knowledge boundary"]
+    KB["Knowledge Boundary<br>Limits of knowledge"]
+    H["Hallucination<br>Generating incorrect answers"]
+    S["Sycophancy<br>User agrees with error"]
+    CR["Context Rot<br>Verification ability degrades"]
+    ID["Instruction Decay<br>Forgetting 'verify' instruction"]
+    D(["Accumulation of<br>technical debt"])
 
-    Q -->|"「知らない」と言えない"| KB
-    KB -->|"誤答を生成"| H
-    H -->|"ユーザーが同意"| S
-    S -->|"検証能力が低下"| CR
-    CR -->|"「確認しろ」指示が忘却"| ID
-    ID -->|"最終結果"| D
+    Q -->|"Cannot admit ignorance"| KB
+    KB -->|"Generates incorrect answer"| H
+    H -->|"User agrees"| S
+    S -->|"Verification ability weakens"| CR
+    CR -->|"Instruction forgotten"| ID
+    ID -->|"Final result"| D
 
-    %% 悪循環の強調
-    D -.->|"蓄積された負債が<br>さらなる境界超過を誘発"| KB
+    %% Emphasize the feedback loop
+    D -.->|"Accumulated debt triggers<br>further boundary exceedance"| KB
 
     style Q fill:#fff,stroke:#374151,color:#000
     style KB fill:#e8d5b7,stroke:#78350f,color:#000
@@ -100,14 +102,14 @@ flowchart TD
     style D fill:#fef9c3,stroke:#a16207,color:#000
 ```
 
-## 参考文献
+## References
 
-- Pan et al. (2025). "Can LLMs Refuse Questions They Do Not Know? Measuring Knowledge-Aware Refusal in Factual Tasks." [arXiv:2510.01782](https://arxiv.org/abs/2510.01782) — Refusal Index（RI）メトリクスによる16モデル×5データセットでの拒否行動の定量測定
+- Pan et al. (2025). "Can LLMs Refuse Questions They Do Not Know? Measuring Knowledge-Aware Refusal in Factual Tasks." [arXiv:2510.01782](https://arxiv.org/abs/2510.01782) — Quantitative measurement of refusal behavior across 16 models and 5 datasets using the Refusal Index (RI) metric
 
 ---
 
-> **前へ**: [Sycophancy](sycophancy.md)
+> **Previous**: [Sycophancy](sycophancy.md)
 
-> **次へ**: [Prompt Sensitivity](prompt-sensitivity.md)
+> **Next**: [Prompt Sensitivity](prompt-sensitivity.md)
 
 > **Discussion**: [#11 Knowledge Boundary](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/11)

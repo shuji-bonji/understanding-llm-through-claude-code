@@ -1,33 +1,35 @@
-# Part 8: セッション管理と記憶の永続化
+🌐 [日本語](../ja/08-session-management/index.md)
+
+# Part 8: Session Management and Memory Persistence
 
 > [!NOTE]
-> 会話の寿命と記憶の運用。
-> `/compact` と `/clear` はPart 2（理論）ではなくここ（運用）に配置。
-> 理論的根拠は Part 1・2 にあり、ここでは実践的な運用を扱う。
+> The lifecycle of a conversation and memory operation.
+> `/compact` and `/clear` are placed here (practical operations) rather than in Part 2 (theory).
+> The theoretical basis exists in Parts 1 and 2; this part covers practical operations.
 
-## なぜ重要なのか
+## Why It Matters
 
-LLM のセッションは有限である。会話が長くなるほど Context Rot が進行し、Instruction Decay が発生する。セッションの適切な管理は、LLM の品質を維持するための最も実践的な対策である。
+LLM sessions are finite. As conversations grow longer, Context Rot progresses and Instruction Decay occurs. Proper session management is the most practical countermeasure for maintaining LLM quality.
 
-## → Why: どの構造的問題に対応しているか
+## → Why: Which Structural Problems Does It Address?
 
 > [!IMPORTANT]
-> - **Context Rot**: `/compact` による予防的圧縮でトークン蓄積を抑制
-> - **Lost in the Middle**: 50%使用率前に圧縮することでU字カーブ崩壊を防ぐ
-> - **Instruction Decay**: `/clear` によるセッション分割で劣化をリセット
+> - **Context Rot**: `/compact` prevents token accumulation through predictive compression
+> - **Lost in the Middle**: Compressing before 50% usage prevents U-shaped curve collapse
+> - **Instruction Decay**: `/clear` resets degradation by splitting sessions
 
-## このパートのドキュメント
+## Documents in This Part
 
-| ドキュメント | 内容 |
+| Document | Content |
 |:--|:--|
-| [/compact と /clear の使い分け](compact-and-clear.md) | いつ圧縮し、いつリセットするか |
-| [なぜメモリが問題になるのか](memory-problem.md) | セッション間の情報喪失問題 |
-| [何を覚えるか](what-to-remember.md) | 永続化すべき情報の選別 |
-| [いつ・どう思い出すか](when-to-recall.md) | 記憶の呼び出し戦略 |
-| [ツール比較と選定基準](tools-comparison.md) | 記憶ツールの比較 |
+| [Using /compact and /clear](compact-and-clear.md) | When to compress and when to reset |
+| [Why Memory Becomes a Problem](memory-problem.md) | Information loss between sessions |
+| [What to Remember](what-to-remember.md) | Selecting information to persist |
+| [When and How to Recall](when-to-recall.md) | Memory retrieval strategy |
+| [Tool Comparison and Selection](tools-comparison.md) | Comparison of memory tools |
 
 ---
 
-> **前へ**: [Part 7: LLMが見ないレイヤー](../07-runtime-layer/index.md)
+> **Previous**: [Part 7: The Runtime Layer LLMs Don't See](../07-runtime-layer/index.md)
 
-> **次へ**: [Part 9: 他LLMへの応用](../09-cross-llm-principles/index.md)
+> **Next**: [Part 9: Application to Other LLMs](../09-cross-llm-principles/index.md)

@@ -1,21 +1,23 @@
-# globパターン設計の実践
+🌐 [日本語](../ja/04-conditional-context/glob-patterns.md)
+
+# Practical glob Pattern Design
 
 > [!TIP]
-> 効果的な glob パターンは、必要なルールを必要な時だけ注入する鍵。
+> Effective glob patterns are the key to injecting necessary rules at the right time.
 
-## 基本構文
+## Basic Syntax
 
-| パターン       | 意味                               |
-| :------------- | :--------------------------------- |
-| `*`            | 任意のファイル名                   |
-| `**`           | 任意のディレクトリ深度             |
-| `*.ts`         | 全ての .ts ファイル                |
-| `src/**/*.ts`  | src/ 以下の全 .ts ファイル         |
-| `**/*.spec.ts` | 全ディレクトリの .spec.ts ファイル |
+| Pattern | Meaning |
+| :--- | :--- |
+| `*` | Any filename |
+| `**` | Any directory depth |
+| `*.ts` | All .ts files |
+| `src/**/*.ts` | All .ts files under src/ |
+| `**/*.spec.ts` | .spec.ts files in any directory |
 
-## 複数パターンの指定
+## Specifying Multiple Patterns
 
-カンマ区切りで複数の glob パターンを指定できる。
+You can specify multiple glob patterns separated by commas.
 
 ```yaml
 ---
@@ -23,36 +25,36 @@ globs: '**/*.actions.ts,**/*.effects.ts,**/*.reducer.ts'
 ---
 ```
 
-## 設計のポイント
+## Design Points
 
-### 広すぎるパターンを避ける
+### Avoid Overly Broad Patterns
 
 ```yaml
-# ❌ 広すぎる — ほぼ全てのファイルで発火し、Rules の意味がない
+# ❌ Too broad — fires on almost all files, making Rules pointless
 globs: "**/*.ts"
 
-# ✅ 適切な範囲
+# ✅ Appropriate scope
 globs: "src/app/**/*.component.ts"
 ```
 
-### ドメインごとに分離する
+### Separate by Domain
 
 ```
-# ❌ 1ファイルに複数ドメイン
-rules/frontend-rules.md  # globs: "**/*.ts" — コンポーネント、サービス、テスト全部
+# ❌ Multiple domains in one file
+rules/frontend-rules.md  # globs: "**/*.ts" — all components, services, tests
 
-# ✅ ドメインごとに分離
+# ✅ Separate by domain
 rules/component-rules.md  # globs: "**/*.component.ts"
 rules/service-rules.md    # globs: "**/*.service.ts"
 rules/testing-rules.md    # globs: "**/*.spec.ts"
 ```
 
-### テストファイルのルールは分離する
+### Separate Test File Rules
 
-テスト固有のルール（Jasmine の書き方、モックの方針）はテストファイルにだけ適用すべき。プロダクションコード編集時にテストルールが注入されると、Priority Saturation を引き起こす。
+Rules specific to testing (Jasmine conventions, mocking policies) should only apply to test files. When test rules are injected during production code editing, it causes Priority Saturation.
 
 ---
 
-> **前へ**: [.claude/rules/ の設計原理](rules.md)
+> **Previous**: [Design Principles of .claude/rules/](rules.md)
 
-> **Part 4 完了 → 次へ**: [Part 5: オンデマンドコンテキスト](../05-on-demand-context/index.md)
+> **Part 4 Complete → Next**: [Part 5: On-Demand Context](../05-on-demand-context/index.md)

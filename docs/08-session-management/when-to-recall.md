@@ -1,36 +1,38 @@
-# いつ・どう思い出すか
+🌐 [日本語](../ja/08-session-management/when-to-recall.md)
+
+# When and How to Recall
 
 > [!NOTE]
-> 記憶を持っているだけでは意味がない。
-> 適切なタイミングで適切な記憶を呼び出す仕組みが必要。
+> Having memories is meaningless without using them.
+> A mechanism to retrieve the right memory at the right time is needed.
 
-## 記憶の呼び出しパターン
+## Memory Retrieval Patterns
 
-### 1. セッション開始時の自動読み込み
+### 1. Automatic Loading at Session Start
 
-CLAUDE.md に書かれた情報は毎セッション自動で読み込まれる。最も確実だが、コンテキスト予算を常時消費する。
+Information in CLAUDE.md is automatically loaded every session. Most reliable, but constantly consumes context budget.
 
-### 2. 条件付き読み込み
+### 2. Conditional Loading
 
-`.claude/rules/` のように、特定の条件（ファイル操作）で記憶が読み込まれる。予算効率が良い。
+Like `.claude/rules/`, memories are loaded under specific conditions (file operations). Budget-efficient.
 
-### 3. オンデマンド読み込み
+### 3. On-Demand Loading
 
-Skills のように、必要な時だけ記憶を呼び出す。ユーザーまたは LLM の判断で発火。
+Like Skills, memories are retrieved only when needed. Triggered by user or LLM decision.
 
-### 4. 外部ツールによる読み込み
+### 4. Loading via External Tools
 
-MCP サーバーやメモリツールを通じて、外部に保存された記憶を検索・読み込む。
+Memories stored externally are retrieved through MCP servers or memory tools.
 
-## 設計の原則
+## Design Principles
 
-- **頻繁に必要な記憶** → CLAUDE.md（常駐）
-- **ファイル種別に紐づく記憶** → Rules（条件付き）
-- **タスク固有の記憶** → Skills（オンデマンド）
-- **長期的な知識** → 外部メモリツール
+- **Frequently needed memory** → CLAUDE.md (always available)
+- **Memory tied to file type** → Rules (conditional)
+- **Task-specific memory** → Skills (on-demand)
+- **Long-term knowledge** → External memory tools
 
 ---
 
-> **前へ**: [何を覚えるか](what-to-remember.md)
+> **Previous**: [What to Remember](what-to-remember.md)
 
-> **次へ**: [ツール比較と選定基準](tools-comparison.md)
+> **Next**: [Tool Comparison and Selection](tools-comparison.md)

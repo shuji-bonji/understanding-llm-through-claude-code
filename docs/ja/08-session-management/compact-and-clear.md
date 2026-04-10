@@ -1,0 +1,75 @@
+🌐 [English](../../08-session-management/compact-and-clear.md)
+
+# /compact と /clear の使い分け
+
+> [!IMPORTANT]
+> → Why: **Context Rot** 対策（予防的圧縮でトークン蓄積を抑制）
+> → Why: **Lost in the Middle** 対策（50%使用率前に圧縮してU字カーブ崩壊を防ぐ）
+> → Why: **Instruction Decay** 対策（セッション分割で劣化をリセット）
+
+## /compact — 予防的圧縮
+
+`/compact` は会話履歴を要約・圧縮し、コンテキストのトークン数を削減するコマンド。
+
+### いつ使うか
+
+**50%使用率に達する前に実行する。**
+
+科学的根拠: コンテキスト使用率が50%を超えると、Lost in the Middle のU字カーブが崩壊し、先頭の情報（CLAUDE.md 含む）への注意が最も低下する。
+
+### 何が起きるか
+
+- 会話履歴が要約され、トークン数が大幅に削減される
+- 重要な決定事項や文脈は要約に含まれる
+- 細かいやり取りの詳細は失われる
+
+## /clear — セッション分割
+
+`/clear` はセッションを完全にリセットし、新鮮なコンテキストで再開するコマンド。
+
+### いつ使うか
+
+- タスクが完了し、次の独立したタスクに移る時
+- 会話が長くなり、/compact でも品質が改善しない時
+- LLM の出力品質が明らかに低下した時
+
+### 何が起きるか
+
+- 全ての会話履歴が削除される
+- CLAUDE.md は再読み込みされる
+- 完全にクリーンな状態から再開
+
+## 使い分けのフロー
+
+```mermaid
+flowchart LR
+    Q1{"まだ同じタスクの途中？"}
+    Q2{"タスクは完了した？"}
+    COMPACT(["⚡ /compact<br>会話を圧縮して継続"])
+    CLEAR(["🔄 /clear<br>新しいタスクに向けてリセット"])
+    COMPACT2(["⚡ /compact してから判断"])
+
+    Q1 -->|"Yes"| COMPACT
+    Q1 -->|"No"| Q2
+    Q2 -->|"Yes"| CLEAR
+    Q2 -->|"No"| COMPACT2
+
+    style Q1 fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style Q2 fill:#eff6ff,stroke:#1d4ed8,color:#000
+    style COMPACT fill:#fef9c3,stroke:#a16207,color:#000
+    style CLEAR fill:#dcfce7,stroke:#15803d,color:#000
+    style COMPACT2 fill:#fef9c3,stroke:#a16207,color:#000
+```
+
+## セッション設計の原則
+
+1. **1セッション = 1タスク**（または密接に関連する小タスクの集合）
+2. **50%使用率前に /compact**（予防的）
+3. **タスク完了時に /clear**（リセット）
+4. **重要な決定は CLAUDE.md や Git コミットに永続化**（セッションをまたいで引き継ぐ）
+
+---
+
+> **前へ**: [Part 8: セッション管理と記憶の永続化](index.md)
+
+> **次へ**: [なぜメモリが問題になるのか](memory-problem.md)

@@ -1,36 +1,38 @@
-# なぜメモリが問題になるのか
+🌐 [日本語](../ja/08-session-management/memory-problem.md)
+
+# Why Memory Becomes a Problem
 
 > [!NOTE]
-> セッションは有限だが、プロジェクトは永続的。
-> セッション間の情報喪失が「記憶の永続化」問題を生む。
+> Sessions are finite, but projects are permanent.
+> Information loss between sessions creates the "memory persistence" problem.
 
-## セッションの有限性
+## The Finiteness of Sessions
 
-LLM のセッションには明確な寿命がある。
+LLM sessions have a clear lifespan.
 
-- Context Rot により品質が時間とともに劣化
-- `/compact` で延命できるが限界がある
-- `/clear` でリセットすると会話履歴は全て失われる
+- Quality degrades over time due to Context Rot
+- `/compact` can extend the session but has limits
+- `/clear` resets everything—all conversation history is lost
 
-## 情報喪失の問題
+## The Problem of Information Loss
 
-セッションが終了すると、以下の情報が失われる。
+When a session ends, the following information is lost:
 
-- 設計判断の経緯（「なぜこのアーキテクチャを選んだか」）
-- バグの原因分析の過程
-- ユーザーの好みや作業スタイル
-- プロジェクト固有の暗黙知
+- The rationale behind design decisions ("Why did we choose this architecture?")
+- The process of debugging and root cause analysis
+- User preferences and work style
+- Project-specific implicit knowledge
 
-## 永続化の必要性
+## The Need for Persistence
 
-プロジェクトはセッションを超えて続く。セッション間で情報を引き継ぐ仕組みが必要。
+Projects continue beyond sessions. A mechanism to carry information forward across sessions is necessary.
 
-- **CLAUDE.md**: プロジェクトの規約や技術スタック（手動管理）
-- **Git コミット**: コードの変更履歴（自動管理）
-- **メモリツール**: 設計判断、ユーザーの好みなど（半自動管理）
+- **CLAUDE.md**: Project conventions and technical stack (manual management)
+- **Git commits**: Code change history (automatic management)
+- **Memory tools**: Design decisions, user preferences, etc. (semi-automatic management)
 
 ---
 
-> **前へ**: [/compact と /clear の使い分け](compact-and-clear.md)
+> **Previous**: [Using /compact and /clear](compact-and-clear.md)
 
-> **次へ**: [何を覚えるか](what-to-remember.md)
+> **Next**: [What to Remember](what-to-remember.md)

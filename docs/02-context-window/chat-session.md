@@ -1,40 +1,42 @@
-# Chat / Session — Context が蓄積する「時間の入れ物」
+🌐 [日本語](../ja/02-context-window/chat-session.md)
+
+# Chat / Session — The "Container of Time" Where Context Accumulates
 
 > [!NOTE]
-> **一言で言うと**: Chat（会話 / セッション）は、Context が時間とともに蓄積・膨張する「入れ物」である。
-> Token・Context・Context Window が「空間」の概念なら、Chat は「時間」の概念。
-> この入れ物を理解することで、「なぜ Context が膨らむのか」「なぜ Instruction Decay が起きるのか」が物理的に説明できる。
+> **In a nutshell**: Chat (conversation / session) is a "container" in which Context accumulates and expands over time.
+> If Token, Context, and Context Window represent "space," then Chat represents "time."
+> By understanding this container, we can physically explain "why Context expands" and "why Instruction Decay occurs."
 
-## Chat とは何か
+## What is Chat?
 
-Chat（チャット / セッション / 会話）とは、**ユーザーと LLM の間で行われる一連のやり取り（ターン）の集合**のこと。
+Chat (chat / session / conversation) is **a collection of a series of exchanges (turns) between a user and an LLM**.
 
-ChatGPT の「チャット」、Claude.ai の「会話」、Claude Code の「セッション」—— 呼び方は違うが、本質は同じである。**1つの Chat の中で Context が蓄積していく**。
+ChatGPT's "chat," Claude.ai's "conversation," Claude Code's "session" — the names differ, but the essence is the same. **Context accumulates within a single Chat.**
 
 ```
-Chat（セッション）
-├── ターン 1: ユーザー入力 + LLM 応答
-├── ターン 2: ユーザー入力 + LLM 応答
-├── ターン 3: ユーザー入力 + LLM 応答
-│     ↑ ここまでの全履歴が Context として毎回渡される
+Chat (Session)
+├── Turn 1: User input + LLM response
+├── Turn 2: User input + LLM response
+├── Turn 3: User input + LLM response
+│     ↑ All history up to this point is passed as Context each time
 └── ...
 ```
 
-## 4つの基礎概念の関係
+## Relationship Between Four Core Concepts
 
-Token・Context・Context Window は「ある瞬間」の静的な概念である。Chat を加えることで、**時間軸での変化**が説明できるようになる。
+Token, Context, and Context Window are static concepts at a given moment. By adding Chat, we can explain **changes over time**.
 
 ```mermaid
 graph TD
-    TOKEN["Token<br>LLM の最小処理単位"]
-    CONTEXT["Context<br>LLM に渡す全テキスト"]
-    CW["Context Window<br>Context の最大サイズ"]
-    CHAT["Chat / Session<br>Context が蓄積する時間の入れ物"]
+    TOKEN["Token<br>Minimum processing unit for LLM"]
+    CONTEXT["Context<br>All text passed to LLM"]
+    CW["Context Window<br>Maximum size of Context"]
+    CHAT["Chat / Session<br>Container of time where Context accumulates"]
 
-    TOKEN -->|"集まって構成する"| CONTEXT
-    CONTEXT -->|"サイズが制限される"| CW
-    CHAT -->|"ターンごとに<br>Context を膨張させる"| CONTEXT
-    CHAT -->|"膨張が限界に達すると<br>切り捨て or 圧縮"| CW
+    TOKEN -->|"Combine to form"| CONTEXT
+    CONTEXT -->|"Size is limited by"| CW
+    CHAT -->|"Expands Context<br>each turn"| CONTEXT
+    CHAT -->|"When expansion reaches limit<br>discard or compress"| CW
 
     style TOKEN fill:#f3f4f6,stroke:#374151,color:#000
     style CONTEXT fill:#fef9c3,stroke:#a16207,color:#000
@@ -42,35 +44,35 @@ graph TD
     style CHAT fill:#f3e8ff,stroke:#7c3aed,color:#000
 ```
 
-| 概念               | 性質               | 開発者向けの比喩      |
-| :----------------- | :----------------- | :-------------------- |
-| **Token**          | 空間の最小単位     | メモリのバイト        |
-| **Context**        | ある瞬間の入力全体 | HTTP リクエストボディ |
-| **Context Window** | 空間の上限         | プロセスのメモリ空間  |
-| **Chat / Session** | 時間の入れ物       | TCP コネクション      |
+| Concept            | Nature                      | Developer Analogy      |
+| :----------------- | :-------------------------- | :---------------------- |
+| **Token**          | Minimum unit of space       | Memory byte             |
+| **Context**        | Complete input at a moment  | HTTP request body       |
+| **Context Window** | Space limit                 | Process memory space    |
+| **Chat / Session** | Container of time           | TCP connection          |
 
 > [!TIP]
-> **開発者向けの比喩**: Chat は TCP コネクションに近い。コネクションの中で複数のリクエスト（ターン）がやり取りされ、状態（Context）が蓄積していく。コネクションを閉じる（`/clear`）と状態はリセットされる。
+> **Developer analogy**: Chat is similar to a TCP connection. Multiple requests (turns) are exchanged within the connection, and state (Context) accumulates. When you close the connection (`/clear`), the state resets.
 
-## Chat の中で何が起きているか
+## What Happens Within a Chat?
 
-### ターンごとの Context 膨張
+### Context Expansion per Turn
 
-LLM はステートレスである。「覚えている」のではなく、**毎ターン、全履歴を含む Context を最初から読み直す**。
+The LLM is stateless. It doesn't "remember" — instead, **each turn it reads the entire history from the beginning as Context**.
 
 ```mermaid
 graph LR
-    subgraph T1 ["ターン 1"]
-        C1["Context<br>System Prompt + CLAUDE.md<br>+ ユーザー入力1<br>━━━━━<br>~5K tokens"]
+    subgraph T1 ["Turn 1"]
+        C1["Context<br>System Prompt + CLAUDE.md<br>+ User input 1<br>━━━━━<br>~5K tokens"]
     end
-    subgraph T2 ["ターン 2"]
-        C2["Context<br>... + 応答1 + ユーザー入力2<br>━━━━━<br>~15K tokens"]
+    subgraph T2 ["Turn 2"]
+        C2["Context<br>... + Response 1 + User input 2<br>━━━━━<br>~15K tokens"]
     end
-    subgraph T3 ["ターン 3"]
-        C3["Context<br>... + 応答2 + ユーザー入力3<br>━━━━━<br>~30K tokens"]
+    subgraph T3 ["Turn 3"]
+        C3["Context<br>... + Response 2 + User input 3<br>━━━━━<br>~30K tokens"]
     end
-    subgraph TN ["ターン N"]
-        CN["Context<br>... 全履歴<br>━━━━━<br>~100K+ tokens"]
+    subgraph TN ["Turn N"]
+        CN["Context<br>... All history<br>━━━━━<br>~100K+ tokens"]
     end
 
     T1 --> T2 --> T3 -->|"..."| TN
@@ -81,45 +83,45 @@ graph LR
     style CN fill:#fee2e2,stroke:#b91c1c,color:#000
 ```
 
-### Context 膨張が構造的問題を引き起こす
+### Context Expansion Triggers Structural Problems
 
-Chat が長くなる（＝ターンが増える）ほど、Part 1 で学んだ構造的問題が順に発現する。
+As Chat grows longer (more turns), the structural problems learned in Part 1 emerge in sequence.
 
-| Chat の段階    | Context の状態 | 発現する問題                            |
-| :------------- | :------------- | :-------------------------------------- |
-| 序盤（~30%）   | 小さく安定     | ほぼ問題なし                            |
-| 中盤（30-50%） | 膨張が進行     | Context Rot が始まる                    |
-| 後半（50-70%） | 中間部が死角に | Lost in the Middle、Priority Saturation |
-| 終盤（70%+）   | 限界に接近     | Hallucination 増加、Sycophancy 悪化     |
-| 全体を通して   | 時間軸で複合   | **Instruction Decay**（全問題の集大成） |
+| Chat Stage       | Context State          | Emerging Problems                         |
+| :--------------- | :--------------------- | :---------------------------------------- |
+| Early (~30%)     | Small and stable       | Almost no issues                          |
+| Middle (30-50%)  | Expansion underway     | Context Rot begins                        |
+| Late (50-70%)    | Middle section fades   | Lost in the Middle, Priority Saturation   |
+| Final (70%+)     | Approaching limit      | Increased Hallucination, worse Sycophancy |
+| Throughout       | Complex over time axis | **Instruction Decay** (culmination)       |
 
 > [!IMPORTANT]
-> **Chat こそが Instruction Decay の物理的原因である。** Part 1 で「マルチターンで平均 39% 性能低下」と学んだが、その「マルチターン」とは「1つの Chat の中でターンが蓄積すること」に他ならない。
+> **Chat is the physical cause of Instruction Decay.** In Part 1, we learned "39% average performance degradation in multi-turn," but that "multi-turn" is precisely the accumulation of turns within a single Chat.
 
-## Chat を「管理する」という発想
+## The Idea of "Managing" Chat
 
-Chat を理解すると、Claude Code の対策が「Chat の管理戦略」であることが見える。
+Once you understand Chat, Claude Code's countermeasures become visible as "Chat management strategies."
 
-| 対策           | Chat に対する操作                              |
+| Countermeasure | Operation on Chat                              |
 | :------------- | :--------------------------------------------- |
-| **`/compact`** | Chat の中身を圧縮する（履歴を要約に置換）      |
-| **`/clear`**   | Chat を終了し、新しい Chat を開始する          |
-| **Agents**     | メインの Chat とは別の Chat で実行する         |
-| **Hooks**      | Chat の外で実行する（LLM を経由しない）        |
-| **CLAUDE.md**  | 毎 Chat の冒頭に自動注入される「初期 Context」 |
+| **`/compact`** | Compress the content within Chat (replace history with summary) |
+| **`/clear`**   | End Chat and start a new one                   |
+| **Agents**     | Execute in a separate Chat from the main one   |
+| **Hooks**      | Execute outside Chat (without going through LLM) |
+| **CLAUDE.md**  | "Initial Context" automatically injected at the beginning of each Chat |
 
 ```mermaid
 flowchart TD
     CHAT["Chat / Session"]
-    COMPACT(["⚡ /compact<br>Chat を圧縮して継続"])
-    CLEAR(["🔄 /clear<br>Chat を終了し新規開始"])
-    AGENTS(["🤖 Agents<br>別の Chat で実行"])
-    HOOKS(["🔧 Hooks<br>Chat の外で検証"])
+    COMPACT(["⚡ /compact<br>Compress Chat and continue"])
+    CLEAR(["🔄 /clear<br>End Chat and start new"])
+    AGENTS(["🤖 Agents<br>Execute in separate Chat"])
+    HOOKS(["🔧 Hooks<br>Verify outside Chat"])
 
-    CHAT -->|"50%閾値に近づいたら"| COMPACT
-    CHAT -->|"タスク完了 or 劣化が顕著なら"| CLEAR
-    CHAT -->|"独立タスクは"| AGENTS
-    CHAT -->|"機械的検証は"| HOOKS
+    CHAT -->|"When approaching 50% threshold"| COMPACT
+    CHAT -->|"If task complete or degradation evident"| CLEAR
+    CHAT -->|"For independent tasks"| AGENTS
+    CHAT -->|"For mechanical verification"| HOOKS
 
     style CHAT fill:#f3e8ff,stroke:#7c3aed,color:#000
     style COMPACT fill:#fef9c3,stroke:#a16207,color:#000
@@ -128,20 +130,20 @@ flowchart TD
     style HOOKS fill:#eff6ff,stroke:#1d4ed8,color:#1e40af
 ```
 
-## Chat の設計原則
+## Design Principle for Chat
 
 ```
-原則: 1 Chat = 1 タスク
+Principle: 1 Chat = 1 Task
 
-Chat は「できるだけ短く」が基本戦略。
-長い Chat は Context の膨張を意味し、
-Context の膨張は構造的問題の発現を意味する。
+The basic strategy is to keep Chat "as short as possible."
+A long Chat means Context expansion,
+and Context expansion means emergence of structural problems.
 ```
 
-この原則は Part 8（セッション管理）で詳しく扱う。
+This principle is covered in detail in Part 8 (session management).
 
 ---
 
-> **前へ**: [Token・Context・Context Window](token-context-basics.md)
+> **Previous**: [Token, Context, Context Window](token-context-basics.md)
 
-> **次へ**: [コンテキストウィンドウとは何か — LLM が「見る」もの](what-llm-sees.md)
+> **Next**: [What is the Context Window — What the LLM "Sees"](what-llm-sees.md)

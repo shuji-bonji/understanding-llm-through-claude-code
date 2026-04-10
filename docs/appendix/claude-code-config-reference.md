@@ -1,148 +1,150 @@
-# Claude Code 設定ファイル一覧
+🌐 [日本語](../ja/appendix/claude-code-config-reference.md)
+
+# Claude Code Configuration File Reference
 
 > [!NOTE]
-> Claude Code のプロジェクト設定を構成するファイル・ディレクトリの網羅的リファレンス。
-> 「この設定は何のためにあるのか？」を本プロジェクトの各ページへのリンクで辿れるようにしたもの。
+> Comprehensive reference of files and directories that make up Claude Code project configuration.
+> Designed to trace "what is this configuration for?" through links to relevant pages in this project.
 
-## ディレクトリ構造の全体像
+## Directory Structure Overview
 
-### ユーザーレベル（グローバル）
+### User Level (Global)
 
 ```
 ~/.claude/
-├── CLAUDE.md                    # 全プロジェクト共通の個人指示
-└── settings.json                # グローバル個人設定（ツール許可等）
+├── CLAUDE.md                    # Personal instructions common to all projects
+└── settings.json                # Global personal settings (tool permissions, etc.)
 ```
 
-### プロジェクトレベル
+### Project Level
 
 ```
 my-project/
-├── CLAUDE.md                    # プロジェクトのメイン指示ファイル（自動読み込み）
-├── CLAUDE.local.md              # ローカル専用指示（Git管理外）
+├── CLAUDE.md                    # Main project instruction file (auto-loaded)
+├── CLAUDE.local.md              # Local-only instructions (not Git-managed)
 ├── .claude/
-│   ├── settings.json            # ツール許可・MCP設定・Hooks（チーム共有）
-│   ├── settings.local.json      # ローカル専用設定（Git管理外）
+│   ├── settings.json            # Tool permissions, MCP config, Hooks (team-shared)
+│   ├── settings.local.json      # Local-only settings (not Git-managed)
 │   ├── commands/
-│   │   └── deploy.md            # カスタムスラッシュコマンド（/deploy で実行）
+│   │   └── deploy.md            # Custom slash commands (executed with /deploy)
 │   ├── rules/
-│   │   ├── frontend.md          # 条件付きルール（globパターンで自動注入）
+│   │   ├── frontend.md          # Conditional rules (auto-injected via glob pattern)
 │   │   ├── testing.md
 │   │   └── ...
 │   └── skills/
 │       └── skill-name/
-│           ├── SKILL.md         # Skill 定義（必須）
-│           ├── scripts/         # 補助スクリプト（任意）
-│           ├── references/      # 参照ドキュメント（任意）
-│           └── assets/          # テンプレート等（任意）
+│           ├── SKILL.md         # Skill definition (required)
+│           ├── scripts/         # Helper scripts (optional)
+│           ├── references/      # Reference documents (optional)
+│           └── assets/          # Templates, etc. (optional)
 ├── src/
-│   ├── CLAUDE.md                # サブディレクトリ用（該当ディレクトリ操作時に読み込み）
+│   ├── CLAUDE.md                # Subdirectory-specific (loaded when accessing this directory)
 │   └── components/
-│       └── CLAUDE.md            # さらに深い階層も可能
+│       └── CLAUDE.md            # Deeper hierarchies also possible
 ```
 
-### エンタープライズレベル（管理者設定）
+### Enterprise Level (Admin Configuration)
 
 ```
-（組織管理者が配布）
-├── managed-settings.json        # 組織ポリシー（MDM等で配布、最高優先度）
+(Distributed by organization admin)
+├── managed-settings.json        # Organization policy (distributed via MDM, highest priority)
 ```
 
-### 設定の優先順位
+### Configuration Priority
 
 ```
-Managed（最高）  managed-settings.json（組織ポリシー）
+Managed (Highest)   managed-settings.json (organization policy)
   ↓
-Project          .claude/settings.json（チーム共有）
+Project             .claude/settings.json (team-shared)
   ↓
-Project Local    .claude/settings.local.json（個人ローカル）
+Project Local       .claude/settings.local.json (personal local)
   ↓
-User（最低）     ~/.claude/settings.json（グローバル個人）
+User (Lowest)       ~/.claude/settings.json (global personal)
 ```
 
-以下では、各ファイル/ディレクトリを「コンテキストへの関わり方」で分類して解説する。
+Below, each file/directory is explained by categorizing "how it affects context."
 
-| カテゴリ                               | 設定ファイル / 機能            | 読み込み                           | 解説                                                         |
-| -------------------------------------- | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| **常駐コンテキスト**（Part 3）         | `~/.claude/CLAUDE.md`          | セッション開始時に自動             | [階層マージ](../03-always-loaded-context/hierarchy.md)       |
-|                                        | `CLAUDE.md`                    | セッション開始時に自動             | [設計原理](../03-always-loaded-context/claude-md.md)         |
-|                                        | `CLAUDE.local.md`              | セッション開始時に自動             | [運用](../03-always-loaded-context/local-md.md)              |
-|                                        | サブディレクトリの `CLAUDE.md` | 該当ディレクトリ操作時             | [階層マージ](../03-always-loaded-context/hierarchy.md)       |
-| **条件付きコンテキスト**（Part 4）     | `.claude/rules/`               | glob パターン一致時                | [設計原理](../04-conditional-context/rules.md)               |
-| **オンデマンドコンテキスト**（Part 5） | `.claude/skills/`              | description 一致時に展開           | [Skills](../05-on-demand-context/skills.md)                  |
-|                                        | Agents（`Task()`）             | 明示的呼び出し時                   | [Agents](../05-on-demand-context/agents.md)                  |
-| **ツール定義コンテキスト**（Part 6）   | MCP（`mcpServers`）            | ツール定義が常時消費               | [コンテキストコスト](../06-tool-context/mcp-context-cost.md) |
-| **ランタイム制御**（Part 7）           | `managed-settings.json`        | 組織ポリシー強制（最高優先）       | [settings.json](../07-runtime-layer/settings-json.md)        |
-|                                        | `.claude/settings.json`        | ランタイムが参照（LLM に見えない） | [settings.json](../07-runtime-layer/settings-json.md)        |
-|                                        | `.claude/settings.local.json`  | 個人ローカル設定                   | [settings.json](../07-runtime-layer/settings-json.md)        |
-|                                        | `~/.claude/settings.json`      | グローバル個人設定（最低優先）     | [settings.json](../07-runtime-layer/settings-json.md)        |
-|                                        | Hooks                          | LLM の行動前後に自動実行           | [ライフサイクル](../07-runtime-layer/hooks.md)               |
-| **セッション管理**（Part 8）           | `/compact` · `/clear`          | 手動 or 50%閾値で自動             | [使い分け](../08-session-management/compact-and-clear.md)    |
-|                                        | Memory                         | セッション横断で永続化             | [何を覚えるか](../08-session-management/what-to-remember.md) |
+| Category | Configuration File / Feature | Loading | Explanation |
+| --- | --- | --- | --- |
+| **Resident Context** (Part 3) | `~/.claude/CLAUDE.md` | Auto on session start | [Hierarchy Merge](../03-always-loaded-context/hierarchy.md) |
+| | `CLAUDE.md` | Auto on session start | [Design Principles](../03-always-loaded-context/claude-md.md) |
+| | `CLAUDE.local.md` | Auto on session start | [Operations](../03-always-loaded-context/local-md.md) |
+| | Subdirectory `CLAUDE.md` | On-demand when accessing directory | [Hierarchy Merge](../03-always-loaded-context/hierarchy.md) |
+| **Conditional Context** (Part 4) | `.claude/rules/` | When glob pattern matches | [Design Principles](../04-conditional-context/rules.md) |
+| **On-Demand Context** (Part 5) | `.claude/skills/` | When description matches | [Skills](../05-on-demand-context/skills.md) |
+| | Agents (`Task()`) | On explicit invocation | [Agents](../05-on-demand-context/agents.md) |
+| **Tool Context** (Part 6) | MCP (`mcpServers`) | Tool definitions always consumed | [Context Cost](../06-tool-context/mcp-context-cost.md) |
+| **Runtime Control** (Part 7) | `managed-settings.json` | Enforce organization policy (highest priority) | [settings.json](../07-runtime-layer/settings-json.md) |
+| | `.claude/settings.json` | Runtime reference (invisible to LLM) | [settings.json](../07-runtime-layer/settings-json.md) |
+| | `.claude/settings.local.json` | Personal local settings | [settings.json](../07-runtime-layer/settings-json.md) |
+| | `~/.claude/settings.json` | Global personal settings (lowest priority) | [settings.json](../07-runtime-layer/settings-json.md) |
+| | Hooks | Auto-execute around LLM behavior | [Lifecycle](../07-runtime-layer/hooks.md) |
+| **Session Management** (Part 8) | `/compact` · `/clear` | Manual or auto at 50% threshold | [Usage](../08-session-management/compact-and-clear.md) |
+| | Memory | Persist across sessions | [What to Remember](../08-session-management/what-to-remember.md) |
 
 ---
 
-## 常駐コンテキスト — セッション開始時に必ず読み込まれる
+## Resident Context — Always Loaded on Session Start
 
-### ~/.claude/CLAUDE.md（ユーザーレベル）
+### ~/.claude/CLAUDE.md (User Level)
 
-| 項目         | 内容                                                                           |
-| ------------ | ------------------------------------------------------------------------------ |
-| **場所**     | `~/.claude/CLAUDE.md`                                                          |
-| **読み込み** | セッション開始時に自動（最初にマージされる）                                   |
-| **Git管理**  | しない（ホームディレクトリ）                                                   |
-| **役割**     | 全プロジェクト共通の個人指示（例: 「日本語で回答」「関数型スタイル優先」など） |
-| **詳細解説** | [階層マージの仕組み](../03-always-loaded-context/hierarchy.md)                 |
+| Item | Content |
+| --- | --- |
+| **Location** | `~/.claude/CLAUDE.md` |
+| **Loading** | Auto on session start (merged first) |
+| **Git Management** | No (home directory) |
+| **Role** | Personal instructions common to all projects (e.g., "answer in English," "prefer functional style") |
+| **Detailed Explanation** | [Hierarchy Merge Mechanism](../03-always-loaded-context/hierarchy.md) |
 
-### CLAUDE.md（プロジェクトレベル）
+### CLAUDE.md (Project Level)
 
-| 項目             | 内容                                                                                                                                                   |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **場所**         | プロジェクトルート直下                                                                                                                                 |
-| **読み込み**     | セッション開始時に自動                                                                                                                                 |
-| **Git管理**      | する（チーム共有）                                                                                                                                     |
-| **役割**         | プロジェクト全体の指示・ルール・コンテキストの提供                                                                                                     |
-| **対策する問題** | [Priority Saturation](../01-llm-structural-problems/priority-saturation.md)、[Prompt Sensitivity](../01-llm-structural-problems/prompt-sensitivity.md) |
-| **制約**         | 200行以内推奨（Priority Saturation 回避）                                                                                                              |
-| **詳細解説**     | [CLAUDE.md の設計原理](../03-always-loaded-context/claude-md.md)                                                                                       |
+| Item | Content |
+| --- | --- |
+| **Location** | Project root directory |
+| **Loading** | Auto on session start |
+| **Git Management** | Yes (team-shared) |
+| **Role** | Project-wide instructions, rules, and context provision |
+| **Problems Addressed** | [Priority Saturation](../01-llm-structural-problems/priority-saturation.md), [Prompt Sensitivity](../01-llm-structural-problems/prompt-sensitivity.md) |
+| **Constraint** | Recommended max 200 lines (avoid Priority Saturation) |
+| **Detailed Explanation** | [CLAUDE.md Design Principles](../03-always-loaded-context/claude-md.md) |
 
 ### CLAUDE.local.md
 
-| 項目         | 内容                                                              |
-| ------------ | ----------------------------------------------------------------- |
-| **場所**     | プロジェクトルート直下                                            |
-| **読み込み** | セッション開始時に自動（CLAUDE.md とマージ）                      |
-| **Git管理**  | しない（.gitignore 推奨）                                         |
-| **役割**     | 個人の環境依存設定（ローカルパス、個人APIキー等）                 |
-| **詳細解説** | [CLAUDE.local.md の運用](../03-always-loaded-context/local-md.md) |
+| Item | Content |
+| --- | --- |
+| **Location** | Project root directory |
+| **Loading** | Auto on session start (merged with CLAUDE.md) |
+| **Git Management** | No (.gitignore recommended) |
+| **Role** | Personal environment-specific settings (local paths, personal API keys, etc.) |
+| **Detailed Explanation** | [CLAUDE.local.md Operations](../03-always-loaded-context/local-md.md) |
 
-### サブディレクトリの CLAUDE.md（階層マージ）
+### Subdirectory CLAUDE.md (Hierarchy Merge)
 
-| 項目             | 内容                                                                                |
-| ---------------- | ----------------------------------------------------------------------------------- |
-| **場所**         | 任意のサブディレクトリ（例: `src/CLAUDE.md`）                                       |
-| **読み込み**     | そのディレクトリ内のファイルを操作する際にオンデマンド                              |
-| **Git管理**      | する                                                                                |
-| **役割**         | ディレクトリ固有のルールを追加。親の CLAUDE.md とマージされる                       |
-| **対策する問題** | [Context Rot](../01-llm-structural-problems/context-rot.md)（必要な時だけ読み込む） |
-| **詳細解説**     | [階層マージの仕組み](../03-always-loaded-context/hierarchy.md)                      |
+| Item | Content |
+| --- | --- |
+| **Location** | Any subdirectory (e.g., `src/CLAUDE.md`) |
+| **Loading** | On-demand when operating files in that directory |
+| **Git Management** | Yes |
+| **Role** | Add directory-specific rules. Merged with parent CLAUDE.md |
+| **Problems Addressed** | [Context Rot](../01-llm-structural-problems/context-rot.md) (load only when needed) |
+| **Detailed Explanation** | [Hierarchy Merge Mechanism](../03-always-loaded-context/hierarchy.md) |
 
 ---
 
-## 条件付きコンテキスト — 条件一致時のみ注入
+## Conditional Context — Injected Only When Conditions Match
 
 ### .claude/rules/
 
-| 項目             | 内容                                                                                                                                                                           |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **場所**         | `.claude/rules/*.md`                                                                                                                                                           |
-| **読み込み**     | glob パターンが一致したファイル操作時                                                                                                                                          |
-| **Git管理**      | する                                                                                                                                                                           |
-| **役割**         | ファイル種別ごとの自動適用ルール（例: `*.test.ts` 編集時にテスト規約を注入）                                                                                                   |
-| **対策する問題** | [Priority Saturation](../01-llm-structural-problems/priority-saturation.md)（常駐させず必要時のみ）、[Lost in the Middle](../01-llm-structural-problems/lost-in-the-middle.md) |
-| **詳細解説**     | [.claude/rules/ の設計原理](../04-conditional-context/rules.md)、[glob パターン設計の実践](../04-conditional-context/glob-patterns.md)                                         |
+| Item | Content |
+| --- | --- |
+| **Location** | `.claude/rules/*.md` |
+| **Loading** | When glob pattern matches file operation |
+| **Git Management** | Yes |
+| **Role** | Auto-applied rules per file type (e.g., inject test conventions when editing `*.test.ts`) |
+| **Problems Addressed** | [Priority Saturation](../01-llm-structural-problems/priority-saturation.md) (inject conditionally, not always), [Lost in the Middle](../01-llm-structural-problems/lost-in-the-middle.md) |
+| **Detailed Explanation** | [.claude/rules/ Design Principles](../04-conditional-context/rules.md), [Glob Pattern Design Practice](../04-conditional-context/glob-patterns.md) |
 
-**記述例：**
+**Example:**
 
 ```markdown
 ---
@@ -150,75 +152,75 @@ description: TypeScript test files
 globs: **/*.test.ts, **/*.spec.ts
 ---
 
-- describe/it のネストは2階層まで
-- モックは最小限に、実際のサービスを使う統合テストを優先
+- describe/it nesting max 2 levels
+- Minimize mocks, prioritize integration tests with real services
 ```
 
 ---
 
-## オンデマンドコンテキスト — 呼び出された時だけ展開
+## On-Demand Context — Deployed Only When Invoked
 
 ### .claude/skills/
 
-| 項目             | 内容                                                                                                |
-| ---------------- | --------------------------------------------------------------------------------------------------- |
-| **場所**         | `.claude/skills/<skill-name>/SKILL.md`                                                              |
-| **読み込み**     | description が一致した時に展開                                                                      |
-| **Git管理**      | する                                                                                                |
-| **役割**         | 再利用可能なプロンプトテンプレート。コード生成パターン、ドキュメント生成手順など                    |
-| **対策する問題** | [Context Rot](../01-llm-structural-problems/context-rot.md)（使わない時はコンテキストを消費しない） |
-| **詳細解説**     | [Skills の設計原理](../05-on-demand-context/skills.md)                                              |
+| Item | Content |
+| --- | --- |
+| **Location** | `.claude/skills/<skill-name>/SKILL.md` |
+| **Loading** | When description matches |
+| **Git Management** | Yes |
+| **Role** | Reusable prompt templates. Code generation patterns, documentation generation procedures, etc. |
+| **Problems Addressed** | [Context Rot](../01-llm-structural-problems/context-rot.md) (doesn't consume context when unused) |
+| **Detailed Explanation** | [Skills Design Principles](../05-on-demand-context/skills.md) |
 
-**ディレクトリ構成例：**
+**Directory Structure Example:**
 
 ```
 .claude/skills/
 └── component-gen/
-    ├── SKILL.md          # プロンプト指示（必須）
-    ├── scripts/          # 補助スクリプト
-    ├── references/       # 参照ドキュメント
-    └── assets/           # テンプレート等
+    ├── SKILL.md          # Prompt instructions (required)
+    ├── scripts/          # Helper scripts
+    ├── references/       # Reference documents
+    └── assets/           # Templates, etc.
 ```
 
-### Agents（Task() によるサブプロセス）
+### Agents (Sub-processes via Task())
 
-| 項目             | 内容                                                                                                                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **定義方法**     | Skills 内または会話中で `Task()` を使用                                                                                                          |
-| **コンテキスト** | 親とは**独立した**コンテキストウィンドウで実行                                                                                                   |
-| **役割**         | Cross-model QA、並列処理、専門領域の分離                                                                                                         |
-| **対策する問題** | [Sycophancy](../01-llm-structural-problems/sycophancy.md)（独立判断）、[Knowledge Boundary](../01-llm-structural-problems/knowledge-boundary.md) |
-| **詳細解説**     | [Agents の設計原理](../05-on-demand-context/agents.md)、[import vs 別プロセスの判断基準](../05-on-demand-context/skill-vs-agent.md)              |
-
----
-
-## ツール定義コンテキスト — ツールがコンテキストを消費する
-
-### MCP（Model Context Protocol）
-
-| 項目                   | 内容                                                                                                                                                                           |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **設定場所**           | `.claude/settings.json` 内の `mcpServers`                                                                                                                                      |
-| **コンテキストコスト** | ツール定義そのものがトークンを消費する                                                                                                                                         |
-| **役割**               | 外部ツール・API との連携（DB参照、ファイル操作、外部サービス呼び出し等）                                                                                                       |
-| **対策する問題**       | [Knowledge Boundary](../01-llm-structural-problems/knowledge-boundary.md)（外部知識へのアクセス）、[Hallucination](../01-llm-structural-problems/hallucination.md)（事実確認） |
-| **詳細解説**           | [MCP のコンテキストコスト](../06-tool-context/mcp-context-cost.md)、[Tool Search / Deferred Loading](../06-tool-context/tool-search.md)                                        |
+| Item | Content |
+| --- | --- |
+| **Definition** | Use `Task()` within Skills or during conversation |
+| **Context** | Execute in **independent** context window from parent |
+| **Role** | Cross-model QA, parallel processing, domain separation |
+| **Problems Addressed** | [Sycophancy](../01-llm-structural-problems/sycophancy.md) (independent judgment), [Knowledge Boundary](../01-llm-structural-problems/knowledge-boundary.md) |
+| **Detailed Explanation** | [Agents Design Principles](../05-on-demand-context/agents.md), [Skill vs Agent Decision](../05-on-demand-context/skill-vs-agent.md) |
 
 ---
 
-## ランタイム制御 — LLM のコンテキストに入らないレイヤー
+## Tool Context — Tools Consume Context
+
+### MCP (Model Context Protocol)
+
+| Item | Content |
+| --- | --- |
+| **Config Location** | `mcpServers` in `.claude/settings.json` |
+| **Context Cost** | Tool definitions themselves consume tokens |
+| **Role** | Connect external tools, APIs (DB queries, file operations, external service calls, etc.) |
+| **Problems Addressed** | [Knowledge Boundary](../01-llm-structural-problems/knowledge-boundary.md) (access external knowledge), [Hallucination](../01-llm-structural-problems/hallucination.md) (fact-check) |
+| **Detailed Explanation** | [MCP Context Cost](../06-tool-context/mcp-context-cost.md), [Tool Search / Deferred Loading](../06-tool-context/tool-search.md) |
+
+---
+
+## Runtime Control — Layers Outside LLM Context
 
 ### .claude/settings.json
 
-| 項目         | 内容                                                                                                                               |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **場所**     | `.claude/settings.json`                                                                                                            |
-| **読み込み** | ランタイムが参照（LLMには見えない）                                                                                                |
-| **Git管理**  | する                                                                                                                               |
-| **役割**     | ツール許可設定、MCP サーバー定義、Hooks 定義、環境変数                                                                             |
-| **詳細解説** | [settings.json の役割](../07-runtime-layer/settings-json.md)、[なぜ LLM に見せないのか](../07-runtime-layer/why-not-in-context.md) |
+| Item | Content |
+| --- | --- |
+| **Location** | `.claude/settings.json` |
+| **Loading** | Runtime reference (invisible to LLM) |
+| **Git Management** | Yes |
+| **Role** | Tool permission settings, MCP server definition, Hooks definition, environment variables |
+| **Detailed Explanation** | [settings.json Role](../07-runtime-layer/settings-json.md), [Why Hide from LLM](../07-runtime-layer/why-not-in-context.md) |
 
-**設定例：**
+**Example:**
 
 ```json
 {
@@ -233,127 +235,127 @@ globs: **/*.test.ts, **/*.spec.ts
 
 ### .claude/settings.local.json
 
-| 項目        | 内容                                           |
-| ----------- | ---------------------------------------------- |
-| **場所**    | `.claude/settings.local.json`                  |
-| **Git管理** | しない（.gitignore 推奨）                      |
-| **役割**    | 個人のツール許可設定・ローカルMCPサーバー設定  |
-| **関係**    | `settings.json` とマージされる（local が優先） |
+| Item | Content |
+| --- | --- |
+| **Location** | `.claude/settings.local.json` |
+| **Git Management** | No (.gitignore recommended) |
+| **Role** | Personal tool permission settings, local MCP server configuration |
+| **Relationship** | Merged with `settings.json` (local takes priority) |
 
-### ~/.claude/settings.json（ユーザーレベル）
+### ~/.claude/settings.json (User Level)
 
-| 項目         | 内容                                   |
-| ------------ | -------------------------------------- |
-| **場所**     | `~/.claude/settings.json`              |
-| **Git管理**  | しない（ホームディレクトリ）           |
-| **役割**     | 全プロジェクト共通のグローバル個人設定 |
-| **優先順位** | 最低（プロジェクト設定に上書きされる） |
+| Item | Content |
+| --- | --- |
+| **Location** | `~/.claude/settings.json` |
+| **Git Management** | No (home directory) |
+| **Role** | Global personal settings common to all projects |
+| **Priority** | Lowest (overridden by project settings) |
 
-### managed-settings.json（エンタープライズレベル）
+### managed-settings.json (Enterprise Level)
 
-| 項目         | 内容                                                         |
-| ------------ | ------------------------------------------------------------ |
-| **配布方法** | MDM（モバイルデバイス管理）やサーバー管理で配布              |
-| **役割**     | 組織全体のセキュリティポリシー・許可設定の強制               |
-| **優先順位** | 最高（全設定を上書き。ユーザーは変更不可）                   |
-| **詳細解説** | [settings.json の役割](../07-runtime-layer/settings-json.md) |
+| Item | Content |
+| --- | --- |
+| **Distribution** | Via MDM (Mobile Device Management) or server management |
+| **Role** | Organization-wide security policy and permission enforcement |
+| **Priority** | Highest (overrides all settings. Users cannot modify) |
+| **Detailed Explanation** | [settings.json Role](../07-runtime-layer/settings-json.md) |
 
 ### Hooks
 
-| 項目               | 内容                                                                                                                                                                                                                                    |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **設定場所**       | `.claude/settings.json` 内の `hooks`                                                                                                                                                                                                    |
-| **実行タイミング** | LLM の行動前後に自動実行（LLM は認識しない）                                                                                                                                                                                            |
-| **役割**           | 機械的な検証・自動フォーマット・通知など                                                                                                                                                                                                |
-| **対策する問題**   | [Hallucination](../01-llm-structural-problems/hallucination.md)（自動テスト実行）、[Sycophancy](../01-llm-structural-problems/sycophancy.md)（機械的チェック）、[Instruction Decay](../01-llm-structural-problems/instruction-decay.md) |
-| **詳細解説**       | [Hooks のライフサイクル](../07-runtime-layer/hooks.md)                                                                                                                                                                                  |
+| Item | Content |
+| --- | --- |
+| **Config Location** | `hooks` in `.claude/settings.json` |
+| **Execution Timing** | Auto-execute before/after LLM behavior (LLM unaware) |
+| **Role** | Mechanical validation, auto-format, notifications, etc. |
+| **Problems Addressed** | [Hallucination](../01-llm-structural-problems/hallucination.md) (auto test execution), [Sycophancy](../01-llm-structural-problems/sycophancy.md) (mechanical check), [Instruction Decay](../01-llm-structural-problems/instruction-decay.md) |
+| **Detailed Explanation** | [Hooks Lifecycle](../07-runtime-layer/hooks.md) |
 
-**主なイベント：**
+**Main Events:**
 
-| イベント       | タイミング       |
-| -------------- | ---------------- |
-| `PreToolUse`   | ツール実行前     |
-| `PostToolUse`  | ツール実行後     |
-| `Notification` | 通知発生時       |
-| `Stop`         | セッション停止時 |
-
----
-
-## セッション管理 — 会話の寿命と記憶
-
-### /compact・/clear コマンド
-
-| コマンド   | 動作                       | 用途                                          |
-| ---------- | -------------------------- | --------------------------------------------- |
-| `/compact` | コンテキストを要約して圧縮 | Context Rot の予防的対処。50%閾値で自動実行も |
-| `/clear`   | コンテキストを完全リセット | タスク切り替え時。蓄積したノイズを一掃        |
-
-| 項目             | 内容                                                                                                                                                                                                            |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **対策する問題** | [Context Rot](../01-llm-structural-problems/context-rot.md)、[Lost in the Middle](../01-llm-structural-problems/lost-in-the-middle.md)、[Instruction Decay](../01-llm-structural-problems/instruction-decay.md) |
-| **詳細解説**     | [/compact と /clear の使い分け](../08-session-management/compact-and-clear.md)                                                                                                                                  |
-
-### Memory（記憶の永続化）
-
-| 項目             | 内容                                                                                                                                                                                                                                                                             |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **仕組み**       | セッションを超えて情報を永続化する機構                                                                                                                                                                                                                                           |
-| **対策する問題** | [Context Rot](../01-llm-structural-problems/context-rot.md)（圧縮で失われる情報の救済）、[Instruction Decay](../01-llm-structural-problems/instruction-decay.md)                                                                                                                 |
-| **詳細解説**     | [なぜメモリが問題になるのか](../08-session-management/memory-problem.md)、[何を覚えるか](../08-session-management/what-to-remember.md)、[いつ・どう思い出すか](../08-session-management/when-to-recall.md)、[ツール比較と選定基準](../08-session-management/tools-comparison.md) |
+| Event | Timing |
+| --- | --- |
+| `PreToolUse` | Before tool execution |
+| `PostToolUse` | After tool execution |
+| `Notification` | On notification |
+| `Stop` | On session stop |
 
 ---
 
-## カスタムコマンド
+## Session Management — Conversation Lifespan and Memory
+
+### /compact · /clear Commands
+
+| Command | Behavior | Use Case |
+| --- | --- | --- |
+| `/compact` | Summarize and compress context | Preventive handling of Context Rot. Also auto-executes at 50% threshold |
+| `/clear` | Completely reset context | Task switching. Eliminate accumulated noise |
+
+| Item | Content |
+| --- | --- |
+| **Problems Addressed** | [Context Rot](../01-llm-structural-problems/context-rot.md), [Lost in the Middle](../01-llm-structural-problems/lost-in-the-middle.md), [Instruction Decay](../01-llm-structural-problems/instruction-decay.md) |
+| **Detailed Explanation** | [/compact and /clear Usage](../08-session-management/compact-and-clear.md) |
+
+### Memory (Persistence Across Sessions)
+
+| Item | Content |
+| --- | --- |
+| **Mechanism** | Persist information across sessions |
+| **Problems Addressed** | [Context Rot](../01-llm-structural-problems/context-rot.md) (rescue information lost in compression), [Instruction Decay](../01-llm-structural-problems/instruction-decay.md) |
+| **Detailed Explanation** | [Why Memory Matters](../08-session-management/memory-problem.md), [What to Remember](../08-session-management/what-to-remember.md), [When and How to Recall](../08-session-management/when-to-recall.md), [Tool Comparison and Selection](../08-session-management/tools-comparison.md) |
+
+---
+
+## Custom Commands
 
 ### .claude/commands/
 
-| 項目         | 内容                                                   |
-| ------------ | ------------------------------------------------------ |
-| **場所**     | `.claude/commands/*.md`                                |
-| **呼び出し** | `/` + ファイル名で実行（例: `/deploy`）                |
-| **役割**     | 定型プロンプトの再利用。デプロイ手順、レビュー手順など |
+| Item | Content |
+| --- | --- |
+| **Location** | `.claude/commands/*.md` |
+| **Invocation** | Execute with `/` + filename (e.g., `/deploy`) |
+| **Role** | Reusable boilerplate prompts. Deploy procedures, review procedures, etc. |
 
-**記述例（`.claude/commands/deploy.md`）：**
+**Example** (`.claude/commands/deploy.md`):
 
 ```markdown
-本番デプロイ前のチェックリストを実行してください。
+Execute pre-production deployment checklist.
 
-1. `npm run test` が全てパスすること
-2. `npm run build` がエラーなく完了すること
-3. 変更内容のサマリーを出力すること
+1. `npm run test` must pass all
+2. `npm run build` must complete without errors
+3. Output summary of changes
 ```
 
 ---
 
-## 設定の読み込みタイミング一覧
+## Configuration Loading Timing Overview
 
 ```mermaid
 graph TD
-    START(["セッション開始"]) --> CM["CLAUDE.md 読み込み"]
-    START --> CL["CLAUDE.local.md 読み込み"]
-    START --> ST["settings.json 読み込み"]
+    START(["Session Start"]) --> CM["CLAUDE.md Load"]
+    START --> CL["CLAUDE.local.md Load"]
+    START --> ST["settings.json Load"]
 
-    CM --> MERGE["マージされたコンテキスト"]
+    CM --> MERGE["Merged Context"]
     CL --> MERGE
 
-    MERGE --> WORK["作業開始"]
+    MERGE --> WORK["Begin Work"]
 
-    WORK -->|ファイル操作| RULE{"rules/ の<br>globが一致？"}
-    RULE -->|一致| INJECT["ルール注入"]
-    RULE -->|不一致| SKIP["スキップ"]
+    WORK -->|File Operation| RULE{"rules/ glob<br/>matches?"}
+    RULE -->|Match| INJECT["Inject Rules"]
+    RULE -->|No Match| SKIP["Skip"]
 
-    WORK -->|サブディレクトリ| SUB["サブ CLAUDE.md<br>読み込み・マージ"]
+    WORK -->|Subdirectory| SUB["Load Subdirectory<br/>CLAUDE.md & Merge"]
 
-    WORK -->|description一致| SKILL["Skill 展開"]
-    WORK -->|Task呼び出し| AGENT["Agent 起動<br>（別コンテキスト）"]
+    WORK -->|description Match| SKILL["Deploy Skill"]
+    WORK -->|Task Invocation| AGENT["Launch Agent<br/>(separate context)"]
 
-    WORK -->|ツール使用| MCP["MCP ツール実行"]
+    WORK -->|Tool Use| MCP["Execute MCP Tool"]
 
-    ST -->|PreToolUse等| HOOK["Hooks 自動実行"]
+    ST -->|PreToolUse, etc.| HOOK["Auto-Execute Hooks"]
     HOOK --> WORK
 
-    WORK -->|50%到達 or 手動| COMPACT["/compact 圧縮"]
-    WORK -->|タスク切替| CLEAR["/clear リセット"]
+    WORK -->|50% Reached or Manual| COMPACT["/compact Compress"]
+    WORK -->|Task Switch| CLEAR["/clear Reset"]
 
     style START fill:#eff6ff,stroke:#1d4ed8,color:#000
     style MERGE fill:#dbeafe,stroke:#1d4ed8,color:#000
@@ -368,8 +370,8 @@ graph TD
 
 ---
 
-> **次へ**: [FAQ — よくある質問と設計判断](faq.md)
+> **Next**: [FAQ — Frequently Asked Questions and Design Decisions](faq.md)
 >
-> **前へ**: [構造的問題 × Claude Code 対策マップ](problem-countermeasure-map.md)
+> **Previous**: [Structural Problems × Claude Code Countermeasures Map](problem-countermeasure-map.md)
 
-> **Discussion**: 追加や修正の提案は [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) へ
+> **Discussion**: For suggestions or corrections, please post in [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions)

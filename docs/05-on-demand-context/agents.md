@@ -1,54 +1,56 @@
-# Agents の設計原理
+🌐 [日本語](../ja/05-on-demand-context/agents.md)
+
+# Agents Design Principles
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（独立したコンテキストウィンドウで実行）
-> → Why: **Sycophancy** 対策（Cross-model QA で追従バイアスを排除）
-> → Why: **Knowledge Boundary** 対策（知識領域を狭めて境界超過確率を低減）
+> → Why: **Context Rot** mitigation (execution in independent context window)
+> → Why: **Sycophancy** mitigation (eliminate compliance bias via Cross-model QA)
+> → Why: **Knowledge Boundary** mitigation (narrow knowledge domains to reduce boundary-crossing probability)
 
-## Agents とは
+## What Are Agents?
 
-Agents は **独立したコンテキストウィンドウ** で動作するサブエージェント。メインのコンテキストを消費しない。
+Agents are **sub-agents operating in independent context windows**. They do not consume the main context.
 
-| 属性 | 値 |
+| Attribute | Value |
 |:--|:--|
-| 注入タイミング | `Agent()` / `Task()` ツールで呼び出された時 |
-| コンテキスト消費 | **メインとは別の独立したコンテキスト** |
-| LLM からの見え方 | 独自のシステムプロンプトを持つ別の LLM インスタンス |
+| Invocation Timing | Called via `Agent()` / `Task()` tools |
+| Context Consumption | **Independent context window, separate from main** |
+| Appearance to LLM | Separate LLM instance with its own system prompt |
 
-## Skills との最大の違い
+## Biggest Difference from Skills
 
 ```
-メインClaude（コンテキストウィンドウ）
-  ├─ Skill読込 → 同じコンテキスト内で実行（コンテキスト消費する）
-  │               → import / require に相当
+Main Claude (context window)
+  ├─ Skill loaded → executed in same context (consumes context)
+  │               → equivalent to import / require
   │
-  └─ Agent 起動
-       └─ 別のコンテキストウィンドウ（独立）
-          → 結果だけメインに返す（蒸留された要約）
-          → 別プロセスへの委譲に相当
+  └─ Agent launched
+       └─ separate context window (independent)
+          → only result returned to main (distilled summary)
+          → equivalent to delegation to separate process
 ```
 
-## 構造的問題への対応
+## Addressing Structural Problems
 
-### Context Rot 対策
+### Context Rot Mitigation
 
-Agent は新鮮な独立コンテキストで実行されるため、メインの Context Rot の影響を受けない。長いセッションの途中でも、Agent に委譲すれば高品質な出力が得られる。
+Agents run in fresh, independent context, unaffected by main Context Rot. Even mid-session with long history, delegating to an Agent yields high-quality output.
 
-### Sycophancy 対策（Cross-Model QA）
+### Sycophancy Mitigation (Cross-Model QA)
 
-異なるモデルや新しいコンテキストでレビューすることで、同じ追従バイアスを共有しない検証が可能。
+Review with different models or fresh context enables verification without shared compliance bias.
 
-### Knowledge Boundary 対策
+### Knowledge Boundary Mitigation
 
-特定のドメイン知識が必要なタスクを専門エージェントに委譲することで、知識領域を狭め、知識境界を超える確率を低減する。
+Delegate tasks requiring specific domain knowledge to specialist agents, narrowing knowledge domains and reducing boundary-crossing probability.
 
-## Agent の定義例
+## Agent Definition Example
 
 ```markdown
 <!-- .claude/agents/code-reviewer.md -->
 ---
 name: code-reviewer
-description: PRのコードレビューを行う専門エージェント
+description: Specialist agent for code review of PRs
 model: sonnet
 allowed-tools:
   - Read
@@ -57,23 +59,23 @@ allowed-tools:
   - Bash(git diff *)
 ---
 
-あなたはAngular/NgRxのコードレビュー専門家です。
+You are an Angular/NgRx code review specialist.
 
-## レビュー観点
-1. NgRxパターンの準拠性
-2. RxJSのメモリリーク（takeUntilDestroy未使用）
-3. OnPush変更検知との整合性
-4. テストカバレッジ
+## Review Perspectives
+1. NgRx pattern compliance
+2. RxJS memory leaks (missing takeUntilDestroy)
+3. Alignment with OnPush change detection
+4. Test coverage
 ```
 
-## 重要な制約
+## Important Constraints
 
-- サブエージェントは**他のサブエージェントを起動できない**
-- bash コマンド経由での間接起動も禁止
-- 必ず `Agent(subagent_type="agent-name", ...)` ツールを使う
+- Sub-agents **cannot invoke other sub-agents**
+- Indirect invocation via bash commands is also prohibited
+- Always use the `Agent(subagent_type="agent-name", ...)` tool
 
 ---
 
-> **前へ**: [Skills の設計原理](skills.md)
+> **Previous**: [Skills Design Principles](skills.md)
 
-> **次へ**: [import vs 別プロセスの判断基準](skill-vs-agent.md)
+> **Next**: [Criteria for Skill vs Agent](skill-vs-agent.md)

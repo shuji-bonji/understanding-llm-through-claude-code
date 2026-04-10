@@ -1,151 +1,153 @@
-# Skills の設計原理
+🌐 [日本語](../ja/05-on-demand-context/skills.md)
+
+# Skills Design Principles
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（必要時のみコンテキストに展開）
-> → Why: **Prompt Sensitivity** 対策（description 設計で自動呼び出し精度を向上）
+> → Why: **Context Rot** mitigation (expand to context only when needed)
+> → Why: **Prompt Sensitivity** mitigation (improve auto-invocation accuracy through description design)
 
-## Skills とは
+## What Are Skills?
 
-Skills はユーザーの `/` 呼び出し、または LLM の自動判断でコンテキストに読み込まれるオンデマンドの専門知識。
+Skills are on-demand specialized knowledge loaded into context either through user `/` invocation or LLM auto-detection.
 
-| 属性 | 値 |
+| Attribute | Value |
 |:--|:--|
-| 注入タイミング | ユーザーが `/` で呼出 or LLM が自動判断 |
-| コンテキスト消費 | 呼び出し時のみ |
-| LLM からの見え方 | タスク固有の詳細な手順書 |
-| 配置場所 | `.claude/skills/<skill-name>/SKILL.md` |
+| Injection Timing | User calls with `/` or LLM auto-detects |
+| Context Consumption | Only when called |
+| Appearance to LLM | Task-specific detailed procedures |
+| Location | `.claude/skills/<skill-name>/SKILL.md` |
 
-## CLAUDE.md / Rules との本質的な違い
+## Fundamental Difference from CLAUDE.md / Rules
 
-CLAUDE.md と Rules は**受動的**に注入される。Skills は**能動的**に注入される。
+CLAUDE.md and Rules are injected **passively**. Skills are injected **actively**.
 
 ```
-CLAUDE.md  = グローバル変数（常にスコープ内）     ← 最小限に保つ
-Rules      = 条件付きグローバル（特定条件で有効） ← ファイル種別ごと
-Skills     = import/require（必要時に読込）        ← タスク固有の詳細
+CLAUDE.md  = Global variable (always in scope)        ← Keep minimal
+Rules      = Conditional global (active if condition) ← Per file type
+Skills     = import/require (load when needed)        ← Task-specific details
 ```
 
-## Skill の構造
+## Skill Structure
 
 ```sh
 .claude/skills/
 └── component-generator/
-    ├── SKILL.md              # 必須：LLMへの指示書
-    ├── scripts/              # 任意：実行スクリプト
-    ├── references/           # 任意：参照ドキュメント
-    └── assets/               # 任意：テンプレートファイル
+    ├── SKILL.md              # Required: instructions for LLM
+    ├── scripts/              # Optional: executable scripts
+    ├── references/           # Optional: reference documents
+    └── assets/               # Optional: template files
 ```
 
-## description の重要性
+## Importance of description
 
 > [!TIP]
-> **Prompt Sensitivity** 対策の核心。
+> Core strategy for **Prompt Sensitivity** mitigation.
 >
-> LLM が Skill を自動で呼び出すかどうかは `description` フィールドに依存する。LLM は推論処理の中でユーザーの要求と description の意味的類似度を評価して呼び出しを判断する。
+> Whether an LLM auto-invokes a Skill depends on the `description` field. During inference, the LLM evaluates semantic similarity between the user's request and the description to decide whether to invoke.
 
 ```yaml
-# ❌ 曖昧（自動呼び出し失敗しやすい）
-description: コンポーネント関連のタスク
+# ❌ Vague (auto-invocation often fails)
+description: Tasks related to components
 
-# ✅ 具体的（多様な表現をカバー）
+# ✅ Specific (covers diverse expressions)
 description: >
-  Angularコンポーネントの新規作成。OnPush変更検知、
-  NgRx Store接続、Jasmineテストを含むスキャフォールドを生成する。
-  「コンポーネントを作って」「新しい画面を追加」等の要求で使用。
+  Create new Angular components with OnPush change detection,
+  NgRx Store integration, and Jasmine tests. Used for requests like
+  "create a component", "add a new screen", etc.
 ```
 
-description は **LLM のための検索クエリ**。SEO の原理と同様に、ユーザーが使いそうな多様な表現を含めると呼び出し精度が上がる。
+The description is **a search query for the LLM**. Like SEO principles, including diverse expressions users might use improves invocation accuracy.
 
-## 実例: e-shiwake の Skills（会計ドメイン知識の注入）
+## Real Example: e-shiwake Skills (Injecting Accounting Domain Knowledge)
 
-[e-shiwake](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude/skills/e-shiwake-accounting) は個人事業主向けの PWA 会計アプリで、会計という専門ドメインの知識を Skills で LLM に注入している。
+[e-shiwake](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude/skills/e-shiwake-accounting) is a PWA accounting app for sole proprietors, injecting specialized accounting domain knowledge via Skills.
 
 ```sh
 .claude/skills/e-shiwake-accounting/
-├── SKILL.md              # エントリポイント: ドメイン概要と動作モード
-├── ACCOUNT-CODES.md      # 勘定科目体系（4桁コード・30科目・税区分）
-├── BROWSER-OPERATIONS.md # ブラウザ操作手順（WebMCP なし環境用）
-└── WEBMCP-TOOLS.md       # WebMCP ツールリファレンス（Chrome 146+）
+├── SKILL.md              # Entry point: domain overview and operation modes
+├── ACCOUNT-CODES.md      # Account code system (4-digit codes, 30 accounts, tax categories)
+├── BROWSER-OPERATIONS.md # Browser operation procedures (for non-WebMCP environments)
+└── WEBMCP-TOOLS.md       # WebMCP tool reference (Chrome 146+)
 ```
 
-### 4層構造の設計意図
+### Design Intent of 4-Layer Structure
 
-| ファイル | 役割 | 対応する構造的問題 |
+| File | Role | Addresses Structural Problem |
 |:--|:--|:--|
-| SKILL.md | ドメイン全体の概要・用語定義 | Knowledge Boundary |
-| ACCOUNT-CODES.md | 勘定科目という参照データ | Knowledge Boundary |
-| BROWSER-OPERATIONS.md | UI 操作手順（LLM が自力では知り得ない） | Knowledge Boundary |
-| WEBMCP-TOOLS.md | 利用可能ツールの仕様 | Hallucination（存在しないツールの捏造防止） |
+| SKILL.md | Overview of domain, terminology definitions | Knowledge Boundary |
+| ACCOUNT-CODES.md | Account codes as reference data | Knowledge Boundary |
+| BROWSER-OPERATIONS.md | UI operation procedures (unknowable to LLM) | Knowledge Boundary |
+| WEBMCP-TOOLS.md | Specifications of available tools | Hallucination (prevent fabrication of non-existent tools) |
 
 <details>
-<summary>SKILL.md — エントリポイント（ドメイン概要と動作モード）</summary>
+<summary>SKILL.md — Entry Point (Domain Overview and Operation Modes)</summary>
 
 ```markdown
-# e-shiwake 会計スキル
+# e-shiwake Accounting Skill
 
-e-shiwake（電子仕訳）は個人事業主・フリーランス向けの PWA 会計アプリ。
+e-shiwake (electronic journal entry) is a PWA accounting app for sole proprietors and freelancers.
 
-## できること
-- 仕訳入力・管理
-- 帳簿・決算書の確認（試算表、損益計算書、貸借対照表）
-- 消費税集計
-- データ管理（バックアップ・リストア・エクスポート）
+## Capabilities
+- Journal entry input and management
+- Books and financial statements (trial balance, P&L, balance sheet)
+- Consumption tax aggregation
+- Data management (backup, restore, export)
 
-## 動作モード
-- **WebMCP あり**（Chrome 146+）: ツールで直接操作
-- **WebMCP なし**: ブラウザ操作ガイドに従って案内
+## Operation Modes
+- **With WebMCP** (Chrome 146+): Direct control via tools
+- **Without WebMCP**: Guide through browser operation instructions
 
-## 基本原則
-必ず 借方合計 = 貸方合計（複式簿記の鉄則）
+## Basic Principle
+Debit total must always equal credit total (double-entry bookkeeping rule)
 ```
 
 </details>
 
 <details>
-<summary>WEBMCP-TOOLS.md — ツールリファレンス（抜粋）</summary>
+<summary>WEBMCP-TOOLS.md — Tool Reference (Excerpt)</summary>
 
 ```markdown
-# WebMCP ツールリファレンス（Chrome 146+）
+# WebMCP Tool Reference (Chrome 146+)
 
-## 仕訳管理
-- search_journals: テキスト・日付・科目コードで検索（スペース区切りAND検索）
-- create_journal: 仕訳作成（借方合計=貸方合計が必須）
-- delete_journal: 仕訳削除
+## Journal Management
+- search_journals: Search by text, date, account code (space-separated AND search)
+- create_journal: Create journal entry (debit total = credit total required)
+- delete_journal: Delete journal entry
 
-## 財務レポート
-- generate_ledger: 総勘定元帳（科目別）
-- generate_trial_balance: 試算表
-- generate_profit_loss: 損益計算書
-- generate_balance_sheet: 貸借対照表
-- calculate_consumption_tax: 消費税集計
+## Financial Reports
+- generate_ledger: General ledger (by account)
+- generate_trial_balance: Trial balance
+- generate_profit_loss: Profit and loss statement
+- generate_balance_sheet: Balance sheet
+- calculate_consumption_tax: Consumption tax aggregation
 
-## 利用開始時の推奨手順
-最初に get_available_years で利用可能な年度を確認すること。
+## Recommended Initial Procedure
+First confirm available fiscal years with get_available_years.
 ```
 
 </details>
 
-### llms.txt との連携
+### Integration with llms.txt
 
-この Skills は単体で全仕様を抱え込まず、アプリが提供する `llms.txt` や各ヘルプページの `content.md` を**Single Source of Truth** として参照する設計になっている。Skills 内に仕様を重複記載しないことで、アプリの更新時にドキュメントが乖離するリスクを減らしている。
+This Skill is designed not to contain full specifications on its own, but to reference `llms.txt` provided by the app and `content.md` on each help page as the **Single Source of Truth**. By not duplicating specifications in Skills, we reduce the risk of documentation drift when the app is updated.
 
 > [!IMPORTANT]
-> Skills は「LLM に専門知識を与える」だけでなく、**「どこを参照すべきかを教える」**ポインタとしても機能する。仕様そのものを Skills に書くのではなく、**信頼できる情報源への参照パス**を示すことで、Context Rot と情報の陳腐化を同時に防げる。
+> Skills not only "provide domain knowledge to the LLM," but also function as **pointers to "where to reference."** Rather than writing specifications in Skills themselves, **point to trusted information sources**, preventing both Context Rot and information obsolescence simultaneously.
 >
-> → 実プロジェクト: [e-shiwake/.claude/skills/](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude/skills/e-shiwake-accounting)
+> → Real Project: [e-shiwake/.claude/skills/](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude/skills/e-shiwake-accounting)
 
-## シェルコマンドによる動的コンテキスト注入
+## Dynamic Context Injection via Shell Commands
 
-`!` バッククォート構文で、Skill 起動時にシェルコマンドを実行し、その出力を LLM のコンテキストに注入できる。
+Using `!` backtick syntax, you can execute shell commands when a Skill is invoked and inject their output into the LLM's context.
 
 ```markdown
-## PRコンテキスト
-- PR差分: !`gh pr diff`
-- 変更ファイル一覧: !`gh pr diff --name-only`
+## PR Context
+- PR diff: !`gh pr diff`
+- Changed files list: !`gh pr diff --name-only`
 ```
 
 ---
 
-> **前へ**: [Part 4: 条件付きコンテキスト](../04-conditional-context/index.md)
+> **Previous**: [Part 4: Conditional Context](../04-conditional-context/index.md)
 
-> **次へ**: [Agents の設計原理](agents.md)
+> **Next**: [Agents Design Principles](agents.md)

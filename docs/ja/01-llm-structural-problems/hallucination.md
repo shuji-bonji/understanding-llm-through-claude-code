@@ -1,0 +1,100 @@
+🌐 [English](../../01-llm-structural-problems/hallucination.md)
+
+# Hallucination（幻覚）— LLMは構造的に「嘘」をつく
+
+> [!NOTE]
+> **一言で言うと**: LLM が事実に反する内容を自信を持って生成する現象。
+> これは「バグ」ではなく、Transformer アーキテクチャの構造的制約であり、
+> 数学的に「ゼロにできない」ことが証明されている。
+
+## Hallucination とは何か
+
+Hallucination（幻覚）とは、LLM が事実に反する内容を、あたかも正しいかのように生成する現象である。重要なのは、これがモデルの学習不足や設計ミスではなく、**アーキテクチャに内在する構造的制約**であるということ。
+
+## 3つの数学的根拠
+
+```mermaid
+graph TD
+    A["対角線論法<br>(Xu et al., 2024)"]
+    B["不完全性定理との接続<br>(Banerjee et al., 2025)"]
+    C["創造性との等価性<br>(Karpowicz, 2025)"]
+    D(["ハルシネーションは<br>構造的に排除不可能"])
+    E(["パラダイムシフト:<br>排除から管理へ"])
+
+    A -->|"すべてのLLMに<br>幻覚入力が無限個存在"| D
+    B -->|"全処理段階で<br>確率ゼロ不可"| D
+    C -->|"排除すると<br>創造性も消失"| D
+    D --> E
+
+    style A fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style B fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style C fill:#dbeafe,stroke:#1d4ed8,color:#000
+    style D fill:#fee2e2,stroke:#b91c1c,color:#000
+    style E fill:#dcfce7,stroke:#15803d,color:#000
+```
+
+### 1. 対角線論法による証明（Xu et al., 2024）
+
+カントールの対角線論法を応用し、**すべての LLM には必ずハルシネーションを起こす入力が無限個存在する**ことが証明された。これはモデルのサイズや訓練データの質に関係なく成立する。
+
+### 2. ゲーデルの不完全性定理との接続（Banerjee et al., 2025）
+
+LLM の処理全段階（エンコーディング、注意機構、デコーディング）でハルシネーション確率がゼロにならないことが論証された。形式的体系が自己の無矛盾性を証明できないのと同様に、LLM は自身の出力の正確性を完全に保証できない。
+
+### 3. ハルシネーションと創造性の等価性（Karpowicz, 2025）
+
+ハルシネーション制御の根本的不可能性が証明された。ハルシネーションを完全に排除すると、創造性も同時に失われる。つまり、**ハルシネーションと創造性は数学的に同一の操作**である。
+
+## コーディングにおける影響
+
+- 存在しない API やメソッドを自信を持って呼び出すコードを生成
+- 古いバージョンの文法を現行バージョンとして提示
+- 社内コードに対して、存在しないメソッドの型定義を生成
+- テストコードで、実際には通らないアサーションを書く
+
+## Claude Code での対策
+
+ハルシネーションは排除できない。対策は**検出と管理**のパラダイムに基づく:
+
+| 対策 | 仕組み | なぜ効くのか |
+|:--|:--|:--|
+| **Hooks（テスト実行）** | コード変更後に自動でテスト実行 | コンパイラ・テストランナーはハルシネーションしない |
+| **Cross-Model QA** | 異なるモデルでレビュー（Agents） | 同じハルシネーションを2つのモデルが同時に起こす確率は低い |
+| **CLAUDE.md での制約** | バージョン情報・禁止パターンを明示 | ハルシネーションの発生領域を狭める |
+| **MCP による外部参照** | 外部の信頼できるソースを直接参照 | LLM の内部知識ではなく外部事実に基づく |
+| **Agents（知識の分離）** | 専門エージェントに特定ドメインを委譲 | 知識領域を狭めることでハルシネーション確率を低減 |
+
+## パラダイムシフト: 排除から管理へ
+
+ハルシネーションを「なくす」のではなく「管理する」というパラダイムが重要:
+
+```
+ソフトウェア工学のバグ管理と同じ:
+  バグをゼロにすることは不可能
+  → テスト、レビュー、CI/CD で検出・管理する
+
+LLM のハルシネーション管理:
+  ハルシネーションをゼロにすることは不可能
+  → Hooks、Cross-Model QA、テストコードで検出・管理する
+```
+
+## 他の構造的問題との関係
+
+- **Knowledge Boundary**: 知識境界を超えた時にハルシネーションが発生する入口
+- **Sycophancy**: ハルシネーションした内容をユーザーの同意で追認してしまう
+- **Context Rot**: コンテキストが長くなるとハルシネーション率が上昇
+- **Instruction Decay**: 「事実確認しろ」という指示自体が忘却される
+
+## 参考文献
+
+- Xu, Z. et al. (2024). "Hallucination is Inevitable: An Innate Limitation of Large Language Models." [arXiv:2401.11817](https://arxiv.org/abs/2401.11817) — 対角線論法によるハルシネーション不可避性の形式的証明
+- Banerjee, S., Agarwal, A., & Singla, S. (2024). "LLMs Will Always Hallucinate, and We Need to Live With This." [arXiv:2409.05746](https://arxiv.org/abs/2409.05746) — ゲーデルの第一不完全性定理との接続による不可避性の証明
+- Karpowicz, M. P. (2025). "On the Fundamental Impossibility of Hallucination Control in Large Language Models." [arXiv:2506.06382](https://arxiv.org/abs/2506.06382) — メカニズムデザインとスコアリングルールによるハルシネーションと創造性の等価性証明
+
+---
+
+> **前へ**: [Priority Saturation](priority-saturation.md)
+
+> **次へ**: [Sycophancy](sycophancy.md)
+
+> **Discussion**: [#7 Hallucination](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/7)

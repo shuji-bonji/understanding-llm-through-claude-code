@@ -1,29 +1,31 @@
-# ツール比較と選定基準
+🌐 [日本語](../ja/08-session-management/tools-comparison.md)
+
+# Tool Comparison and Selection
 
 > [!NOTE]
-> 記憶の永続化に使えるツールの比較。
+> Comparison of tools available for memory persistence.
 
-## ツール比較表
+## Tool Comparison Table
 
-| ツール               | 記憶の書き込み | 記憶の読み出し       | コンテキスト消費 | 適用場面                         |
-| :------------------- | :------------- | :------------------- | :--------------- | :------------------------------- |
-| **CLAUDE.md**        | 手動           | 自動（毎セッション） | 常時             | プロジェクト規約、技術スタック   |
-| **Git コミット**     | 自動           | 手動（git log）      | なし             | コード変更履歴                   |
-| **`.claude/rules/`** | 手動           | 条件付き自動         | 条件時のみ       | ファイル種別ルール               |
-| **MCP メモリツール** | 自動/半自動    | 検索ベース           | 検索時のみ       | 長期的な設計判断、ユーザー情報   |
-| **Auto Memory**      | 自動           | 自動                 | セッション開始時 | ユーザーの好み、プロジェクト知識 |
+| Tool | Memory Write | Memory Read | Context Cost | Use Cases |
+| :--- | :--- | :--- | :--- | :--- |
+| **CLAUDE.md** | Manual | Automatic (every session) | Always | Project conventions, technical stack |
+| **Git commits** | Automatic | Manual (git log) | None | Code change history |
+| **`.claude/rules/`** | Manual | Conditional automatic | Condition-dependent | File type rules |
+| **MCP memory tools** | Automatic/semi-automatic | Search-based | Search-time only | Long-term design decisions, user info |
+| **Auto Memory** | Automatic | Automatic | At session start | User preferences, project knowledge |
 
-## 選定基準
+## Selection Criteria
 
 ```mermaid
 flowchart LR
-    Q1{"毎セッション必要？"}
-    Q2{"特定のファイル操作時に<br>必要？"}
-    Q3{"長期的に保持したい？"}
-    CLAUDE(["CLAUDE.md<br>（200行以内に収まるか確認）"])
+    Q1{"Needed every session?"}
+    Q2{"Needed at specific<br>file operations?"}
+    Q3{"Want to keep<br>long-term?"}
+    CLAUDE(["CLAUDE.md<br>(Verify fits in 200 lines)"])
     RULES([".claude/rules/"])
-    MEMORY(["メモリツール / Auto Memory"])
-    GIT(["Git コミットメッセージに記録"])
+    MEMORY(["Memory tool / Auto Memory"])
+    GIT(["Record in Git commit message"])
 
     Q1 -->|"Yes"| CLAUDE
     Q1 -->|"No"| Q2
@@ -43,6 +45,6 @@ flowchart LR
 
 ---
 
-> **前へ**: [いつ・どう思い出すか](when-to-recall.md)
+> **Previous**: [When and How to Recall](when-to-recall.md)
 
-> **Part 8 完了 → 次へ**: [Part 9: 他LLMへの応用](../09-cross-llm-principles/index.md)
+> **Part 8 Complete → Next**: [Part 9: Application to Other LLMs](../09-cross-llm-principles/index.md)

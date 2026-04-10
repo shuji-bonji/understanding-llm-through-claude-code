@@ -1,18 +1,20 @@
-# Lost in the Middle — コンテキスト中間部の情報を無視する
+🌐 [日本語](../ja/01-llm-structural-problems/lost-in-the-middle.md)
+
+# Lost in the Middle — Ignoring Information in the Middle of Context
 
 > [!NOTE]
-> **一言で言うと**: LLM は先頭と末尾の情報をよく覚えているが、中間部の情報を著しく無視する。
-> 20個の文書から検索する場合、5番目〜15番目に配置された情報の精度は 30% 以上低下する。
+> **In short**: LLMs excel at remembering information at the beginning and end, but significantly ignore middle content.
+> When searching across 20 documents, the accuracy of information positioned 5th through 15th drops by over 30%.
 
-## Lost in the Middle とは何か
+## What is Lost in the Middle?
 
-Lost in the Middle とは、LLM がコンテキストの**先頭（Primacy Bias）と末尾（Recency Bias）に注意を集中させ、中間部を無視する**現象である。これは Context Rot の最も具体的な発現形態であり、Transformer の位置エンコーディングに起因する構造的な制約である。
+Lost in the Middle is the phenomenon where LLMs **concentrate attention on the beginning (Primacy Bias) and end (Recency Bias) of context, while ignoring the middle section**. This is the most concrete manifestation of Context Rot and a structural constraint stemming from Transformer position encodings.
 
-## U字カーブの正体
+## The U-Shaped Curve Revealed
 
-LLM の注意パターンは「U字カーブ」を描く。先頭と末尾に注意が集中し、中間部が死角になる。
+LLM attention patterns form a "U-shaped curve." Attention concentrates at the beginning and end, leaving the middle as a blind spot.
 
-**コンテキスト使用率50%未満: U字カーブ**
+**Context Usage Below 50%: U-Shaped Curve**
 
 ```mermaid
 ---
@@ -24,25 +26,25 @@ config:
             labelFontSize: 12
 ---
 xychart
-    title "コンテキスト内の情報位置と精度"
+    title "Information Position in Context and Accuracy"
     x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
-    y-axis "精度 (%)" 20 --> 100
+    y-axis "Accuracy (%)" 20 --> 100
     bar [92, 88, 82, 74, 58, 48, 38, 35, 33, 32, 33, 35, 40, 48, 58, 68, 76, 82, 88, 92]
 ```
 
 > [!NOTE]
-> 先頭（Primacy bias）と末尾（Recency bias）の精度が高く、中間部（Blind spot）で 30% 以上低下する。
-> 20個の文書を与えた場合、5番目〜15番目に配置された情報の検索精度が著しく低下する。
+> Accuracy is high at the beginning (Primacy bias) and end (Recency bias), but drops by over 30% in the middle section (Blind spot).
+> When given 20 documents, retrieval accuracy for information positioned 5th through 15th drops significantly.
 
-### RoPE（Rotary Position Embedding）の役割
+### The Role of RoPE (Rotary Position Embedding)
 
-現代の LLM で広く使われる RoPE は、位置が離れるほど注意重みが減衰する特性を持つ。これが中間部への注意低下を構造的に引き起こしている。
+RoPE, widely used in modern LLMs, has the characteristic that attention weights decay as positions become farther apart. This structurally triggers the decreased attention to the middle section.
 
-### 臨界点: コンテキスト使用率50%
+### Critical Point: 50% Context Usage Threshold
 
-コンテキスト使用率が50%を超えると、U字カーブのパターンが崩壊する。
+When context usage exceeds 50%, the U-shaped curve pattern breaks down.
 
-**コンテキスト使用率50%超: パターン崩壊**
+**Context Usage Over 50%: Pattern Collapse**
 
 ```mermaid
 ---
@@ -54,56 +56,57 @@ config:
             labelFontSize: 12
 ---
 xychart
-    title "50%超: 先頭(CLAUDE.md)の注意が最低に"
-    x-axis ["先頭", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "末尾"]
-    y-axis "注意" 20 --> 100
+    title "Over 50%: Attention to Beginning (CLAUDE.md) Drops to Minimum"
+    x-axis ["Beginning", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "End"]
+    y-axis "Attention" 20 --> 100
     bar [25, 28, 32, 36, 40, 44, 48, 52, 55, 58, 60, 63, 66, 70, 73, 76, 80, 85, 90, 96]
 ```
 
 > [!TIP]
-> 50%を超えると Recency（直近）が支配的になり、**先頭の情報（CLAUDE.md 含む）への注意が最も低下する**。
+> Once usage exceeds 50%, Recency (recent content) becomes dominant, and **attention to information at the beginning (including CLAUDE.md) drops to its lowest point**.
 >
-> **実践的な含意**:
+> **Practical implications**:
 >
-> - 50%未満: CLAUDE.md は Primacy bias の恩恵で比較的機能する
-> - **50%超: CLAUDE.md が最も軽視される位置に落ちる → `/compact` が必要**
-> - Skills は呼出し時に末尾（最も注目される位置）に注入される → 効果的
-> - Hooks はコンテキスト外で動作 → 位置バイアスの影響を受けない
+> - Below 50%: CLAUDE.md benefits from Primacy bias and functions relatively well
+> - **Over 50%: CLAUDE.md falls to the least-attended position → `/compact` becomes necessary**
+> - Skills are injected at the end when called (the most-attended position) → highly effective
+> - Hooks operate outside context → unaffected by position bias
 
-これが `/compact` を50%使用率前に実行すべき理由の科学的根拠である。
+This is the scientific basis for why `/compact` should be run before 50% usage is reached.
 
-## コーディングへの影響
+## Impact on Coding
 
-- 長い会話の中で、序盤に決めた設計方針が忘れられる
-- CLAUDE.md に書いたルールが、会話が進むにつれて遵守されなくなる
-- 中間で行った重要な議論（バグの原因分析など）が後の実装に反映されない
+- In long conversations, design decisions made early are forgotten
+- Rules written in CLAUDE.md become less adhered to as conversation progresses
+- Important discussions in the middle (such as bug root cause analysis) are not reflected in later implementations
 
-## Claude Code での対策
+## Countermeasures in Claude Code
 
-| 対策                 | 仕組み                         | なぜ効くのか                                                     |
-| :------------------- | :----------------------------- | :--------------------------------------------------------------- |
-| **`/compact`**       | 会話履歴を要約・圧縮           | コンテキスト使用率を50%未満に保ち、U字カーブの崩壊を防ぐ         |
-| **`.claude/rules/`** | 条件付きルール注入             | 全ルールを常時載せず、必要なルールだけを末尾（高注意位置）に注入 |
-| **Agents**           | 独立したコンテキストウィンドウ | 新鮮なコンテキストでタスクを実行、中間部の問題を根本回避         |
-| **Skills**           | オンデマンド読み込み           | 必要な時に末尾近くに注入し、高注意位置に配置                     |
-| **Hooks**            | コンテキスト外で強制実行       | LLM の注意パターンに依存しない機械的な検証                       |
-| **情報の戦略的配置** | 重要情報を先頭/末尾に          | U字カーブの高注意位置に重要情報を配置                            |
+| Countermeasure           | Mechanism                           | Why It Works                                                                |
+| :----------------------- | :---------------------------------- | :-------------------------------------------------------------------------- |
+| **`/compact`**           | Summarize and compress chat history | Keeps context usage below 50%, preventing U-curve collapse                  |
+| **`.claude/rules/`**     | Conditional rule injection          | Avoids loading all rules constantly; injects only necessary rules at end    |
+| **Agents**               | Independent context windows         | Execute tasks with fresh context, fundamentally avoiding middle problems    |
+| **Skills**               | On-demand loading                   | Inject near end when needed, placing in high-attention positions            |
+| **Hooks**                | Forced execution outside context    | Mechanical verification independent of LLM attention patterns               |
+| **Strategic information placement** | Place critical info at beginning/end | Position important information at high-attention positions in U-curve       |
 
-## 他の構造的問題との関係
+## Relationship to Other Structural Problems
 
-Lost in the Middle は Context Rot の一部であると同時に、他の問題を増幅する:
+Lost in the Middle is part of Context Rot while simultaneously amplifying other problems:
 
-- **Priority Saturation**: 中間部の指示が無視されることで、実質的な有効指示数が減少
-- **Instruction Decay**: 会話が長くなるほど中間部が増え、初期指示の忘却が加速
-- **Sycophancy**: 重要な制約を見落とすことで、ユーザーの要求にそのまま従いやすくなる
+- **Priority Saturation**: Instructions in the middle being ignored reduces the effective number of instructions
+- **Instruction Decay**: As conversations lengthen, the middle grows, accelerating forgotten initial instructions
+- **Sycophancy**: Overlooking important constraints makes it easier to comply directly with user requests
 
-## 参考文献
+## References
 
-- Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., & Liang, P. (2024). "Lost in the Middle: How Language Models Use Long Contexts." *Transactions of the Association for Computational Linguistics*, 12, 157–173. [arXiv:2307.03172](https://arxiv.org/abs/2307.03172) / [DOI:10.1162/tacl_a_00638](https://doi.org/10.1162/tacl_a_00638) — 長文コンテキストにおける U 字型注意パターンの発見
-- Su, J. et al. (2021). "RoFormer: Enhanced Transformer with Rotary Position Embedding." [arXiv:2104.09864](https://arxiv.org/abs/2104.09864) — RoPE の原論文。位置が離れるほど注意スコアが減衰するメカニズムの基盤
+- Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., & Liang, P. (2024). "Lost in the Middle: How Language Models Use Long Contexts." *Transactions of the Association for Computational Linguistics*, 12, 157–173. [arXiv:2307.03172](https://arxiv.org/abs/2307.03172) / [DOI:10.1162/tacl_a_00638](https://doi.org/10.1162/tacl_a_00638) — Discovery of U-shaped attention patterns in long-context processing
+
+- Su, J. et al. (2021). "RoFormer: Enhanced Transformer with Rotary Position Embedding." [arXiv:2104.09864](https://arxiv.org/abs/2104.09864) — Original RoPE paper. Foundation for the mechanism where attention scores decay as positions become farther apart
 
 ---
 
-> **次へ**: [Priority Saturation](priority-saturation.md)
+> **Next**: [Priority Saturation](priority-saturation.md)
 
 > **Discussion**: [#9 Lost in the Middle](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/9)

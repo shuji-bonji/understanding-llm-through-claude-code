@@ -1,31 +1,33 @@
-# Part 2: コンテキストウィンドウを理解する
+🌐 [日本語](../ja/02-context-window/index.md)
+
+# Part 2: Understanding Context Window
 
 > [!NOTE]
-> LLM の「思考空間」の構造を理解する。
-> Part 1 で学んだ構造的問題が「なぜ起きるのか」の物理的基盤がここにある。
-> Part 3 以降の全ての設計判断は、このコンテキストウィンドウの制約に基づいている。
+> Learn the structure of the LLM's "thinking space."
+> The physical foundation for "why" the structural problems you learned in Part 1 occur lies here.
+> All design decisions from Part 3 onward are based on the constraints of this context window.
 
-## コンテキストウィンドウとは
+## What is Context Window?
 
-LLM は一つの「コンテキストウィンドウ」の中で思考する。Claude の場合、最大 200K〜1M トークン（モデル世代による）。Claude Code の全ての設定ファイルは、このウィンドウに「いつ・何を・どれだけ注入するか」を制御する仕組みである。
+An LLM thinks within a single "context window." For Claude, this is typically 200K to 1M tokens (depending on model generation). All configuration files in Claude Code are mechanisms to control "when, what, and how much" to inject into this window.
 
-## このパートで学ぶこと
+## What You'll Learn in This Part
 
-| ドキュメント | 内容 |
+| Document | Content |
 |:--|:--|
-| [Token・Context・Context Window](token-context-basics.md) | 3つの基礎概念。本リポジトリ全体の前提知識 |
-| [Chat / Session](chat-session.md) | Context が蓄積する「時間の入れ物」。なぜ Context が膨らむのかの物理的説明 |
-| [コンテキストウィンドウとは何か](what-llm-sees.md) | LLM が「見る」ものの全体像 |
-| [注入タイミングの全体像](injection-timing.md) | 各設定ファイルがいつ・どうやってコンテキストに入るか |
-| [コンテキスト予算という考え方](context-budget.md) | 有限のトークンをどう配分するかの戦略 |
+| [Token・Context・Context Window](token-context-basics.md) | Three foundational concepts. Prerequisites for understanding this entire repository |
+| [Chat / Session](chat-session.md) | The "temporal container" where context accumulates. Physical explanation for why context grows |
+| [What is Context Window](what-llm-sees.md) | The complete picture of what the LLM "sees" |
+| [Injection Timing Overview](injection-timing.md) | When and how each configuration file enters the context |
+| [Context Budget as a Strategy](context-budget.md) | How to allocate finite tokens strategically |
 
-## なぜ Part 1 と Part 3 の間にあるのか
+## Why It's Between Part 1 and Part 3
 
-Part 1 で「LLM にはこういう問題がある」を学び、このPart 2 で「LLM の思考空間はこういう構造」を理解し、Part 3 以降で「だからこう設定する」に進む。
+In Part 1, you learn "LLMs have these problems." In Part 2, you understand "the LLM's thinking space has this structure." Then in Part 3 onward, you proceed to "therefore, configure it this way."
 
-これは Node.js のランタイムを理解してから TypeScript を書くのと同じ順序。ランタイムの制約を知らずにコードを書くと、なぜ動かないのか分からない。
+This follows the same order as understanding the Node.js runtime before writing TypeScript. Without knowing the runtime's constraints, you can't understand why code doesn't work.
 
 ---
 
-> **前へ**: [Part 1: LLMの構造的制約を知る](../01-llm-structural-problems/index.md)
-> **次へ**: [Part 3: 常駐コンテキスト](../03-always-loaded-context/index.md)
+> **Previous**: [Part 1: Understanding LLM Structural Constraints](../01-llm-structural-problems/index.md)
+> **Next**: [Part 3: Always-Loaded Context](../03-always-loaded-context/index.md)

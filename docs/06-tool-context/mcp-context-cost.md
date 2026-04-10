@@ -1,31 +1,33 @@
-# MCP のコンテキストコスト
+🌐 [日本語](../ja/06-tool-context/mcp-context-cost.md)
+
+# MCP Context Cost
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（ツール定義の常時消費がコンテキストを圧迫する）
-> → Why: **Knowledge Boundary** 対策（外部知識参照で LLM の内部知識への依存を減らす）
+> → Why: **Context Rot** mitigation (constant consumption of tool definitions pressures context)
+> → Why: **Knowledge Boundary** mitigation (external knowledge retrieval reduces LLM's dependency on internal knowledge)
 
-## MCP のコンテキスト消費の仕組み
+## How MCP Consumes Context
 
-MCP サーバーを接続すると、ツール定義（名前、パラメータスキーマ、説明文）が**毎ターン**コンテキストウィンドウに注入される。これは CLAUDE.md と同じ「常駐コスト」。
+When you connect an MCP server, tool definitions (name, parameter schema, description) are injected into the context window **every turn**. This is the same "resident cost" as CLAUDE.md.
 
-| 属性             | 値                                       |
-| :--------------- | :--------------------------------------- |
-| 注入タイミング   | セッション開始時にツール定義としてロード |
-| コンテキスト消費 | ツール定義として**常時消費**             |
-| LLM からの見え方 | 「使用可能なツール」のリスト             |
-| 危険閾値         | **全MCP合計 20K トークン超**             |
+| Property | Value |
+| :--- | :--- |
+| Injection Timing | Loaded as tool definitions at session start |
+| Context Consumption | **Constant consumption** as tool definitions |
+| How LLM Sees It | List of "available tools" |
+| Danger Threshold | **20K+ tokens total across all MCPs** |
 
-## コンテキスト消費の具体例
+## Concrete Example of Context Consumption
 
 ```mermaid
 graph TB
-    subgraph budget ["200K トークンのコンテキストウィンドウ"]
+    subgraph budget ["200K Token Context Window"]
         direction LR
         SP["System Prompt<br>~5K"]
         CM["CLAUDE.md<br>~2K"]
-        MCP["⚠️ MCP Tools 定義<br>~25K"]
-        CH["会話履歴<br>~50K"]
-        FREE["残り ~118K<br>（実作業用）"]
+        MCP["⚠️ MCP Tools Definitions<br>~25K"]
+        CH["Conversation History<br>~50K"]
+        FREE["Remaining ~118K<br>(for actual work)"]
     end
 
     SP --> CM --> MCP --> CH --> FREE
@@ -38,24 +40,24 @@ graph TB
 ```
 
 > [!WARNING]
-> MCP Tools 定義が 50K に膨れると、残りは 93K — 長い会話が成立しなくなる。
+> When MCP tool definitions balloon to 50K, the remaining budget drops to 93K — long conversations become impossible.
 
-## Knowledge Boundary 対策としての MCP
+## MCP as Knowledge Boundary Mitigation
 
-MCP は Context Rot のリスクを持つ一方で、**Knowledge Boundary** の最も根本的な対策でもある。
+While MCP carries Context Rot risk, it is also the most fundamental mitigation for **Knowledge Boundary**.
 
-- LLM の内部知識（訓練データ）に依存する代わりに、外部の信頼できるソースを直接参照
-- API ドキュメント、社内Wiki、データベースなどをリアルタイムで参照可能
-- 「知らないことを知らない」問題を、外部知識で補完
+- Instead of relying on the LLM's internal knowledge (training data), directly reference external trusted sources
+- Real-time access to API documentation, internal wikis, databases, etc.
+- Address "unknown unknowns" by supplementing with external knowledge
 
-## 運用のポイント
+## Operational Best Practices
 
-- 不要な MCP サーバーは接続しない
-- MCP の合計が 20K トークンを超えないよう監視
-- 使用頻度の低い MCP は必要な時だけ接続
+- Don't connect unnecessary MCP servers
+- Monitor that total MCP consumption doesn't exceed 20K tokens
+- Connect infrequently-used MCPs only when needed
 
 ---
 
-> **前へ**: [Part 6: ツール定義としてのコンテキスト](index.md)
+> **Previous**: [Part 6: Context as Tool Definitions](index.md)
 
-> **次へ**: [Tool Search / Deferred Loading](tool-search.md)
+> **Next**: [Tool Search / Deferred Loading](tool-search.md)

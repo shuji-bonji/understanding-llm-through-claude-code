@@ -1,32 +1,34 @@
-# なぜLLMに見せないのか
+🌐 [日本語](../ja/07-runtime-layer/why-not-in-context.md)
+
+# Why Not Show LLMs?
 
 > [!NOTE]
-> settings.json と Hooks をコンテキスト外に置く設計判断の根拠。
+> Design rationale for placing settings.json and Hooks outside context.
 
-## 核心的な問い
+## Core Question
 
-「LLM にルールを教えれば済むのに、なぜわざわざコンテキスト外に置くのか？」
+"If you just teach the LLM the rules, why bother placing them outside the context?"
 
-答えは3つの構造的問題に集約される。
+The answer boils down to three structural problems.
 
-### 1. Instruction Decay への耐性
+### 1. Resilience to Instruction Decay
 
-LLM に「毎回テストを実行しろ」と指示しても、長い会話の中で遵守率が低下する（平均39%の性能低下）。Hooks はコンテキストに存在しないため、Instruction Decay の影響を受けない。
+Even if you instruct an LLM to "run tests every time," compliance degrades over long conversations (average 39% performance drop). Hooks aren't in the context, so they're unaffected by Instruction Decay.
 
-### 2. Sycophancy への耐性
+### 2. Resilience to Sycophancy
 
-LLM は追従性により「テストは大丈夫だろう」と判断をスキップする可能性がある。Hooks は LLM の判断を介さずに機械的に実行するため、追従の余地がない。
+LLMs may skip judgment due to following tendency ("tests should be fine"). Hooks execute mechanically without LLM judgment, leaving no room for following along.
 
-### 3. コンテキスト予算の節約
+### 3. Saving Context Budget
 
-「毎回 lint を実行しろ」「毎回テストを実行しろ」「毎回フォーマットしろ」—— これらをCLAUDE.md に書くと、常時コンテキストを消費する。Hooks に移動すれば**予算消費ゼロ**。
+"Run lint every time" "run tests every time" "format every time" — Writing these in CLAUDE.md constantly consumes context. Moving to Hooks means **zero budget consumption**.
 
-## 判断基準
+## Decision Criteria
 
 ```mermaid
 flowchart LR
-    Q1{"LLM の判断が必要か？"}
-    Q2{"機械的に検証可能か？"}
+    Q1{"Does LLM judgment matter?"}
+    Q2{"Can it be mechanically verified?"}
     CLAUDE(["CLAUDE.md / Rules"])
     HOOKS(["Hooks"])
     CLAUDE2(["CLAUDE.md"])
@@ -43,12 +45,12 @@ flowchart LR
     style CLAUDE2 fill:#fef9c3,stroke:#a16207,color:#000
 ```
 
-## 原則
+## Principle
 
-**ルールで判断が必要なものは CLAUDE.md / Rules に、機械的に強制できるものは Hooks に書く。**
+**Place rules requiring judgment in CLAUDE.md / Rules; place mechanically enforceable rules in Hooks.**
 
 ---
 
-> **前へ**: [Hooks のライフサイクル](hooks.md)
+> **前へ**: [Hooks Lifecycle](hooks.md)
 
-> **Part 7 完了 → 次へ**: [Part 8: セッション管理と記憶の永続化](../08-session-management/index.md)
+> **Part 7 Complete → Next**: [Part 8: Session Management and Memory Persistence](../08-session-management/index.md)

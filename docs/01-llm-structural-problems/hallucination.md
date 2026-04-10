@@ -1,27 +1,28 @@
-# Hallucination（幻覚）— LLMは構造的に「嘘」をつく
+🌐 [日本語](../ja/01-llm-structural-problems/hallucination.md)
+
+# Hallucination — LLMs Structurally Generate False Information
 
 > [!NOTE]
-> **一言で言うと**: LLM が事実に反する内容を自信を持って生成する現象。
-> これは「バグ」ではなく、Transformer アーキテクチャの構造的制約であり、
-> 数学的に「ゼロにできない」ことが証明されている。
+> **In short**: The phenomenon where an LLM confidently generates content that contradicts facts.
+> This is not a "bug" but a **structural constraint inherent to Transformer architecture**, and it has been mathematically proven that it cannot be reduced to zero.
 
-## Hallucination とは何か
+## What is Hallucination?
 
-Hallucination（幻覚）とは、LLM が事実に反する内容を、あたかも正しいかのように生成する現象である。重要なのは、これがモデルの学習不足や設計ミスではなく、**アーキテクチャに内在する構造的制約**であるということ。
+Hallucination is the phenomenon where an LLM generates content that contradicts facts while presenting it as if it were correct. The critical point is that this is not due to insufficient training or design flaws, but rather **a structural constraint inherent to the architecture itself**.
 
-## 3つの数学的根拠
+## Three Mathematical Foundations
 
 ```mermaid
 graph TD
-    A["対角線論法<br>(Xu et al., 2024)"]
-    B["不完全性定理との接続<br>(Banerjee et al., 2025)"]
-    C["創造性との等価性<br>(Karpowicz, 2025)"]
-    D(["ハルシネーションは<br>構造的に排除不可能"])
-    E(["パラダイムシフト:<br>排除から管理へ"])
+    A["Diagonal Argument<br>(Xu et al., 2024)"]
+    B["Connection to Incompleteness Theorem<br>(Banerjee et al., 2025)"]
+    C["Equivalence with Creativity<br>(Karpowicz, 2025)"]
+    D(["Hallucination Cannot Be<br>Structurally Eliminated"])
+    E(["Paradigm Shift:<br>From Elimination to Management"])
 
-    A -->|"すべてのLLMに<br>幻覚入力が無限個存在"| D
-    B -->|"全処理段階で<br>確率ゼロ不可"| D
-    C -->|"排除すると<br>創造性も消失"| D
+    A -->|"Every LLM has<br>infinitely many hallucinating inputs"| D
+    B -->|"Probability cannot be zero<br>at any processing stage"| D
+    C -->|"Eliminating it also<br>eliminates creativity"| D
     D --> E
 
     style A fill:#dbeafe,stroke:#1d4ed8,color:#000
@@ -31,68 +32,68 @@ graph TD
     style E fill:#dcfce7,stroke:#15803d,color:#000
 ```
 
-### 1. 対角線論法による証明（Xu et al., 2024）
+### 1. Proof via Diagonal Argument (Xu et al., 2024)
 
-カントールの対角線論法を応用し、**すべての LLM には必ずハルシネーションを起こす入力が無限個存在する**ことが証明された。これはモデルのサイズや訓練データの質に関係なく成立する。
+Using Cantor's diagonal argument, it has been proven that **every LLM necessarily has infinitely many inputs that cause hallucinations**. This holds regardless of model size or training data quality.
 
-### 2. ゲーデルの不完全性定理との接続（Banerjee et al., 2025）
+### 2. Connection to Gödel's Incompleteness Theorem (Banerjee et al., 2025)
 
-LLM の処理全段階（エンコーディング、注意機構、デコーディング）でハルシネーション確率がゼロにならないことが論証された。形式的体系が自己の無矛盾性を証明できないのと同様に、LLM は自身の出力の正確性を完全に保証できない。
+It has been demonstrated that hallucination probability cannot reach zero at any stage of LLM processing (encoding, attention mechanisms, decoding). Just as formal systems cannot prove their own consistency, LLMs cannot completely guarantee the accuracy of their outputs.
 
-### 3. ハルシネーションと創造性の等価性（Karpowicz, 2025）
+### 3. Equivalence of Hallucination and Creativity (Karpowicz, 2025)
 
-ハルシネーション制御の根本的不可能性が証明された。ハルシネーションを完全に排除すると、創造性も同時に失われる。つまり、**ハルシネーションと創造性は数学的に同一の操作**である。
+It has been proven that complete hallucination control is fundamentally impossible. When hallucinations are completely eliminated, creativity is simultaneously lost. In other words, **hallucination and creativity are mathematically equivalent operations**.
 
-## コーディングにおける影響
+## Impact on Coding
 
-- 存在しない API やメソッドを自信を持って呼び出すコードを生成
-- 古いバージョンの文法を現行バージョンとして提示
-- 社内コードに対して、存在しないメソッドの型定義を生成
-- テストコードで、実際には通らないアサーションを書く
+- Generating code that confidently calls non-existent APIs or methods
+- Presenting outdated syntax as current standard
+- Generating type definitions for non-existent methods in proprietary codebases
+- Writing assertions in test code that will actually fail
 
-## Claude Code での対策
+## Mitigation Strategies in Claude Code
 
-ハルシネーションは排除できない。対策は**検出と管理**のパラダイムに基づく:
+Hallucination cannot be eliminated. Mitigation is based on a **detection and management paradigm**:
 
-| 対策 | 仕組み | なぜ効くのか |
+| Strategy | Mechanism | Why It Works |
 |:--|:--|:--|
-| **Hooks（テスト実行）** | コード変更後に自動でテスト実行 | コンパイラ・テストランナーはハルシネーションしない |
-| **Cross-Model QA** | 異なるモデルでレビュー（Agents） | 同じハルシネーションを2つのモデルが同時に起こす確率は低い |
-| **CLAUDE.md での制約** | バージョン情報・禁止パターンを明示 | ハルシネーションの発生領域を狭める |
-| **MCP による外部参照** | 外部の信頼できるソースを直接参照 | LLM の内部知識ではなく外部事実に基づく |
-| **Agents（知識の分離）** | 専門エージェントに特定ドメインを委譲 | 知識領域を狭めることでハルシネーション確率を低減 |
+| **Hooks (Test Execution)** | Automatically runs tests after code changes | Compilers and test runners don't hallucinate |
+| **Cross-Model QA** | Review by different models (Agents) | Two models simultaneously hallucinating the same error is unlikely |
+| **CLAUDE.md Constraints** | Explicit version information and forbidden patterns | Narrows the domain where hallucinations can occur |
+| **MCP External References** | Direct reference to trusted external sources | Based on external facts, not internal LLM knowledge |
+| **Agents (Knowledge Separation)** | Delegate specific domains to specialized agents | Narrower knowledge domain reduces hallucination probability |
 
-## パラダイムシフト: 排除から管理へ
+## Paradigm Shift: From Elimination to Management
 
-ハルシネーションを「なくす」のではなく「管理する」というパラダイムが重要:
+The key is shifting from trying to "eliminate" hallucinations to "managing" them:
 
 ```
-ソフトウェア工学のバグ管理と同じ:
-  バグをゼロにすることは不可能
-  → テスト、レビュー、CI/CD で検出・管理する
+Software engineering approach to bug management:
+  Eliminating bugs completely is impossible
+  → Detect and manage through testing, review, CI/CD
 
-LLM のハルシネーション管理:
-  ハルシネーションをゼロにすることは不可能
-  → Hooks、Cross-Model QA、テストコードで検出・管理する
+LLM hallucination management:
+  Eliminating hallucinations completely is impossible
+  → Detect and manage through Hooks, Cross-Model QA, test code
 ```
 
-## 他の構造的問題との関係
+## Relationship to Other Structural Problems
 
-- **Knowledge Boundary**: 知識境界を超えた時にハルシネーションが発生する入口
-- **Sycophancy**: ハルシネーションした内容をユーザーの同意で追認してしまう
-- **Context Rot**: コンテキストが長くなるとハルシネーション率が上昇
-- **Instruction Decay**: 「事実確認しろ」という指示自体が忘却される
+- **Knowledge Boundary**: The point where hallucinations occur when exceeding knowledge boundaries
+- **Sycophancy**: User agreement may reinforce hallucinated content
+- **Context Rot**: Hallucination rate increases as context length grows
+- **Instruction Decay**: The instruction itself to "verify facts" may be forgotten
 
-## 参考文献
+## References
 
-- Xu, Z. et al. (2024). "Hallucination is Inevitable: An Innate Limitation of Large Language Models." [arXiv:2401.11817](https://arxiv.org/abs/2401.11817) — 対角線論法によるハルシネーション不可避性の形式的証明
-- Banerjee, S., Agarwal, A., & Singla, S. (2024). "LLMs Will Always Hallucinate, and We Need to Live With This." [arXiv:2409.05746](https://arxiv.org/abs/2409.05746) — ゲーデルの第一不完全性定理との接続による不可避性の証明
-- Karpowicz, M. P. (2025). "On the Fundamental Impossibility of Hallucination Control in Large Language Models." [arXiv:2506.06382](https://arxiv.org/abs/2506.06382) — メカニズムデザインとスコアリングルールによるハルシネーションと創造性の等価性証明
+- Xu, Z. et al. (2024). "Hallucination is Inevitable: An Innate Limitation of Large Language Models." [arXiv:2401.11817](https://arxiv.org/abs/2401.11817) — Formal proof of hallucination inevitability using diagonal argument
+- Banerjee, S., Agarwal, A., & Singla, S. (2024). "LLMs Will Always Hallucinate, and We Need to Live With This." [arXiv:2409.05746](https://arxiv.org/abs/2409.05746) — Proof of inevitability via connection to Gödel's first incompleteness theorem
+- Karpowicz, M. P. (2025). "On the Fundamental Impossibility of Hallucination Control in Large Language Models." [arXiv:2506.06382](https://arxiv.org/abs/2506.06382) — Proof of equivalence between hallucination and creativity using mechanism design and scoring rules
 
 ---
 
-> **前へ**: [Priority Saturation](priority-saturation.md)
+> **Previous**: [Priority Saturation](priority-saturation.md)
 
-> **次へ**: [Sycophancy](sycophancy.md)
+> **Next**: [Sycophancy](sycophancy.md)
 
 > **Discussion**: [#7 Hallucination](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions/7)

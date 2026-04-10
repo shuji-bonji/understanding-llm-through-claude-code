@@ -1,29 +1,31 @@
-# Part 3: 常駐コンテキスト — CLAUDE.md
+🌐 [日本語](../ja/03-always-loaded-context/index.md)
+
+# Part 3: Always-Loaded Context — CLAUDE.md
 
 > [!NOTE]
-> セッション開始時に常に読み込まれる情報。
-> コンテキスト予算における「固定費」であり、最も慎重な管理が必要。
+> Information that is always loaded when a session begins.
+> This is a "fixed cost" in your context budget and requires the most careful management.
 
-## なぜ重要なのか
+## Why It Matters
 
-CLAUDE.md はLLMが**毎ターン読む**情報。つまり、ここに書いたことは常にコンテキスト予算を消費し続ける。書きすぎれば Priority Saturation を引き起こし、書かなすぎれば LLM が重要な制約を知らずにコードを生成する。
+CLAUDE.md is information that the LLM **reads every turn**. This means everything you write here consumes your context budget continuously. Write too much and you trigger Priority Saturation; write too little and the LLM generates code without knowing important constraints.
 
-## → Why: どの構造的問題に対応しているか
+## → Why: Which Structural Problems Does It Address?
 
 > [!IMPORTANT]
-> - **Priority Saturation**: 200行制限は、同時有効指示数を劣化閾値以下に保つための設計
-> - **Prompt Sensitivity**: 具体的・命令的な記述は、表現の曖昧さによる結果変動を抑える
-> - **Context Rot**: 階層マージとスコープ分離は、不要な情報の蓄積を防ぐ
+> - **Priority Saturation**: The 200-line limit is designed to keep the number of simultaneously active instructions below the degradation threshold.
+> - **Prompt Sensitivity**: Concrete, directive language reduces result variance caused by ambiguous phrasing.
+> - **Context Rot**: Hierarchical merging and scope separation prevent the accumulation of unnecessary information.
 
-## このパートのドキュメント
+## Documents in This Section
 
-| ドキュメント | 内容 |
+| Document | Content |
 |:--|:--|
-| [CLAUDE.md の設計原理](claude-md.md) | 何を書くべきか、なぜ200行なのか |
-| [階層マージの仕組み](hierarchy.md) | グローバル → プロジェクト → ローカル → サブディレクトリ |
-| [CLAUDE.local.md の運用](local-md.md) | Git管理外の個人設定 |
+| [Design Principles of CLAUDE.md](claude-md.md) | What to write and why 200 lines |
+| [How Hierarchical Merging Works](hierarchy.md) | Global → Project → Local → Subdirectory |
+| [Operating CLAUDE.local.md](local-md.md) | Personal configuration outside Git |
 
 ---
 
-> **前へ**: [Part 2: コンテキストウィンドウを理解する](../02-context-window/index.md)
-> **次へ**: [Part 4: 条件付きコンテキスト](../04-conditional-context/index.md)
+> **Previous**: [Part 2: Understanding the Context Window](../02-context-window/index.md)
+> **Next**: [Part 4: Conditional Context](../04-conditional-context/index.md)

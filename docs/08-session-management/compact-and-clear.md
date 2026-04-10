@@ -1,51 +1,53 @@
-# /compact と /clear の使い分け
+🌐 [日本語](../ja/08-session-management/compact-and-clear.md)
+
+# Using /compact and /clear
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（予防的圧縮でトークン蓄積を抑制）
-> → Why: **Lost in the Middle** 対策（50%使用率前に圧縮してU字カーブ崩壊を防ぐ）
-> → Why: **Instruction Decay** 対策（セッション分割で劣化をリセット）
+> → Why: **Context Rot** countermeasure (preventive compression reduces token accumulation)
+> → Why: **Lost in the Middle** countermeasure (compress before 50% usage to prevent U-shaped curve collapse)
+> → Why: **Instruction Decay** countermeasure (reset degradation by splitting sessions)
 
-## /compact — 予防的圧縮
+## /compact — Preventive Compression
 
-`/compact` は会話履歴を要約・圧縮し、コンテキストのトークン数を削減するコマンド。
+`/compact` is a command that summarizes and compresses conversation history, reducing the token count of the context.
 
-### いつ使うか
+### When to Use It
 
-**50%使用率に達する前に実行する。**
+**Execute before reaching 50% usage.**
 
-科学的根拠: コンテキスト使用率が50%を超えると、Lost in the Middle のU字カーブが崩壊し、先頭の情報（CLAUDE.md 含む）への注意が最も低下する。
+Scientific basis: When context usage exceeds 50%, the Lost in the Middle U-shaped curve collapses, and attention to information at the beginning (including CLAUDE.md) drops most significantly.
 
-### 何が起きるか
+### What Happens
 
-- 会話履歴が要約され、トークン数が大幅に削減される
-- 重要な決定事項や文脈は要約に含まれる
-- 細かいやり取りの詳細は失われる
+- Conversation history is summarized, drastically reducing token count
+- Important decisions and context are included in the summary
+- Fine details of back-and-forth exchanges are lost
 
-## /clear — セッション分割
+## /clear — Session Splitting
 
-`/clear` はセッションを完全にリセットし、新鮮なコンテキストで再開するコマンド。
+`/clear` is a command that completely resets the session and resumes with a fresh context.
 
-### いつ使うか
+### When to Use It
 
-- タスクが完了し、次の独立したタスクに移る時
-- 会話が長くなり、/compact でも品質が改善しない時
-- LLM の出力品質が明らかに低下した時
+- When a task is complete and you move to the next independent task
+- When conversation becomes long and `/compact` doesn't improve quality
+- When LLM output quality noticeably declines
 
-### 何が起きるか
+### What Happens
 
-- 全ての会話履歴が削除される
-- CLAUDE.md は再読み込みされる
-- 完全にクリーンな状態から再開
+- All conversation history is deleted
+- CLAUDE.md is reloaded
+- Restart with a completely clean state
 
-## 使い分けのフロー
+## Decision Flow for Using Them
 
 ```mermaid
 flowchart LR
-    Q1{"まだ同じタスクの途中？"}
-    Q2{"タスクは完了した？"}
-    COMPACT(["⚡ /compact<br>会話を圧縮して継続"])
-    CLEAR(["🔄 /clear<br>新しいタスクに向けてリセット"])
-    COMPACT2(["⚡ /compact してから判断"])
+    Q1{"Still working on the same task?"}
+    Q2{"Is the task complete?"}
+    COMPACT(["⚡ /compact<br>Compress conversation and continue"])
+    CLEAR(["🔄 /clear<br>Reset for a new task"])
+    COMPACT2(["⚡ /compact then reassess"])
 
     Q1 -->|"Yes"| COMPACT
     Q1 -->|"No"| Q2
@@ -59,15 +61,15 @@ flowchart LR
     style COMPACT2 fill:#fef9c3,stroke:#a16207,color:#000
 ```
 
-## セッション設計の原則
+## Session Design Principles
 
-1. **1セッション = 1タスク**（または密接に関連する小タスクの集合）
-2. **50%使用率前に /compact**（予防的）
-3. **タスク完了時に /clear**（リセット）
-4. **重要な決定は CLAUDE.md や Git コミットに永続化**（セッションをまたいで引き継ぐ）
+1. **One session = One task** (or a set of closely related small tasks)
+2. **Use `/compact` before 50% usage** (preventive)
+3. **Use `/clear` when task is complete** (reset)
+4. **Persist important decisions in CLAUDE.md or Git commits** (carry across sessions)
 
 ---
 
-> **前へ**: [Part 8: セッション管理と記憶の永続化](index.md)
+> **Previous**: [Part 8: Session Management and Memory Persistence](index.md)
 
-> **次へ**: [なぜメモリが問題になるのか](memory-problem.md)
+> **Next**: [Why Memory Becomes a Problem](memory-problem.md)

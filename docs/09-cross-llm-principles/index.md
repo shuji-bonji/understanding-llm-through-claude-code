@@ -1,23 +1,25 @@
-# Part 9: 他LLMへの応用
+🌐 [日本語](../ja/09-cross-llm-principles/index.md)
+
+# Part 9: Applying to Other LLMs
 
 > [!NOTE]
-> Claude Code 固有の知識を他ツール・他LLMに応用可能な形に昇華する。
-> Part 1〜8 で学んだ原理は Claude Code 固有ではなく、LLM を使うあらゆるツールに共通する。
+> Translate Claude Code-specific knowledge into a form that can be applied to other tools and LLMs.
+> The principles learned in Parts 1–8 are not specific to Claude Code, but common to all tools that use LLMs.
 
-## なぜこのパートがあるのか
+## Why This Part Exists
 
-「コンテキストウィンドウへの注入制御」という原理は Claude Code 固有のものではない。Cursor、Cline、GitHub Copilot、その他あらゆる LLM ツールが同じ構造的問題に直面し、同じ原理に基づいた設計をしている。
+"Context window injection control" is not specific to Claude Code. Cursor, Cline, GitHub Copilot, and all other LLM tools face the same structural problems and are designed based on the same principles.
 
-原理を理解していれば、ツールが変わっても設計の考え方は同じ。
+If you understand the principles, the design approach remains the same even when tools change.
 
-## このパートのドキュメント
+## Documents in This Part
 
-| ドキュメント | 内容 |
+| Document | Content |
 |:--|:--|
-| [構造的制約は全モデル共通](universal-patterns.md) | LLM 共通の原理 |
-| [ツール支援がない環境での実践](prompt-driven-development.md) | プロンプト駆動開発の手法 |
-| [Cursor / Cline / Copilot 対応表](cursor-cline-mapping.md) | ツール間の機能マッピング |
+| [Structural Constraints Are Universal Across All Models](universal-patterns.md) | Principles common to all LLMs |
+| [Practical Application Without Tool Support](prompt-driven-development.md) | Techniques for prompt-driven development |
+| [Cursor / Cline / Copilot Reference Table](cursor-cline-mapping.md) | Feature mapping across tools |
 
 ---
 
-> **前へ**: [Part 8: セッション管理と記憶の永続化](../08-session-management/index.md)
+> **Previous**: [Part 8: Session Management and Memory Persistence](../08-session-management/index.md)

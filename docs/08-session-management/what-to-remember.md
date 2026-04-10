@@ -1,32 +1,34 @@
-# 何を覚えるか
+🌐 [日本語](../ja/08-session-management/what-to-remember.md)
+
+# What to Remember
 
 > [!NOTE]
-> すべてを覚えようとすると、Priority Saturation が発生する。
-> 「何を覚えるか」の選別が記憶の永続化の核心。
+> Trying to remember everything causes Priority Saturation.
+> The selection of "what to remember" is the core of memory persistence.
 
-## 覚えるべき情報
+## Information Worth Remembering
 
-| カテゴリ | 例 | 理由 |
+| Category | Example | Reason |
 |:--|:--|:--|
-| 設計判断の経緯 | 「NgRx を選んだのは状態管理の予測可能性のため」 | コードからは読み取れない「Why」 |
-| ユーザーの好み | 「関数型を優先」「日本語で応答」 | 毎セッション伝え直すのは非効率 |
-| プロジェクト固有の知識 | 「認証は OAuth2 + PKCE」 | CLAUDE.md に書ききれない詳細 |
-| 過去の失敗と対策 | 「RxJS の subscribe 漏れでメモリリーク発生」 | 同じ失敗を繰り返さない |
+| Design decision rationale | "Chose NgRx for predictable state management" | The "Why" cannot be inferred from code alone |
+| User preferences | "Prefers functional style" or "Respond in Japanese" | Inefficient to repeat every session |
+| Project-specific knowledge | "Authentication uses OAuth2 + PKCE" | Too detailed for CLAUDE.md |
+| Past failures and solutions | "RxJS subscribe leak caused memory leak" | Avoid repeating the same mistake |
 
-## 覚えるべきでない情報
+## Information NOT Worth Remembering
 
-| カテゴリ | 理由 |
+| Category | Reason |
 |:--|:--|
-| コードの実装詳細 | コードベースから直接読み取れる |
-| ライブラリの API | 公式ドキュメントを参照すべき |
-| 一時的な作業状態 | セッション内で完結する情報 |
+| Code implementation details | Read directly from the codebase |
+| Library APIs | Refer to official documentation |
+| Temporary work state | Information contained within the session |
 
-## Priority Saturation との関係
+## Relationship with Priority Saturation
 
-記憶が増えすぎると、メモリの読み込み自体がコンテキストを圧迫し、Priority Saturation を引き起こす。記憶は「少なく、重要なものだけ」が原則。
+When memory grows too large, loading the memory itself consumes context, triggering Priority Saturation. The principle is "fewer, more important memories."
 
 ---
 
-> **前へ**: [なぜメモリが問題になるのか](memory-problem.md)
+> **Previous**: [Why Memory Becomes a Problem](memory-problem.md)
 
-> **次へ**: [いつ・どう思い出すか](when-to-recall.md)
+> **Next**: [When and How to Recall](when-to-recall.md)

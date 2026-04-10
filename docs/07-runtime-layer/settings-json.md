@@ -1,68 +1,70 @@
-# settings.json の役割
+🌐 [日本語](../ja/07-runtime-layer/settings-json.md)
+
+# The Role of settings.json
 
 > [!NOTE]
-> LLM のコンテキストには注入されない「ランタイム設定」。
+> "Runtime configuration" not injected into the LLM's context.
 
-## settings.json とは
+## What Is settings.json?
 
-settings.json は Claude Code アプリケーション（ランタイム）の動作を制御する設定ファイル。**LLM のコンテキストウィンドウには注入されない**。
+settings.json is a configuration file that controls the behavior of the Claude Code application (runtime). **It is not injected into the LLM's context window**.
 
-| 属性 | 値 |
+| Attribute | Value |
 |:--|:--|
-| 注入タイミング | **コンテキストに注入されない** |
-| コンテキスト消費 | なし |
-| 役割 | ランタイムの動作制御 |
+| Injection Timing | **Not injected into context** |
+| Context Consumption | None |
+| Role | Control runtime behavior |
 
-## CLAUDE.md との根本的な違い
+## Fundamental Difference from CLAUDE.md
 
 ```
-CLAUDE.md      = LLM への指示（「何を知るべきか」「どう振る舞うべきか」）
-settings.json  = ランタイムへの設定（「何を許可するか」「どう実行するか」）
+CLAUDE.md      = Instructions for the LLM ("what should be known" "how should it behave")
+settings.json  = Configuration for the runtime ("what to allow" "how to execute")
 ```
 
-Node.js での比較:
-- CLAUDE.md → ソースコード（V8 エンジンが解釈する）
-- settings.json → `node --max-old-space-size=4096` のようなランタイムフラグ
+Comparison with Node.js:
+- CLAUDE.md → Source code (interpreted by V8 engine)
+- settings.json → Runtime flags like `node --max-old-space-size=4096`
 
-## 階層と優先順位
+## Hierarchy and Priority
 
-| 優先度 | 階層 | ファイル | Git管理 |
+| Priority | Layer | File | Git Managed |
 |:--|:--|:--|:--|
-| 最高 | Managed | server-managed / MDM / managed-settings.json | — |
-| ↓ | Project | `.claude/settings.json` | する（チーム共有） |
-| ↓ | Project Local | `.claude/settings.local.json` | しない（個人用） |
-| 最低 | User | `~/.claude/settings.json` | — |
+| Highest | Managed | server-managed / MDM / managed-settings.json | — |
+| ↓ | Project | `.claude/settings.json` | Yes (team shared) |
+| ↓ | Project Local | `.claude/settings.local.json` | No (personal) |
+| Lowest | User | `~/.claude/settings.json` | — |
 
-**上位が常に勝つ**。プロジェクト設定で deny されたものは、ユーザー設定で allow しても拒否される。
+**Higher always wins**. If something is denied in project settings, it will be rejected even if allowed in user settings.
 
-## 主要な設定カテゴリ
+## Main Configuration Categories
 
 ```jsonc
 {
-  // 権限制御：LLMが使えるツールを制限
+  // Permission control: restrict tools available to LLM
   "permissions": {
     "allow": ["Read", "Write", "Bash(npm run *)", "Bash(ng *)"],
     "deny": ["Read(./.env)", "Read(./secrets/**)"]
   },
 
-  // 環境変数
+  // Environment variables
   "env": {
     "ANTHROPIC_MODEL": "claude-sonnet-4-20250514"
   },
 
-  // Hooksの定義
+  // Hooks definition
   "hooks": { },
 
-  // MCP接続の許可
+  // Allow MCP connections
   "enableAllProjectMcpServers": true,
 
-  // 思考モード
+  // Thinking mode
   "thinking": true
 }
 ```
 
 ---
 
-> **前へ**: [Part 7: LLMが見ないレイヤー](index.md)
+> **前へ**: [Part 7: The Layer LLMs Don't See](index.md)
 
-> **次へ**: [Hooks のライフサイクル](hooks.md)
+> **次へ**: [Hooks Lifecycle](hooks.md)

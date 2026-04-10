@@ -1,29 +1,31 @@
-# ライフサイクル × 設定マップ
+🌐 [日本語](../ja/appendix/lifecycle-config-map.md)
+
+# Lifecycle × Configuration Map
 
 > [!NOTE]
-> Claude Code のタスクフローの各フェーズで、どの設定レイヤーが作用するかを示す。
-> Part 3〜7 で学んだ設定の全体像を、ライフサイクルの視点から横断的に整理したリファレンス。
+> Shows which configuration layers are active at each phase of Claude Code's task flow.
+> A cross-sectional reference organizing the complete picture of configuration learned in Parts 3-7, from the perspective of lifecycle.
 >
-> 関連 Issue: [#21](https://github.com/shuji-bonji/understanding-llm-through-claude-code/issues/21)
+> Related Issue: [#21](https://github.com/shuji-bonji/understanding-llm-through-claude-code/issues/21)
 
-## ライフサイクルフロー
+## Lifecycle Flow
 
 ```mermaid
 flowchart TB
     SS@{ shape: circle, label: "SessionStart" }
     SE@{ shape: circle, label: "SessionEnd" }
-    subgraph セッション全体
-        IL --> UPS["ユーザー入力"]
+    subgraph Session["Session Flow"]
+        IL --> UPS["User Input"]
         UPS --> PTU["PreToolUse Hook / Rules / Skill"]
-        PTU --> EXEC["ツール実行 / MCP"]
+        PTU --> EXEC["Tool Execution / MCP"]
         EXEC --> POST["PostToolUse Hook"]
-        POST --> SUB["Agent / サブタスク"]
-        SUB --> STOP["応答完了"]
-        STOP -->|"次のターン"| UPS
+        POST --> SUB["Agent / Subtask"]
+        SUB --> STOP["Response Complete"]
+        STOP -->|"Next turn"| UPS
     end
 
-    SS--> IL["CLAUDE.md / rules読込<br/>+ settings.json"]
-    STOP -->|"セッション終了"| SE
+    SS--> IL["CLAUDE.md / rules load<br/>+ settings.json"]
+    STOP -->|"Session end"| SE
 
     style SS fill:#dcfce7,stroke:#15803d,color:#000
     style SE fill:#fee2e2,stroke:#b91c1c,color:#000
@@ -32,94 +34,94 @@ flowchart TB
     style STOP fill:#fef9c3,stroke:#a16207,color:#000
 ```
 
-## 各フェーズで効く設定
+## Configuration Effective at Each Phase
 
-### セッション開始（SessionStart → CLAUDE.md 読込）
+### Session Start (SessionStart → CLAUDE.md Load)
 
-| 設定レイヤー                   | 何が起きるか                                                                                            | 該当 Part                                      |
-| :----------------------------- | :------------------------------------------------------------------------------------------------------ | :--------------------------------------------- |
-| **CLAUDE.md**（全階層）        | グローバル → プロジェクト → ローカルの順にマージされ、常駐コンテキストとして注入                        | [Part 3](../03-always-loaded-context/index.md) |
-| **settings.json**              | ランタイム設定（権限、環境変数、thinking モード等）が適用される。LLM のコンテキストには注入されない     | [Part 7](../07-runtime-layer/settings-json.md) |
-| **MCP ツール定義**             | 接続済み MCP サーバーのツール定義がコンテキストに常駐注入される（Tool Search 有効時はインデックスのみ） | [Part 6](../06-tool-context/index.md)          |
-| **Hook: `SessionStart`**       | 環境チェック、ログ初期化。stdout はコンテキストに追加される                                             | [Part 7](../07-runtime-layer/hooks.md)         |
-| **Hook: `InstructionsLoaded`** | CLAUDE.md / rules ファイル読込時に発火。監査ログ、コンプライアンス追跡                                  | [Part 7](../07-runtime-layer/hooks.md)         |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **CLAUDE.md** (all levels) | Merged in order: Global → Project → Local, injected as resident context | [Part 3](../03-always-loaded-context/index.md) |
+| **settings.json** | Runtime settings (permissions, environment variables, thinking mode, etc.) applied. Not injected to LLM context | [Part 7](../07-runtime-layer/settings-json.md) |
+| **MCP tool definitions** | Tool definitions from connected MCP servers resident-injected to context (index-only when Tool Search enabled) | [Part 6](../06-tool-context/index.md) |
+| **Hook: `SessionStart`** | Environment check, log initialization. stdout added to context | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `InstructionsLoaded`** | Fires when CLAUDE.md / rules files are loaded. Audit log, compliance tracking | [Part 7](../07-runtime-layer/hooks.md) |
 
-### ユーザー入力時（UserPromptSubmit）
+### On User Input (UserPromptSubmit)
 
-| 設定レイヤー                 | 何が起きるか                                                                                                   | 該当 Part                              |
-| :--------------------------- | :------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
-| **Hook: `UserPromptSubmit`** | 入力バリデーション、追加コンテキスト注入。stdout はコンテキストに追加される。exit 2 でプロンプトをブロック可能 | [Part 7](../07-runtime-layer/hooks.md) |
-| **Prompt Hook**              | `type: "prompt"` で LLM による入力評価が可能                                                                   | [Part 7](../07-runtime-layer/hooks.md) |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **Hook: `UserPromptSubmit`** | Input validation, additional context injection. stdout added to context. Can block prompt with exit 2 | [Part 7](../07-runtime-layer/hooks.md) |
+| **Prompt Hook** | Evaluate input using LLM with `type: "prompt"` | [Part 7](../07-runtime-layer/hooks.md) |
 
-### ツール実行前（PreToolUse）
+### Before Tool Execution (PreToolUse)
 
-| 設定レイヤー                     | 何が起きるか                                                                                                        | 該当 Part                                      |
-| :------------------------------- | :------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------- |
-| **`.claude/rules/`**             | 操作対象ファイルの glob パターンに一致するルールがコンテキストに注入される                                          | [Part 4](../04-conditional-context/rules.md)   |
-| **Skills**                       | LLM の自動判断または `/` 呼び出しで、タスク固有の手順書がコンテキストに展開される                                   | [Part 5](../05-on-demand-context/skills.md)    |
-| **settings.json（permissions）** | `allow` / `deny` ルールでツール使用を許可・拒否。Hook の `allow` より deny ルールが優先                             | [Part 7](../07-runtime-layer/settings-json.md) |
-| **Hook: `PreToolUse`**           | 危険なコマンドのブロック、入力の書き換え（`updatedInput`）。`permissionDecision` で `allow` / `deny` / `ask` を制御 | [Part 7](../07-runtime-layer/hooks.md)         |
-| **Hook: `PermissionRequest`**    | 権限ダイアログ表示時に発火。自動承認/拒否が可能                                                                     | [Part 7](../07-runtime-layer/hooks.md)         |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **`.claude/rules/`** | Rules matching glob pattern of target file injected to context | [Part 4](../04-conditional-context/rules.md) |
+| **Skills** | Task-specific procedures deployed to context via automatic LLM judgment or `/` invocation | [Part 5](../05-on-demand-context/skills.md) |
+| **settings.json** (permissions) | `allow` / `deny` rules permit/deny tool use. Hook's `deny` rule takes priority over `allow` | [Part 7](../07-runtime-layer/settings-json.md) |
+| **Hook: `PreToolUse`** | Block dangerous commands, rewrite input (`updatedInput`). Control `allow` / `deny` / `ask` with `permissionDecision` | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `PermissionRequest`** | Fires when permission dialog shown. Auto-approve/deny possible | [Part 7](../07-runtime-layer/hooks.md) |
 
-### ツール実行後（PostToolUse / PostToolUseFailure）
+### After Tool Execution (PostToolUse / PostToolUseFailure)
 
-| 設定レイヤー                   | 何が起きるか                                                                             | 該当 Part                              |
-| :----------------------------- | :--------------------------------------------------------------------------------------- | :------------------------------------- |
-| **Hook: `PostToolUse`**        | 自動フォーマット（prettier 等）、lint 実行、ログ記録。ツールは実行済みのため取り消し不可 | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `PostToolUseFailure`** | ツール失敗時のエラーログ、リトライ判定                                                   | [Part 7](../07-runtime-layer/hooks.md) |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **Hook: `PostToolUse`** | Auto-format (prettier, etc.), lint execution, logging. Tools already executed, cannot be reverted | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `PostToolUseFailure`** | Error log on tool failure, retry decision | [Part 7](../07-runtime-layer/hooks.md) |
 
-### サブエージェント・タスク（SubagentStart/Stop, TaskCreated/Completed）
+### Sub-Agent and Tasks (SubagentStart/Stop, TaskCreated/Completed)
 
-| 設定レイヤー              | 何が起きるか                                                       | 該当 Part                                   |
-| :------------------------ | :----------------------------------------------------------------- | :------------------------------------------ |
-| **Agents**                | 独立したコンテキストウィンドウで実行。結果のみメインに蒸留して返す | [Part 5](../05-on-demand-context/agents.md) |
-| **Hook: `SubagentStart`** | サブエージェント生成時にコンテキスト注入                           | [Part 7](../07-runtime-layer/hooks.md)      |
-| **Hook: `SubagentStop`**  | サブエージェント完了時に結果検証。exit 2 でブロック可能            | [Part 7](../07-runtime-layer/hooks.md)      |
-| **Hook: `TaskCreated`**   | タスク作成時の命名規則強制、検証                                   | [Part 7](../07-runtime-layer/hooks.md)      |
-| **Hook: `TaskCompleted`** | タスク完了条件の検証                                               | [Part 7](../07-runtime-layer/hooks.md)      |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **Agents** | Execute in independent context window. Distill results back to main | [Part 5](../05-on-demand-context/agents.md) |
+| **Hook: `SubagentStart`** | Inject context when sub-agent generated | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `SubagentStop`** | Validate results on sub-agent completion. Can block with exit 2 | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `TaskCreated`** | Enforce naming conventions, validate on task creation | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `TaskCompleted`** | Validate task completion conditions | [Part 7](../07-runtime-layer/hooks.md) |
 
-### 応答完了（Stop / StopFailure）
+### Response Complete (Stop / StopFailure)
 
-| 設定レイヤー            | 何が起きるか                                                                                     | 該当 Part                              |
-| :---------------------- | :----------------------------------------------------------------------------------------------- | :------------------------------------- |
-| **Hook: `Stop`**        | 品質ゲート、続行判定。exit 2 または `decision: "block"` で Claude の停止を防止し作業を続行させる | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `StopFailure`** | API エラー時のエラーログ、アラート送信                                                           | [Part 7](../07-runtime-layer/hooks.md) |
-| **Agent Hook**          | `type: "agent"` でサブエージェントによるマルチターン検証（テスト実行等）                         | [Part 7](../07-runtime-layer/hooks.md) |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **Hook: `Stop`** | Quality gate, continuation decision. Exit 2 or `decision: "block"` prevents stop and continues work | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `StopFailure`** | Error log on API error, send alerts | [Part 7](../07-runtime-layer/hooks.md) |
+| **Agent Hook** | Sub-agent multi-turn verification (test execution, etc.) with `type: "agent"` | [Part 7](../07-runtime-layer/hooks.md) |
 
-### コンテキスト圧縮時（PreCompact / PostCompact）
+### Context Compression (PreCompact / PostCompact)
 
-| 設定レイヤー                                   | 何が起きるか                                       | 該当 Part                              |
-| :--------------------------------------------- | :------------------------------------------------- | :------------------------------------- |
-| **Hook: `PreCompact`**                         | 圧縮前の検証。重要情報の退避等                     | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `PostCompact`**                        | 圧縮後の検証                                       | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `SessionStart`**（matcher: `compact`） | 圧縮後のセッション再開時にコンテキスト再注入が可能 | [Part 7](../07-runtime-layer/hooks.md) |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **Hook: `PreCompact`** | Validate before compression. Backup critical information, etc. | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `PostCompact`** | Validate after compression | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `SessionStart`** (matcher: `compact`) | After compression, context re-injection possible on session restart | [Part 7](../07-runtime-layer/hooks.md) |
 
-### 非同期イベント（ループと並行して発火）
+### Async Events (Fire Parallel to Loop)
 
-| 設定レイヤー             | 何が起きるか                                                | 該当 Part                              |
-| :----------------------- | :---------------------------------------------------------- | :------------------------------------- |
-| **Hook: `CwdChanged`**   | 作業ディレクトリ変更時に環境変数の再読込（direnv 等）       | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `FileChanged`**  | 監視ファイルの変更検出。matcher でファイル名を指定          | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `ConfigChange`** | 設定ファイル変更時のセキュリティ監査。exit 2 でブロック可能 | [Part 7](../07-runtime-layer/hooks.md) |
-| **Hook: `Notification`** | 通知発生時のデスクトップ通知、アラート                      | [Part 7](../07-runtime-layer/hooks.md) |
+| Configuration Layer | What Happens | Related Part |
+| :--- | :--- | :--- |
+| **Hook: `CwdChanged`** | Reload environment variables on working directory change (direnv, etc.) | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `FileChanged`** | Detect watched file changes. Specify filename with matcher | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `ConfigChange`** | Security audit on config file change. Can block with exit 2 | [Part 7](../07-runtime-layer/hooks.md) |
+| **Hook: `Notification`** | Desktop notification, alert on notification event | [Part 7](../07-runtime-layer/hooks.md) |
 
-## 設定レイヤー別の作用タイミング一覧
+## Configuration Layer Timing Summary
 
-| 設定レイヤー         | 作用タイミング                                             | コンテキスト消費           |
-| :------------------- | :--------------------------------------------------------- | :------------------------- |
-| **CLAUDE.md**        | セッション開始時に注入、全ターンで常駐                     | 常時                       |
-| **`.claude/rules/`** | glob 一致するファイル操作時に注入                          | 条件時のみ                 |
-| **Skills**           | `/` 呼出 or LLM 自動判断時に注入                           | 呼出時のみ                 |
-| **Agents**           | `Agent()` / `Task()` で起動。独立コンテキスト              | メインは消費しない         |
-| **MCP ツール定義**   | セッション開始時に注入（Tool Search 時はインデックスのみ） | 常時（または検索時）       |
-| **settings.json**    | ランタイムで常時適用                                       | なし                       |
-| **Hooks**            | 各ライフサイクルイベントで発火                             | なし（Prompt Hook を除く） |
+| Configuration Layer | Active Timing | Context Consumption |
+| :--- | :--- | :--- |
+| **CLAUDE.md** | Injected on session start, resident across all turns | Always |
+| **`.claude/rules/`** | Injected when glob matches file operation | Conditional only |
+| **Skills** | Injected on `/` invocation or LLM auto-judgment | On invocation only |
+| **Agents** | Started with `Agent()` / `Task()`. Independent context | Main doesn't consume |
+| **MCP tool definitions** | Injected on session start (index-only with Tool Search) | Always (or on search) |
+| **settings.json** | Always applied at runtime | None |
+| **Hooks** | Fire at each lifecycle event | None (except Prompt Hook) |
 
 > [!TIP]
-> `problem-countermeasure-map.md` が「構造的問題 → どの設定で対策するか」を示すのに対し、このページは「ライフサイクルのどのフェーズで → どの設定が作用するか」を示す。両方を合わせて読むと、設定の全体像が立体的に理解できる。
+> While `problem-countermeasure-map.md` shows "structural problem → which configuration solves it," this page shows "which phase of the lifecycle → which configuration is active." Reading both together gives a three-dimensional understanding of the configuration landscape.
 
 ---
 
 > [!NOTE]
-> Hook イベントの詳細（JSON 入出力スキーマ、matcher の仕様等）は公式リファレンスを参照:
+> For detailed Hook events (JSON input/output schema, matcher specs, etc.), see the official reference:
 > [Hooks reference](https://code.claude.com/docs/en/hooks) | [Hooks guide](https://code.claude.com/docs/en/hooks-guide)

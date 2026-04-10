@@ -1,106 +1,108 @@
-# 構造的問題 × Claude Code 対策マップ（詳細版）
+🌐 [日本語](../ja/appendix/problem-countermeasure-map.md)
+
+# Structural Problems × Claude Code Countermeasures Map (Detailed)
 
 > [!NOTE]
-> 8つの構造的問題と Claude Code の各機能の対応関係を詳細に示す。
+> Detailed correspondence between the 8 structural problems and Claude Code features.
 
-## 対策マップ
+## Countermeasure Map
 
-### Context Rot（トークン増で品質劣化）
+### Context Rot (Quality Degradation with More Tokens)
 
-| 対策                | 分類                 | 効果                                             |
-| :------------------ | :------------------- | :----------------------------------------------- |
-| `/compact`          | セッション管理       | 会話履歴を圧縮してトークン数を削減               |
-| `/clear`            | セッション管理       | セッションをリセットして新鮮なコンテキストで再開 |
-| CLAUDE.md 200行制限 | 常駐コンテキスト     | 固定費を最小化                                   |
-| `.claude/rules/`    | 条件付きコンテキスト | 不要なルールの注入を防ぐ                         |
-| Skills              | オンデマンド         | 必要時のみ展開                                   |
-| Agents              | オンデマンド         | 独立コンテキストで根本回避                       |
-| MCP Tool Search     | ツール定義           | ツール定義を遅延ロード                           |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| `/compact` | Session Management | Compress conversation history to reduce token count |
+| `/clear` | Session Management | Reset session to start with fresh context |
+| CLAUDE.md 200-line limit | Resident Context | Minimize fixed cost |
+| `.claude/rules/` | Conditional Context | Prevent unnecessary rule injection |
+| Skills | On-Demand | Deploy only when needed |
+| Agents | On-Demand | Avoid root cause with independent context |
+| MCP Tool Search | Tool Definition | Lazy-load tool definitions |
 
-### Lost in the Middle（中間部の情報喪失）
+### Lost in the Middle (Information Loss in Middle of Context)
 
-| 対策                  | 分類                 | 効果                                 |
-| :-------------------- | :------------------- | :----------------------------------- |
-| `/compact`（50%閾値） | セッション管理       | U字カーブ崩壊前に圧縮                |
-| `.claude/rules/`      | 条件付きコンテキスト | 必要なルールだけを高注意位置に注入   |
-| Agents                | オンデマンド         | 新鮮なコンテキストで中間部問題を回避 |
-| Skills                | オンデマンド         | 末尾近くに注入し高注意位置に配置     |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| `/compact` (50% threshold) | Session Management | Compress before U-curve collapse |
+| `.claude/rules/` | Conditional Context | Inject only necessary rules at high-attention positions |
+| Agents | On-Demand | Avoid middle problem with fresh context |
+| Skills | On-Demand | Inject near end for high-attention placement |
 
-### Priority Saturation（指示過多で遵守率低下）
+### Priority Saturation (Reduced Compliance with Too Many Instructions)
 
-| 対策                | 分類                 | 効果                                   |
-| :------------------ | :------------------- | :------------------------------------- |
-| CLAUDE.md 200行制限 | 常駐コンテキスト     | 同時有効指示数を劣化閾値以下に         |
-| `.claude/rules/`    | 条件付きコンテキスト | 指示を条件付きで分散                   |
-| Skills              | オンデマンド         | タスク固有の指示を必要時のみロード     |
-| Hooks               | ランタイム           | 機械的ルールをコンテキスト予算から除外 |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| CLAUDE.md 200-line limit | Resident Context | Keep simultaneous active instructions below degradation threshold |
+| `.claude/rules/` | Conditional Context | Distribute instructions conditionally |
+| Skills | On-Demand | Load task-specific instructions only when needed |
+| Hooks | Runtime | Exclude mechanical rules from context budget |
 
-### Hallucination（構造的に不可避な幻覚）
+### Hallucination (Structurally Unavoidable)
 
-| 対策                     | 分類             | 効果                                               |
-| :----------------------- | :--------------- | :------------------------------------------------- |
-| Hooks（テスト実行）      | ランタイム       | コンパイラ・テストランナーはハルシネーションしない |
-| Cross-Model QA（Agents） | オンデマンド     | 異なるモデルでの検証                               |
-| MCP                      | ツール定義       | 外部の信頼できるソースを参照                       |
-| CLAUDE.md                | 常駐コンテキスト | 制約・バージョン情報を明示                         |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| Hooks (test execution) | Runtime | Compilers and test runners don't hallucinate |
+| Cross-Model QA (Agents) | On-Demand | Verification across different models |
+| MCP | Tool Definition | Reference external trusted sources |
+| CLAUDE.md | Resident Context | Make constraints and version info explicit |
 
-### Sycophancy（正確性より同意を優先）
+### Sycophancy (Prioritizing Agreement Over Accuracy)
 
-| 対策                     | 分類             | 効果                         |
-| :----------------------- | :--------------- | :--------------------------- |
-| Agents（Cross-Model QA） | オンデマンド     | 同じ追従バイアスを共有しない |
-| Hooks                    | ランタイム       | 追従しない機械的検証         |
-| CLAUDE.md（反論指示）    | 常駐コンテキスト | 「問題を見つけろ」と明示指示 |
-| テストコード             | 外部検証         | 客観的事実による防波堤       |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| Agents (Cross-Model QA) | On-Demand | Different models don't share the same conformity bias |
+| Hooks | Runtime | Mechanical verification without conformity bias |
+| CLAUDE.md (contradiction instruction) | Resident Context | Explicit instruction to "find problems" |
+| Test Code | External Validation | Objective facts as a safeguard |
 
-### Knowledge Boundary（「知らない」と言えない）
+### Knowledge Boundary (Inability to Say "I Don't Know")
 
-| 対策                        | 分類             | 効果                               |
-| :-------------------------- | :--------------- | :--------------------------------- |
-| MCP（外部知識参照）         | ツール定義       | 知識境界を外部に拡張               |
-| CLAUDE.md（バージョン明示） | 常駐コンテキスト | 「どの時点の知識を使うか」を指定   |
-| Agents（知識の分離）        | オンデマンド     | 知識領域を狭めて境界超過確率を低減 |
-| テストコード                | 外部検証         | 知識境界を超えた出力の結果を検出   |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| MCP (external knowledge reference) | Tool Definition | Extend knowledge boundary externally |
+| CLAUDE.md (explicit version) | Resident Context | Specify "which point in time's knowledge to use" |
+| Agents (knowledge separation) | On-Demand | Narrow knowledge domain to reduce boundary crossing probability |
+| Test Code | External Validation | Detect outputs that exceed knowledge boundary |
 
-### Prompt Sensitivity（表現で結果が変動）
+### Prompt Sensitivity (Results Vary by Expression)
 
-| 対策               | 分類                 | 効果                                   |
-| :----------------- | :------------------- | :------------------------------------- |
-| CLAUDE.md の書き方 | 常駐コンテキスト     | 具体的・命令的記述で曖昧さを排除       |
-| Skills description | オンデマンド         | 多様な表現をカバーして呼び出し精度向上 |
-| `.claude/rules/`   | 条件付きコンテキスト | 同時指示数削減で感受性悪化を防止       |
-| Hooks・テスト      | ランタイム           | プロンプト表現に依存しない検証         |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| CLAUDE.md writing style | Resident Context | Specific and imperative writing removes ambiguity |
+| Skills description | On-Demand | Diverse expressions improve invocation accuracy |
+| `.claude/rules/` | Conditional Context | Reduced simultaneous instructions prevent sensitivity degradation |
+| Hooks and tests | Runtime | Verification independent of prompt expression |
 
-### Instruction Decay（長会話でルール忘却）
+### Instruction Decay (Rule Forgetting in Long Conversations)
 
-| 対策         | 分類           | 効果                           |
-| :----------- | :------------- | :----------------------------- |
-| `/compact`   | セッション管理 | 50%使用率前に予防的圧縮        |
-| `/clear`     | セッション管理 | セッション分割で劣化をリセット |
-| Hooks        | ランタイム     | コンテキスト依存しない強制実行 |
-| Agents       | オンデマンド   | 新鮮なコンテキストでタスク実行 |
-| Git コミット | 外部永続化     | 劣化出力のロールバックを容易に |
+| Countermeasure | Category | Effect |
+| :--- | :--- | :--- |
+| `/compact` | Session Management | Preventive compression before 50% usage |
+| `/clear` | Session Management | Reset degradation by splitting sessions |
+| Hooks | Runtime | Force execution independent of context |
+| Agents | On-Demand | Execute task with fresh context |
+| Git commits | External Persistence | Easy rollback of degraded output |
 
-## 全体マップ（視覚版）
+## Full Map (Visual)
 
-上記の対策マップを、対策カテゴリの視点から可視化する。各図は「この対策がどの問題に効くか」を示す。
+Visualize the above countermeasure map from the perspective of countermeasure categories. Each diagram shows "which problems this countermeasure addresses."
 
-### セッション管理 — `/compact` `/clear`
+### Session Management — `/compact` `/clear`
 
 ```mermaid
 graph LR
-    COMPACT(["/compact 会話履歴を圧縮"])
-    CLEAR(["/clear セッションをリセット"])
+    COMPACT(["/compact Compress history"])
+    CLEAR(["/clear Reset session"])
 
     CR["Context Rot"]
     LM["Lost in the Middle"]
     ID["Instruction Decay"]
 
-    COMPACT -->|"トークン数を削減"| CR
-    COMPACT -->|"50%閾値で<br/>U字カーブ崩壊前に圧縮"| LM
-    COMPACT -->|"予防的圧縮"| ID
-    CLEAR -->|"新鮮なコンテキスト<br/>で再開"| CR
-    CLEAR -->|"劣化をリセット"| ID
+    COMPACT -->|"Reduce token count"| CR
+    COMPACT -->|"Compress before<br/>U-curve collapse at 50%"| LM
+    COMPACT -->|"Preventive compression"| ID
+    CLEAR -->|"Restart with<br/>fresh context"| CR
+    CLEAR -->|"Reset degradation"| ID
 
     classDef countermeasure fill:#eff6ff,stroke:#1d4ed8,color:#1e40af,font-weight:bold
     classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000,font-weight:bold
@@ -112,11 +114,11 @@ graph LR
     class ID id
 ```
 
-### 常駐コンテキスト — CLAUDE.md（200行制限）
+### Resident Context — CLAUDE.md (200-line limit)
 
 ```mermaid
 graph LR
-    CMD(["CLAUDE.md 200行制限"])
+    CMD(["CLAUDE.md 200-line limit"])
 
     CR["Context Rot"]
     PS["Priority Saturation"]
@@ -125,12 +127,12 @@ graph LR
     KB["Knowledge Boundary"]
     PM["Prompt Sensitivity"]
 
-    CMD -->|"固定費を最小化"| CR
-    CMD -->|"同時有効指示数を<br/>劣化閾値以下に"| PS
-    CMD -->|"制約・バージョン<br/>情報を明示"| HL
-    CMD -->|"「問題を見つけろ」<br/>と明示指示"| SY
-    CMD -->|"どの時点の知識を<br/>使うか指定"| KB
-    CMD -->|"具体的・命令的記述で<br/>曖昧さを排除"| PM
+    CMD -->|"Minimize fixed cost"| CR
+    CMD -->|"Keep simultaneous active<br/>instructions below<br/>degradation threshold"| PS
+    CMD -->|"Make constraints &<br/>version info explicit"| HL
+    CMD -->|"Explicit instruction to<br/>find problems"| SY
+    CMD -->|"Specify which point in<br/>time's knowledge to use"| KB
+    CMD -->|"Specific & imperative<br/>writing removes ambiguity"| PM
 
     classDef countermeasure fill:#eff6ff,stroke:#1d4ed8,color:#1e40af,font-weight:bold
     classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000,font-weight:bold
@@ -148,21 +150,21 @@ graph LR
     class PM pm
 ```
 
-### 条件付きコンテキスト — `.claude/rules/`
+### Conditional Context — `.claude/rules/`
 
 ```mermaid
 graph LR
-    RULES([".claude/rules/ 条件付き注入"])
+    RULES([".claude/rules/ Conditional injection"])
 
     CR["Context Rot"]
     LM["Lost in the Middle"]
     PS["Priority Saturation"]
     PM["Prompt Sensitivity"]
 
-    RULES -->|"不要なルールの<br/>注入を防ぐ"| CR
-    RULES -->|"必要なルールだけを<br/>高注意位置に注入"| LM
-    RULES -->|"指示を条件付きで分散"| PS
-    RULES -->|"同時指示数削減で<br/>感受性悪化を防止"| PM
+    RULES -->|"Prevent unnecessary<br/>rule injection"| CR
+    RULES -->|"Inject necessary rules<br/>only at high-attention<br/>positions"| LM
+    RULES -->|"Distribute instructions<br/>conditionally"| PS
+    RULES -->|"Reduced simultaneous<br/>instructions prevent<br/>sensitivity degradation"| PM
 
     classDef countermeasure fill:#eff6ff,stroke:#1d4ed8,color:#1e40af,font-weight:bold
     classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000,font-weight:bold
@@ -176,12 +178,12 @@ graph LR
     class PM pm
 ```
 
-### オンデマンドコンテキスト — Skills & Agents
+### On-Demand Context — Skills & Agents
 
 ```mermaid
 graph LR
-    SKILLS(["Skills メインコンテキスト内展開"])
-    AGENTS(["Agents 独立コンテキスト"])
+    SKILLS(["Skills Deploy in main context"])
+    AGENTS(["Agents Independent context"])
 
     CR["Context Rot"]
     LM["Lost in the Middle"]
@@ -192,17 +194,17 @@ graph LR
     PM["Prompt Sensitivity"]
     ID["Instruction Decay"]
 
-    SKILLS -->|"必要時のみ展開"| CR
-    SKILLS -->|"末尾近くに注入"| LM
-    SKILLS -->|"タスク固有の指示を<br/>必要時のみロード"| PS
-    SKILLS -->|"多様な表現をカバー"| PM
+    SKILLS -->|"Deploy only when<br/>needed"| CR
+    SKILLS -->|"Inject near end"| LM
+    SKILLS -->|"Load task-specific<br/>instructions only when<br/>needed"| PS
+    SKILLS -->|"Diverse expressions<br/>improve accuracy"| PM
 
-    AGENTS -->|"根本回避<br/>（別コンテキスト）"| CR
-    AGENTS -->|"中間部問題を回避"| LM
+    AGENTS -->|"Root cause avoidance<br/>(separate context)"| CR
+    AGENTS -->|"Avoid middle<br/>problem"| LM
     AGENTS -->|"Cross-Model QA"| HL
-    AGENTS -->|"異なる追従バイアス"| SY
-    AGENTS -->|"知識領域を狭める"| KB
-    AGENTS -->|"新鮮なコンテキスト<br/>でタスク実行"| ID
+    AGENTS -->|"Different conformity<br/>bias"| SY
+    AGENTS -->|"Narrow knowledge<br/>domain"| KB
+    AGENTS -->|"Execute task with<br/>fresh context"| ID
 
     classDef countermeasure fill:#eff6ff,stroke:#1d4ed8,color:#1e40af,font-weight:bold
     classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000,font-weight:bold
@@ -224,11 +226,11 @@ graph LR
     class ID id
 ```
 
-### ランタイム — Hooks
+### Runtime — Hooks
 
 ```mermaid
 graph LR
-    HOOKS(["Hooks コンテキスト外で実行"])
+    HOOKS(["Hooks Execute outside context"])
 
     PS["Priority Saturation"]
     HL["Hallucination"]
@@ -236,11 +238,11 @@ graph LR
     PM["Prompt Sensitivity"]
     ID["Instruction Decay"]
 
-    HOOKS -->|"機械的ルールを<br/>予算から除外"| PS
-    HOOKS -->|"コンパイラ・テストは<br/>ハルシネーションしない"| HL
-    HOOKS -->|"追従しない<br/>機械的検証"| SY
-    HOOKS -->|"プロンプト表現に<br/>依存しない検証"| PM
-    HOOKS -->|"コンテキスト依存しない<br/>強制実行"| ID
+    HOOKS -->|"Exclude mechanical<br/>rules from budget"| PS
+    HOOKS -->|"Compiler & tests<br/>don't hallucinate"| HL
+    HOOKS -->|"Mechanical verification<br/>without conformity bias"| SY
+    HOOKS -->|"Verification independent<br/>of prompt expression"| PM
+    HOOKS -->|"Force execution<br/>independent of context"| ID
 
     classDef countermeasure fill:#eff6ff,stroke:#1d4ed8,color:#1e40af,font-weight:bold
     classDef ps fill:#fef9c3,stroke:#a16207,color:#000,font-weight:bold
@@ -256,20 +258,20 @@ graph LR
     class ID id
 ```
 
-### ツール定義 — MCP & Tool Search
+### Tool Definition — MCP & Tool Search
 
 ```mermaid
 graph LR
-    MCP(["MCP 外部知識参照"])
-    TS(["Tool Search 遅延ロード"])
+    MCP(["MCP Reference external knowledge"])
+    TS(["Tool Search Lazy-load"])
 
     CR["Context Rot"]
     HL["Hallucination"]
     KB["Knowledge Boundary"]
 
-    MCP -->|"外部の信頼できる<br/>ソースを参照"| HL
-    MCP -->|"知識境界を<br/>外部に拡張"| KB
-    TS -->|"ツール定義を<br/>遅延ロード"| CR
+    MCP -->|"Reference external<br/>trusted sources"| HL
+    MCP -->|"Extend knowledge<br/>boundary externally"| KB
+    TS -->|"Lazy-load tool<br/>definitions"| CR
 
     classDef countermeasure fill:#eff6ff,stroke:#1d4ed8,color:#1e40af,font-weight:bold
     classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000,font-weight:bold
@@ -281,59 +283,59 @@ graph LR
     class KB kb
 ```
 
-## 統合全体マップ — 問題の連鎖 × 対策の配置
+## Integrated Full Map — Problem Chain × Countermeasure Placement
 
-8つの構造的問題がどう連鎖し、Claude Code の各機能がどこに介入するかの全体像。
+The complete picture of how the 8 structural problems interconnect and where Claude Code features intervene.
 
 ```mermaid
 graph TD
     %% ════════════════════════════════
-    %% 構造的問題 ■ 四角・問題ごとに固有色
+    %% Structural Problems ■ Rectangle, unique color per type
     %% ════════════════════════════════
-    CR["Context Rot<br/>トークン増で品質劣化"]
-    LM["Lost in the Middle<br/>中間部の情報喪失"]
-    PS["Priority Saturation<br/>指示過多で遵守率低下"]
-    HL["Hallucination<br/>構造的に不可避な幻覚"]
-    SY["Sycophancy<br/>正確性より同意を優先"]
-    KB["Knowledge Boundary<br/>「知らない」と言えない"]
-    PM["Prompt Sensitivity<br/>表現で結果が変動"]
-    ID["Instruction Decay<br/>長会話でルール忘却"]
+    CR["Context Rot<br/>Quality degradation with<br/>more tokens"]
+    LM["Lost in the Middle<br/>Information loss in<br/>middle of context"]
+    PS["Priority Saturation<br/>Reduced compliance with<br/>too many instructions"]
+    HL["Hallucination<br/>Structurally unavoidable"]
+    SY["Sycophancy<br/>Prioritizing agreement<br/>over accuracy"]
+    KB["Knowledge Boundary<br/>Inability to say<br/>'I don't know'"]
+    PM["Prompt Sensitivity<br/>Results vary by<br/>expression"]
+    ID["Instruction Decay<br/>Rule forgetting in<br/>long conversations"]
 
-    %% ── 問題間の連鎖（実線） ──
-    CR -->|"注意希薄化"| LM
-    CR -->|"有効性低下"| PS
-    CR -->|"率が上昇"| HL
-    CR -->|"気づかず追従"| SY
-    LM -->|"指示が無視"| PS
-    LM -->|"制約見落とし"| SY
-    PS -->|"表現に左右"| PM
-    PS -->|"制約見落とし"| HL
-    KB -->|"誤答を生成"| HL
-    KB -->|"期待に合わせる"| SY
-    SY -->|"追認・増幅"| HL
-    HL -->|"同意で確定"| SY
+    %% ── Problem chain (solid lines) ──
+    CR -->|"Reduced attention"| LM
+    CR -->|"Decreased effectiveness"| PS
+    CR -->|"Increased rate"| HL
+    CR -->|"Unaware conformity"| SY
+    LM -->|"Ignored instructions"| PS
+    LM -->|"Overlooked constraints"| SY
+    PS -->|"Influenced by expression"| PM
+    PS -->|"Overlooked constraints"| HL
+    KB -->|"Generate wrong answers"| HL
+    KB -->|"Conform to expectations"| SY
+    SY -->|"Confirm & amplify"| HL
+    HL -->|"Confirm through agreement"| SY
 
-    %% ── 全問題 → Instruction Decay ──
-    CR -->|"蓄積"| ID
-    LM -->|"忘却加速"| ID
-    PS -->|"優先度低下"| ID
-    HL -->|"基盤劣化"| ID
-    SY -->|"修正困難"| ID
-    PM -->|"意図からズレ"| ID
+    %% ── All problems → Instruction Decay ──
+    CR -->|"Accumulation"| ID
+    LM -->|"Accelerated forgetting"| ID
+    PS -->|"Priority decrease"| ID
+    HL -->|"Foundation degradation"| ID
+    SY -->|"Hard to correct"| ID
+    PM -->|"Drift from intent"| ID
 
     %% ════════════════════════════════
-    %% 対策 ⬮ 角丸・青系統一
+    %% Countermeasures ⬮ Rounded, unified blue
     %% ════════════════════════════════
-    COMPACT(["/compact 履歴圧縮"])
-    CLEAR(["/clear リセット"])
-    CMD(["CLAUDE.md 200行制限"])
-    RULES([".claude/rules/ 条件付き注入"])
-    SKILLS(["Skills オンデマンド"])
-    AGENTS(["Agents 独立コンテキスト"])
-    HOOKS(["Hooks コンテキスト外"])
-    MCP(["MCP 外部知識参照"])
+    COMPACT(["/compact Compress history"])
+    CLEAR(["/clear Reset"])
+    CMD(["CLAUDE.md 200-line limit"])
+    RULES([".claude/rules/ Conditional injection"])
+    SKILLS(["Skills On-demand"])
+    AGENTS(["Agents Independent context"])
+    HOOKS(["Hooks Context-external"])
+    MCP(["MCP Reference external"])
 
-    %% ── 対策 → 問題（点線で介入） ──
+    %% ── Countermeasures → Problems (dotted for intervention) ──
     COMPACT -.-> CR
     COMPACT -.-> LM
     COMPACT -.-> ID
@@ -371,7 +373,7 @@ graph TD
     MCP -.-> KB
 
     %% ════════════════════════════════
-    %% スタイル — 問題は固有色、対策は青統一
+    %% Styles — problems unique colors, countermeasures unified blue
     %% ════════════════════════════════
     classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000,font-weight:bold
     classDef lm fill:#ffedd5,stroke:#c2410c,color:#000,font-weight:bold
@@ -394,17 +396,17 @@ graph TD
     class COMPACT,CLEAR,CMD,RULES,SKILLS,AGENTS,HOOKS,MCP countermeasure
 ```
 
-**読み方**:
+**How to Read:**
 
-| 要素 | 形 | 意味 |
+| Element | Shape | Meaning |
 |:--|:--|:--|
-| ■ 四角ノード（各色） | 構造的問題（色で種類を区別） |
-| ⬮ 角丸ノード（青） | Claude Code の対策 |
-| **実線 →** | 問題が別の問題を引き起こす・増幅する |
-| **点線 -.->** | 対策が問題に介入するポイント |
+| ■ Rectangle nodes (color-coded) | Structural problems (color indicates type) |
+| ⬮ Rounded nodes (blue) | Claude Code countermeasures |
+| **Solid →** | Problem causes or amplifies another problem |
+| **Dotted -.->** | Countermeasure intervenes at this point |
 
 ---
 
-> **次へ**: [Claude Code 設定ファイル一覧](claude-code-config-reference.md)
+> **Next**: [Claude Code Configuration File Reference](claude-code-config-reference.md)
 
-> [対策マップ表（概要版）](../01-llm-structural-problems/index.md#構造的問題--claude-code-対策マップ) も参照
+> [Countermeasure Map (Overview)](../01-llm-structural-problems/index.md#structural-problems--claude-code-countermeasures-map) also available
