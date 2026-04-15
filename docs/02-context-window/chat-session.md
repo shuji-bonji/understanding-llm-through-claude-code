@@ -1,3 +1,8 @@
+---
+title: "Chat / Session"
+description: "How chat sessions act as the temporal container that accumulates context over turns, and why session boundaries matter."
+---
+
 🌐 [日本語](../ja/02-context-window/chat-session.md)
 
 # Chat / Session — The "Container of Time" Where Context Accumulates

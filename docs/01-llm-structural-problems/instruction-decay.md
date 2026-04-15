@@ -1,3 +1,8 @@
+---
+title: "Instruction Decay"
+description: "Why LLMs gradually forget instructions during long conversations, and how rule placement and re-injection mitigate it."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/instruction-decay.md)
 
 # Instruction Decay — Forgetting Rules in Long Conversations

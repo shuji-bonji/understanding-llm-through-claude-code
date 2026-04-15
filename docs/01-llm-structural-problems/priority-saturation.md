@@ -1,3 +1,8 @@
+---
+title: "Priority Saturation"
+description: "Why LLM compliance with individual instructions drops as total instruction count grows — the priority saturation effect."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/priority-saturation.md)
 
 # Priority Saturation — Compliance Rates Degrade When Instructions Accumulate

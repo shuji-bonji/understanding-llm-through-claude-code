@@ -1,3 +1,8 @@
+---
+title: "What the LLM Sees"
+description: "What actually enters the LLM's context window each turn, and how to reason about prompt construction from the model's perspective."
+---
+
 🌐 [日本語](../ja/02-context-window/what-llm-sees.md)
 
 # What Is the Context Window? — What the LLM "Sees"

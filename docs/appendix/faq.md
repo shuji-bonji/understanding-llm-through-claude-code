@@ -1,3 +1,8 @@
+---
+title: "FAQ"
+description: "Frequently asked questions about the structural problems of LLMs and the Claude Code design decisions covered in this guide."
+---
+
 🌐 [日本語](../ja/appendix/faq.md)
 
 # FAQ — Frequently Asked Questions and Design Decisions

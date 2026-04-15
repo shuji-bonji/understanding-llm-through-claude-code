@@ -1,3 +1,8 @@
+---
+title: "Knowledge Boundary"
+description: "Why LLMs fabricate answers instead of saying \"I don't know,\" and what signals reveal when a model is past its knowledge boundary."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/knowledge-boundary.md)
 
 # Knowledge Boundary — LLMs Cannot Admit What They Don't Know

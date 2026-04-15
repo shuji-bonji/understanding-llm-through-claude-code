@@ -1,3 +1,8 @@
+---
+title: "Part 8: Session Management"
+description: "How session boundaries and memory persistence shape what the LLM remembers across turns, and what carries over between sessions."
+---
+
 🌐 [日本語](../ja/08-session-management/index.md)
 
 # Part 8: Session Management and Memory Persistence

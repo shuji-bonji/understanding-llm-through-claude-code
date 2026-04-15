@@ -1,3 +1,8 @@
+---
+title: "Hallucination"
+description: "Why LLMs generate confident-sounding false statements as a structural outcome of next-token prediction, not a correctable bug."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/hallucination.md)
 
 # Hallucination — LLMs Structurally Generate False Information

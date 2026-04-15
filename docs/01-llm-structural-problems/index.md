@@ -1,3 +1,8 @@
+---
+title: "Part 1: LLM Structural Problems"
+description: "Overview of the eight structural constraints every LLM faces: context rot, lost in the middle, hallucination, and more."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/index.md)
 
 # Part 1: Understanding the Structural Constraints of LLMs

@@ -1,3 +1,8 @@
+---
+title: "Context Budget"
+description: "How to think about the context window as a finite token budget, and why allocation strategy determines what the LLM actually sees."
+---
+
 🌐 [日本語](../ja/02-context-window/context-budget.md)
 
 # Context Budget: Thinking in Terms of Token Allocation

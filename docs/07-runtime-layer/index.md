@@ -1,3 +1,8 @@
+---
+title: "Part 7: Runtime Layer"
+description: "The runtime configuration layer (Settings & Hooks) that shapes tool behavior without ever appearing in the LLM's context."
+---
+
 🌐 [日本語](../ja/07-runtime-layer/index.md)
 
 # Part 7: The Layer LLMs Don't See — Settings & Hooks

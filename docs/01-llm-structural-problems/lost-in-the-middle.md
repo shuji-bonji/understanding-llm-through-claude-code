@@ -1,3 +1,8 @@
+---
+title: "Lost in the Middle"
+description: "The documented failure mode where LLMs attend to the start and end of context but miss information placed in the middle."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/lost-in-the-middle.md)
 
 # Lost in the Middle — Ignoring Information in the Middle of Context

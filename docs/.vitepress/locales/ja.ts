@@ -2,6 +2,7 @@ import type { DefaultTheme, LocaleSpecificConfig } from 'vitepress';
 
 export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 	description: 'LLMはなぜ幻覚を見るのか、指示を忘れるのか、文脈を失うのか。Claude Codeの多層設計が各問題をどう解決するかを学ぶ、無料のオープンソースガイド。',
+	titleTemplate: ':title | Claude CodeでLLMを学ぶ',
 	head: [
 		['meta', { property: 'og:image', content: 'https://shuji-bonji.github.io/understanding-llm-through-claude-code/og-image-ja.png' }],
 		['meta', { name: 'twitter:image', content: 'https://shuji-bonji.github.io/understanding-llm-through-claude-code/og-image-ja.png' }],

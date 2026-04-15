@@ -7,7 +7,7 @@ export default withMermaid(
 	defineConfig({
 		title: 'Understanding LLMs',
 		description: 'Learn why LLMs hallucinate, forget instructions, and lose context — and how Claude Code\'s layered design solves each problem. A free, open-source guide.',
-		titleTemplate: ':title | Understanding LLMs Through Claude Code',
+		titleTemplate: ':title | Understanding LLMs',
 
 		base: '/understanding-llm-through-claude-code/',
 

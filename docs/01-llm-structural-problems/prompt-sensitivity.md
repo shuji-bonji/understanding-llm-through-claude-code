@@ -1,3 +1,8 @@
+---
+title: "Prompt Sensitivity"
+description: "Why semantically equivalent prompts produce different outputs, and what this means for reproducibility in LLM-based systems."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/prompt-sensitivity.md)
 
 # Prompt Sensitivity — Same Meaning, Different Results

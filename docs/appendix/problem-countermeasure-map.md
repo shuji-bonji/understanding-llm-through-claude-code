@@ -1,3 +1,8 @@
+---
+title: "Problem × Countermeasure Map"
+description: "Detailed mapping of LLM structural problems to the Claude Code design decisions that mitigate each one."
+---
+
 🌐 [日本語](../ja/appendix/problem-countermeasure-map.md)
 
 # Structural Problems × Claude Code Countermeasures Map (Detailed)

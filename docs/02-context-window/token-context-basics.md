@@ -1,3 +1,8 @@
+---
+title: "Token, Context, Context Window"
+description: "The three foundational concepts you need to reason about LLM behavior: tokens, context, and the context window."
+---
+
 🌐 [日本語](../ja/02-context-window/token-context-basics.md)
 
 # Token, Context, and Context Window — Three Foundational Concepts

@@ -1,3 +1,8 @@
+---
+title: "Universal Structural Constraints"
+description: "Structural constraints that affect every LLM regardless of vendor: context limits, hallucination, instruction decay, and more."
+---
+
 🌐 [日本語](../ja/09-cross-llm-principles/universal-patterns.md)
 
 # Structural Constraints Are Universal Across All Models

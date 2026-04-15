@@ -1,3 +1,8 @@
+---
+title: "Context Rot"
+description: "Why output quality measurably degrades as token count grows, even within the official context window."
+---
+
 🌐 [日本語](../ja/01-llm-structural-problems/context-rot.md)
 
 # Context Rot — Output Quality Degrades as Token Count Increases
