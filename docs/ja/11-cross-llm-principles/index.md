@@ -1,6 +1,6 @@
-🌐 [English](../../09-cross-llm-principles/index.md)
+🌐 [English](../../11-cross-llm-principles/index.md)
 
-# Part 9: 他LLMへの応用
+# Part 11: 他LLMへの応用
 
 > [!NOTE]
 > Claude Code 固有の知識を他ツール・他LLMに応用可能な形に昇華する。
@@ -22,4 +22,4 @@
 
 ---
 
-> **前へ**: [Part 8: セッション管理と記憶の永続化](../08-session-management/index.md)
+> **前へ**: [Part 9: コード世界の接地 — Code Intelligence](../09-code-intelligence/index.md)

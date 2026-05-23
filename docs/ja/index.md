@@ -27,7 +27,10 @@ features:
   - title: "Part 8: セッション管理"
     details: /compact、/clear、セッション間で何を永続化すべきか
     link: /ja/08-session-management/
-  - title: "Part 9: 他LLMへの応用"
+  - title: "Part 9: Code Intelligence"
+    details: LSP によるコードシンボルへの接地 — MCP と並ぶ「事実への接地」の第二の柱
+    link: /ja/09-code-intelligence/
+  - title: "Part 11: 他LLMへの応用"
     details: Cursor、Cline、Copilot にも適用できる普遍的パターン
-    link: /ja/09-cross-llm-principles/
+    link: /ja/11-cross-llm-principles/
 ---

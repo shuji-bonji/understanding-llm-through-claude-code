@@ -1,4 +1,4 @@
-🌐 [English](../../09-cross-llm-principles/cursor-cline-mapping.md)
+🌐 [English](../../11-cross-llm-principles/cursor-cline-mapping.md)
 
 # Cursor / Cline / Copilot 対応表
 

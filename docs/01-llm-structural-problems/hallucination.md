@@ -66,6 +66,7 @@ Hallucination cannot be eliminated. Mitigation is based on a **detection and man
 | **Cross-Model QA** | Review by different models (Agents) | Two models simultaneously hallucinating the same error is unlikely |
 | **CLAUDE.md Constraints** | Explicit version information and forbidden patterns | Narrows the domain where hallucinations can occur |
 | **MCP External References** | Direct reference to trusted external sources | Based on external facts, not internal LLM knowledge |
+| **Code Intelligence (LSP)** | Symbol-level grounding via language server | See [Part 9](../09-code-intelligence/hallucination-and-symbols.md) — confirms symbols exist before code is committed |
 | **Agents (Knowledge Separation)** | Delegate specific domains to specialized agents | Narrower knowledge domain reduces hallucination probability |
 
 ## Paradigm Shift: From Elimination to Management

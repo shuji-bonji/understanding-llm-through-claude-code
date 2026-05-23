@@ -97,14 +97,24 @@ Three projects connect in a "Learn → Understand → Apply" sequence.
 - [When and How to Recall](docs/08-session-management/when-to-recall.md)
 - [Tool Comparison and Selection Criteria](docs/08-session-management/tools-comparison.md)
 
-### Part 9: Applying to Other LLMs
+### Part 9: Code-World Grounding — Code Intelligence
+
+> Grounding the LLM in the symbols, types, and references that exist inside the repository. → Why: Hallucination / Knowledge Boundary countermeasures
+
+- [Overview](docs/09-code-intelligence/index.md)
+- [LSP as Grounding](docs/09-code-intelligence/lsp-as-grounding.md)
+- [Hallucination and Symbols](docs/09-code-intelligence/hallucination-and-symbols.md)
+- [Live Type Errors](docs/09-code-intelligence/live-type-errors.md)
+- [Grep / Read / LSP — Which Tool When?](docs/09-code-intelligence/vs-grep-vs-read.md)
+
+### Part 11: Applying to Other LLMs
 
 > Elevating Claude Code-specific knowledge into universally applicable principles.
 
-- [Overview](docs/09-cross-llm-principles/index.md)
-- [Structural Constraints Are Universal](docs/09-cross-llm-principles/universal-patterns.md)
-- [Practice Without Tool Support](docs/09-cross-llm-principles/prompt-driven-development.md)
-- [Cursor / Cline / Copilot Mapping](docs/09-cross-llm-principles/cursor-cline-mapping.md)
+- [Overview](docs/11-cross-llm-principles/index.md)
+- [Structural Constraints Are Universal](docs/11-cross-llm-principles/universal-patterns.md)
+- [Practice Without Tool Support](docs/11-cross-llm-principles/prompt-driven-development.md)
+- [Cursor / Cline / Copilot Mapping](docs/11-cross-llm-principles/cursor-cline-mapping.md)
 
 ### Appendix
 

@@ -1,4 +1,4 @@
-🌐 [English](../../09-cross-llm-principles/universal-patterns.md)
+🌐 [English](../../11-cross-llm-principles/universal-patterns.md)
 
 # 構造的制約は全モデル共通
 
@@ -44,6 +44,6 @@ Claude Code が採用している対策の原理は、ツールが変わって�
 
 ---
 
-> **前へ**: [Part 9: 他LLMへの応用](index.md)
+> **前へ**: [Part 11: 他LLMへの応用](index.md)
 
 > **次へ**: [ツール支援がない環境での実践](prompt-driven-development.md)

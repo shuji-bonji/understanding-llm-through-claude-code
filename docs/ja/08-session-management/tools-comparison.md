@@ -47,4 +47,4 @@ flowchart LR
 
 > **前へ**: [いつ・どう思い出すか](when-to-recall.md)
 
-> **Part 8 完了 → 次へ**: [Part 9: 他LLMへの応用](../09-cross-llm-principles/index.md)
+> **Part 8 完了 → 次へ**: [Part 9: コード世界の接地 — Code Intelligence](../09-code-intelligence/index.md)

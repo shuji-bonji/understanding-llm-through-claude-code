@@ -23,6 +23,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | Skills | On-Demand | Deploy only when needed |
 | Agents | On-Demand | Avoid root cause with independent context |
 | MCP Tool Search | Tool Definition | Lazy-load tool definitions |
+| Code Intelligence (LSP) | Code World | Retrieve symbols precisely without loading whole files |
 
 ### Lost in the Middle (Information Loss in Middle of Context)
 
@@ -49,6 +50,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | Hooks (test execution) | Runtime | Compilers and test runners don't hallucinate |
 | Cross-Model QA (Agents) | On-Demand | Verification across different models |
 | MCP | Tool Definition | Reference external trusted sources |
+| Code Intelligence (LSP) | Code World | Symbol-level grounding before code is committed |
 | CLAUDE.md | Resident Context | Make constraints and version info explicit |
 
 ### Sycophancy (Prioritizing Agreement Over Accuracy)
@@ -65,6 +67,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | Countermeasure | Category | Effect |
 | :--- | :--- | :--- |
 | MCP (external knowledge reference) | Tool Definition | Extend knowledge boundary externally |
+| Code Intelligence (LSP) | Code World | Resolve project-private and post-cutoff symbols via language server |
 | CLAUDE.md (explicit version) | Resident Context | Specify "which point in time's knowledge to use" |
 | Agents (knowledge separation) | On-Demand | Narrow knowledge domain to reduce boundary crossing probability |
 | Test Code | External Validation | Detect outputs that exceed knowledge boundary |

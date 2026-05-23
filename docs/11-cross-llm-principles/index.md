@@ -1,6 +1,6 @@
-🌐 [日本語](../ja/09-cross-llm-principles/index.md)
+🌐 [日本語](../ja/11-cross-llm-principles/index.md)
 
-# Part 9: Applying to Other LLMs
+# Part 11: Applying to Other LLMs
 
 > [!NOTE]
 > Translate Claude Code-specific knowledge into a form that can be applied to other tools and LLMs.
@@ -22,4 +22,4 @@ If you understand the principles, the design approach remains the same even when
 
 ---
 
-> **Previous**: [Part 8: Session Management and Memory Persistence](../08-session-management/index.md)
+> **Previous**: [Part 9: Code-World Grounding — Code Intelligence](../09-code-intelligence/index.md)

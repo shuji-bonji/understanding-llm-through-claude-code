@@ -37,4 +37,4 @@ LLM sessions are finite. As conversations grow longer, Context Rot progresses an
 
 > **Previous**: [Part 7: The Runtime Layer LLMs Don't See](../07-runtime-layer/index.md)
 
-> **Next**: [Part 9: Application to Other LLMs](../09-cross-llm-principles/index.md)
+> **Next**: [Part 9: Code-World Grounding — Code Intelligence](../09-code-intelligence/index.md)

@@ -27,7 +27,10 @@ features:
   - title: "Part 8: Session Management"
     details: "/compact, /clear, and what to persist across sessions"
     link: /08-session-management/
-  - title: "Part 9: Cross-LLM Principles"
+  - title: "Part 9: Code Intelligence"
+    details: "LSP-driven grounding for code symbols — the second pillar of factual grounding alongside MCP"
+    link: /09-code-intelligence/
+  - title: "Part 11: Cross-LLM Principles"
     details: Universal patterns that apply to Cursor, Cline, Copilot, and beyond
-    link: /09-cross-llm-principles/
+    link: /11-cross-llm-principles/
 ---

@@ -1,4 +1,4 @@
-🌐 [日本語](../ja/09-cross-llm-principles/prompt-driven-development.md)
+🌐 [日本語](../ja/11-cross-llm-principles/prompt-driven-development.md)
 
 # Practical Application Without Tool Support
 

@@ -69,6 +69,7 @@ The same question can be answered correctly or incorrectly depending on how it's
 | Mitigation | Mechanism | Why It Works |
 | :--- | :--- | :--- |
 | **MCP (External Knowledge Reference)** | Query external trusted sources directly | Extends knowledge boundaries beyond the LLM's internal knowledge |
+| **Code Intelligence (LSP)** | Resolve project-private and post-cutoff symbols via language server | See [Part 9](../09-code-intelligence/index.md) — the boundary shifts from "what the model memorized" to "what the LSP can resolve" |
 | **Test Code** | Externally verify generated code correctness | Detects outputs that exceed knowledge boundaries through their results |
 | **Version Declaration in CLAUDE.md** | Explicitly specify library versions | Clarifies "which version's knowledge should be used?" |
 | **Agents (Knowledge Isolation)** | Delegate to specialized agents | Shrinks knowledge domains, reducing the probability of boundary exceedance |

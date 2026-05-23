@@ -99,13 +99,24 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 				],
 			},
 			{
-				text: '9. Cross-LLM Principles',
+				text: '9. Code Intelligence',
 				collapsed: true,
 				items: [
-					{ text: 'Overview', link: '/09-cross-llm-principles/' },
-					{ text: 'Universal Patterns', link: '/09-cross-llm-principles/universal-patterns' },
-					{ text: 'Prompt-Driven Development', link: '/09-cross-llm-principles/prompt-driven-development' },
-					{ text: 'Cursor / Cline / Copilot', link: '/09-cross-llm-principles/cursor-cline-mapping' },
+					{ text: 'Overview', link: '/09-code-intelligence/' },
+					{ text: 'LSP as Grounding', link: '/09-code-intelligence/lsp-as-grounding' },
+					{ text: 'Hallucination and Symbols', link: '/09-code-intelligence/hallucination-and-symbols' },
+					{ text: 'Live Type Errors', link: '/09-code-intelligence/live-type-errors' },
+					{ text: 'Grep / Read / LSP', link: '/09-code-intelligence/vs-grep-vs-read' },
+				],
+			},
+			{
+				text: '11. Cross-LLM Principles',
+				collapsed: true,
+				items: [
+					{ text: 'Overview', link: '/11-cross-llm-principles/' },
+					{ text: 'Universal Patterns', link: '/11-cross-llm-principles/universal-patterns' },
+					{ text: 'Prompt-Driven Development', link: '/11-cross-llm-principles/prompt-driven-development' },
+					{ text: 'Cursor / Cline / Copilot', link: '/11-cross-llm-principles/cursor-cline-mapping' },
 				],
 			},
 			{

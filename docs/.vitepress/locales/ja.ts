@@ -105,13 +105,24 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					],
 				},
 				{
-					text: '9. 他LLMへの応用',
+					text: '9. Code Intelligence',
 					collapsed: true,
 					items: [
-						{ text: '概要', link: '/ja/09-cross-llm-principles/' },
-						{ text: '構造的制約は普遍的', link: '/ja/09-cross-llm-principles/universal-patterns' },
-						{ text: 'ツール支援がない環境での実践', link: '/ja/09-cross-llm-principles/prompt-driven-development' },
-						{ text: 'Cursor / Cline / Copilot 対応表', link: '/ja/09-cross-llm-principles/cursor-cline-mapping' },
+						{ text: '概要', link: '/ja/09-code-intelligence/' },
+						{ text: 'LSP は接地装置である', link: '/ja/09-code-intelligence/lsp-as-grounding' },
+						{ text: 'Hallucination とシンボル', link: '/ja/09-code-intelligence/hallucination-and-symbols' },
+						{ text: 'ライブ型エラー', link: '/ja/09-code-intelligence/live-type-errors' },
+						{ text: 'Grep / Read / LSP', link: '/ja/09-code-intelligence/vs-grep-vs-read' },
+					],
+				},
+				{
+					text: '11. 他LLMへの応用',
+					collapsed: true,
+					items: [
+						{ text: '概要', link: '/ja/11-cross-llm-principles/' },
+						{ text: '構造的制約は普遍的', link: '/ja/11-cross-llm-principles/universal-patterns' },
+						{ text: 'ツール支援がない環境での実践', link: '/ja/11-cross-llm-principles/prompt-driven-development' },
+						{ text: 'Cursor / Cline / Copilot 対応表', link: '/ja/11-cross-llm-principles/cursor-cline-mapping' },
 					],
 				},
 				{

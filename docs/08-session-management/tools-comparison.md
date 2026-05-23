@@ -47,4 +47,4 @@ flowchart LR
 
 > **Previous**: [When and How to Recall](when-to-recall.md)
 
-> **Part 8 Complete → Next**: [Part 9: Application to Other LLMs](../09-cross-llm-principles/index.md)
+> **Part 8 Complete → Next**: [Part 9: Code-World Grounding — Code Intelligence](../09-code-intelligence/index.md)

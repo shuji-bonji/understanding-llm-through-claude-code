@@ -1,4 +1,4 @@
-🌐 [日本語](../ja/09-cross-llm-principles/cursor-cline-mapping.md)
+🌐 [日本語](../ja/11-cross-llm-principles/cursor-cline-mapping.md)
 
 # Cursor / Cline / Copilot Reference Table
 

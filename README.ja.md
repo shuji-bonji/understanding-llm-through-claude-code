@@ -97,14 +97,24 @@
 - [いつ・どう思い出すか](docs/ja/08-session-management/when-to-recall.md)
 - [ツール比較と選定基準](docs/ja/08-session-management/tools-comparison.md)
 
-### Part 9: 他LLMへの応用
+### Part 9: コード世界の接地 — Code Intelligence
+
+> LSPによりリポジトリ内のシンボル・型・参照に LLM を接地させる。→ Why: Hallucination / Knowledge Boundary 対策
+
+- [概要](docs/ja/09-code-intelligence/index.md)
+- [LSP は接地装置である](docs/ja/09-code-intelligence/lsp-as-grounding.md)
+- [Hallucination とシンボル](docs/ja/09-code-intelligence/hallucination-and-symbols.md)
+- [ライブ型エラー](docs/ja/09-code-intelligence/live-type-errors.md)
+- [Grep / Read / LSP — どれをいつ使うか？](docs/ja/09-code-intelligence/vs-grep-vs-read.md)
+
+### Part 11: 他LLMへの応用
 
 > Claude Code 固有の知識を他ツール・他LLMに応用可能な形に昇華する。
 
-- [概要](docs/ja/09-cross-llm-principles/index.md)
-- [構造的制約は全モデル共通](docs/ja/09-cross-llm-principles/universal-patterns.md)
-- [ツール支援がない環境での実践](docs/ja/09-cross-llm-principles/prompt-driven-development.md)
-- [Cursor / Cline / Copilot 対応表](docs/ja/09-cross-llm-principles/cursor-cline-mapping.md)
+- [概要](docs/ja/11-cross-llm-principles/index.md)
+- [構造的制約は全モデル共通](docs/ja/11-cross-llm-principles/universal-patterns.md)
+- [ツール支援がない環境での実践](docs/ja/11-cross-llm-principles/prompt-driven-development.md)
+- [Cursor / Cline / Copilot 対応表](docs/ja/11-cross-llm-principles/cursor-cline-mapping.md)
 
 ### 付録
 

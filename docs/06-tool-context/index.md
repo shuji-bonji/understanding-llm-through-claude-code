@@ -15,6 +15,9 @@ When you connect an MCP server, tool definitions (name, parameter schema, descri
 - **Context Rot**: The constant consumption of tool definitions puts pressure on context
 - **Knowledge Boundary**: External knowledge retrieval via MCP reduces dependency on the LLM's internal knowledge
 
+> [!TIP]
+> MCP grounds the LLM in **external-world facts** (APIs, databases, wikis). For **code-world facts** (symbols, types, references in the repository), see [Part 9: Code Intelligence](../09-code-intelligence/index.md). Together they form the two pillars of factual grounding.
+
 ## Documentation in This Part
 
 | Document | Content |
