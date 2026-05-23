@@ -77,6 +77,7 @@ flowchart TB
 | **Agents** | Execute in independent contexts | Executes tasks with fresh context |
 | **Small granule Git commits** | Commit changes frequently | Simplifies rollback of degraded outputs |
 | **Session log at Stop Hook** | Record log at session end | Ensures handoff to next session |
+| **Plugins / Marketplaces** | Distribute organizational conventions as packages | See [Appendix: Plugins & Marketplaces](../appendix/plugins-and-marketplaces.md) — conventions survive turnover, onboarding, and individual `/clear` cycles |
 
 ## Session Design Principles
 

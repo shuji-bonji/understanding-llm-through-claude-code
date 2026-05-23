@@ -58,4 +58,6 @@ graph LR
 
 > **前へ**: [Claude Code 設定ファイル一覧](claude-code-config-reference.md)
 
+> **次へ**: [Plugins & Marketplaces](plugins-and-marketplaces.md)
+
 > 新しい質問や議論は [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) へ

@@ -110,6 +110,17 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 				],
 			},
 			{
+				text: '10. Multi-Session Coordination',
+				collapsed: true,
+				items: [
+					{ text: 'Overview', link: '/10-multi-session/' },
+					{ text: 'Subagent vs Agent Team', link: '/10-multi-session/subagent-vs-team' },
+					{ text: 'Session Boundary Design', link: '/10-multi-session/session-boundary-design' },
+					{ text: 'Peer Messaging', link: '/10-multi-session/peer-messaging' },
+					{ text: 'Long-Running Tasks', link: '/10-multi-session/long-running-tasks' },
+				],
+			},
+			{
 				text: '11. Cross-LLM Principles',
 				collapsed: true,
 				items: [
@@ -127,6 +138,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					{ text: 'Lifecycle × Config Map', link: '/appendix/lifecycle-config-map' },
 					{ text: 'Configuration Reference', link: '/appendix/claude-code-config-reference' },
 					{ text: 'FAQ', link: '/appendix/faq' },
+					{ text: 'Plugins & Marketplaces', link: '/appendix/plugins-and-marketplaces' },
 					{ text: 'Glossary', link: '/appendix/glossary' },
 				],
 			},

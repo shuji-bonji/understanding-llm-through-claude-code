@@ -3,7 +3,7 @@
 # Practical Examples
 
 > [!NOTE]
-> A collection of real-world project configurations that put into practice the LLM structural constraints and Claude Code design principles covered in Parts 1–9.
+> A collection of real-world project configurations that put into practice the LLM structural constraints and Claude Code design principles covered in Parts 1–11.
 
 ## Configuration Examples by Project
 
@@ -27,6 +27,9 @@ A reference table showing which Part's concepts each example puts into practice.
 | Hooks (automated lint & test) | [Part 7: Runtime Layer](../docs/07-runtime-layer/) | Hallucination, Sycophancy |
 | Agents (dedicated reviewers) | [Part 5: On-Demand Context](../docs/05-on-demand-context/) | Sycophancy, Knowledge Boundary |
 | Session management strategy | [Part 8: Session Management](../docs/08-session-management/) | Instruction Decay |
+| IDE / language server integration | [Part 9: Code Intelligence](../docs/09-code-intelligence/) | Hallucination, Knowledge Boundary |
+| Role-split sessions for long refactors | [Part 10: Multi-Session Coordination](../docs/10-multi-session/) | Context Rot, Lost in the Middle, Priority Saturation |
+| Packaging team conventions as plugins | [Appendix: Plugins & Marketplaces](../docs/appendix/plugins-and-marketplaces.md) | Prompt Sensitivity, Instruction Decay |
 
 ## How to Use
 

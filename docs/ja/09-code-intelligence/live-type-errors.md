@@ -1,6 +1,6 @@
 ---
-title: "ライブ型エラー"
-description: "LSP の Diagnostics — 生成中に配信される型エラーと lint 警告 — がフィードバックループを短縮し、Hallucination を自己修正可能な信号へと変換する仕組み。"
+title: 'ライブ型エラー'
+description: 'LSP の Diagnostics — 生成中に配信される型エラーと lint 警告 — がフィードバックループを短縮し、Hallucination を自己修正可能な信号へと変換する仕組み。'
 ---
 
 🌐 [English](../../09-code-intelligence/live-type-errors.md)
@@ -16,7 +16,7 @@ description: "LSP の Diagnostics — 生成中に配信される型エラーと
 検証なしでコードを生成するのはオープンループである。LLM はトークンを発し、それらがコンパイルされることを祈り、パイプラインの後段で何かが文句を言ってきて初めて違うことを知る。ループが長いほど、無駄になる生成が増え、意図と出力の間のドリフトが大きくなる。
 
 ```mermaid
-flowchart LR
+flowchart TB
     A["生成"] --> B["ディスクに書き込み"] --> C["ビルド/テスト実行"] --> D{"エラー?"}
     D -->|あり| E["エラーを読む"] --> F["再生成"] --> A
     D -->|なし| G["完了"]
@@ -37,7 +37,7 @@ flowchart LR
 `textDocument/publishDiagnostics` はプッシュ通知である。言語サーバーは編集中のバッファ状態を継続的に解析し、コードが変わると**その瞬間に**エラーを配信する。ビルドを待つ必要がない。
 
 ```mermaid
-flowchart LR
+flowchart
     A["生成"] --> B["バッファに書き込み"] --> C(["LSP が解析<br/>(ビルドなし)"]) --> D{"エラー?"}
     D -->|あり| F["再生成<br/>(プロセス起動なし)"] --> A
     D -->|なし| G["完了"]
@@ -56,15 +56,15 @@ flowchart LR
 
 LSP Diagnostics は、実行なしで言語サーバーが計算できるものすべてを対象とする：
 
-| 診断の種類 | 例 | 重要度 |
-|:--|:--|:--|
-| 型不整合 | `string` が期待される箇所に `number` を渡す | Error |
-| 未解決の import | シンボルを使っているが import していない | Error |
-| 解決不能シンボル | 存在しない関数を呼び出す | Error |
-| 必須フィールドの欠落 | TypeScript のオブジェクトリテラルに `required: true` がない | Error |
-| 未使用変数 | 宣言したが一度も参照していない | Warning |
-| lint ルール違反 | ESLint / `tslint` ルール違反（配線済みの場合） | Warning |
-| 非推奨 API | `@deprecated` シンボルの使用 | Warning |
+| 診断の種類           | 例                                                          | 重要度  |
+| :------------------- | :---------------------------------------------------------- | :------ |
+| 型不整合             | `string` が期待される箇所に `number` を渡す                 | Error   |
+| 未解決の import      | シンボルを使っているが import していない                    | Error   |
+| 解決不能シンボル     | 存在しない関数を呼び出す                                    | Error   |
+| 必須フィールドの欠落 | TypeScript のオブジェクトリテラルに `required: true` がない | Error   |
+| 未使用変数           | 宣言したが一度も参照していない                              | Warning |
+| lint ルール違反      | ESLint / `tslint` ルール違反（配線済みの場合）              | Warning |
+| 非推奨 API           | `@deprecated` シンボルの使用                                | Warning |
 
 Error はブロッキングシグナル、Warning は情報提供だがゲートはしない。両方が同じチャネルで瞬時に届く。
 

@@ -74,6 +74,9 @@ allowed-tools:
 - bash コマンド経由での間接起動も禁止
 - 必ず `Agent(subagent_type="agent-name", ...)` ツールを使う
 
+> [!TIP]
+> 作業が日数や週を跨ぐ場合、サブエージェント同士が話す必要がある場合、または親のコンテキストがサマリで埋まる場合 — 正しいパターンは Subagent ではなく **Agent Teams** である。[Part 10: マルチセッション協調](../10-multi-session/index.md) を参照。
+
 ---
 
 > **前へ**: [Skills の設計原理](skills.md)

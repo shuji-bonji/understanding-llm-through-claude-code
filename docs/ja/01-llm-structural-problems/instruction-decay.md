@@ -72,6 +72,7 @@ flowchart TB
 | **Agents**                       | 独立したコンテキストで実行   | 新鮮なコンテキストでタスクを実行              |
 | **小単位の Git コミット**        | 変更を頻繁にコミット         | 劣化した出力のロールバックを容易にする        |
 | **Stop Hook でのセッションログ** | セッション終了時にログを記録 | 次のセッションへの引継ぎを確保                |
+| **Plugins / Marketplaces**       | 組織の慣習をパッケージとして配布 | [付録: Plugins & Marketplaces](../appendix/plugins-and-marketplaces.md) を参照 — 慣習は人の入れ替わり、オンボーディング、個別の `/clear` を跨いで生存する |
 
 ## セッション設計の原則
 

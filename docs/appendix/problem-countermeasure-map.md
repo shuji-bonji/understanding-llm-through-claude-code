@@ -24,6 +24,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | Agents | On-Demand | Avoid root cause with independent context |
 | MCP Tool Search | Tool Definition | Lazy-load tool definitions |
 | Code Intelligence (LSP) | Code World | Retrieve symbols precisely without loading whole files |
+| Agent Teams | Multi-Session | Parallel decomposition — no single session ever grows large |
 
 ### Lost in the Middle (Information Loss in Middle of Context)
 
@@ -33,6 +34,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | `.claude/rules/` | Conditional Context | Inject only necessary rules at high-attention positions |
 | Agents | On-Demand | Avoid middle problem with fresh context |
 | Skills | On-Demand | Inject near end for high-attention placement |
+| Agent Teams | Multi-Session | Each session's history stays short; no "middle" forms |
 
 ### Priority Saturation (Reduced Compliance with Too Many Instructions)
 
@@ -42,6 +44,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | `.claude/rules/` | Conditional Context | Distribute instructions conditionally |
 | Skills | On-Demand | Load task-specific instructions only when needed |
 | Hooks | Runtime | Exclude mechanical rules from context budget |
+| Agent Teams | Multi-Session | Split responsibilities across sessions; each carries fewer instructions |
 
 ### Hallucination (Structurally Unavoidable)
 
@@ -80,6 +83,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | Skills description | On-Demand | Diverse expressions improve invocation accuracy |
 | `.claude/rules/` | Conditional Context | Reduced simultaneous instructions prevent sensitivity degradation |
 | Hooks and tests | Runtime | Verification independent of prompt expression |
+| Plugins / Marketplaces | Distribution | Distribute verified prompts so each engineer does not retry from scratch |
 
 ### Instruction Decay (Rule Forgetting in Long Conversations)
 
@@ -90,6 +94,7 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 | Hooks | Runtime | Force execution independent of context |
 | Agents | On-Demand | Execute task with fresh context |
 | Git commits | External Persistence | Easy rollback of degraded output |
+| Plugins / Marketplaces | Distribution | Enforce organizational conventions so they survive turnover and onboarding |
 
 ## Full Map (Visual)
 

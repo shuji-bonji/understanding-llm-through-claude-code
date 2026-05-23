@@ -107,6 +107,16 @@ Three projects connect in a "Learn → Understand → Apply" sequence.
 - [Live Type Errors](docs/09-code-intelligence/live-type-errors.md)
 - [Grep / Read / LSP — Which Tool When?](docs/09-code-intelligence/vs-grep-vs-read.md)
 
+### Part 10: Multi-Session Coordination — Agent Teams
+
+> Multiple independent sessions coordinating peer-to-peer. → Why: Context Rot / Lost in the Middle / Priority Saturation countermeasures at scale
+
+- [Overview](docs/10-multi-session/index.md)
+- [Subagent vs Agent Team](docs/10-multi-session/subagent-vs-team.md)
+- [Session Boundary Design](docs/10-multi-session/session-boundary-design.md)
+- [Peer Messaging](docs/10-multi-session/peer-messaging.md)
+- [Long-Running Tasks](docs/10-multi-session/long-running-tasks.md)
+
 ### Part 11: Applying to Other LLMs
 
 > Elevating Claude Code-specific knowledge into universally applicable principles.
@@ -122,6 +132,7 @@ Three projects connect in a "Learn → Understand → Apply" sequence.
 - [Lifecycle × Configuration Map](docs/appendix/lifecycle-config-map.md)
 - [Claude Code Configuration Reference](docs/appendix/claude-code-config-reference.md)
 - [FAQ — Frequently Asked Questions and Design Decisions](docs/appendix/faq.md)
+- [Plugins & Marketplaces — Distributing Verified Configurations](docs/appendix/plugins-and-marketplaces.md)
 - [Glossary](docs/appendix/glossary.md)
 
 ### Practical Examples

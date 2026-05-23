@@ -18,7 +18,7 @@ The Hallucination chapter framed this in general terms: LLMs generate confident,
 These failures all share a structure: the LLM emits a symbol that *could plausibly exist*, and there is no signal inside the LLM telling it that this particular symbol does not. LSP is the signal.
 
 ```mermaid
-flowchart LR
+flowchart TB
     PROMPT["Generation request<br/>(e.g., 'add this feature')"]
     GUESS["LLM emits<br/>a plausible symbol"]
     LSP{"LSP query"}

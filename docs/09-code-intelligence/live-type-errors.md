@@ -1,6 +1,6 @@
 ---
-title: "Live Type Errors"
-description: "Why streaming LSP diagnostics — type errors and lint warnings delivered during generation — collapse the feedback loop and convert Hallucination into a self-correcting signal."
+title: 'Live Type Errors'
+description: 'Why streaming LSP diagnostics — type errors and lint warnings delivered during generation — collapse the feedback loop and convert Hallucination into a self-correcting signal.'
 ---
 
 🌐 [日本語](../ja/09-code-intelligence/live-type-errors.md)
@@ -16,7 +16,7 @@ description: "Why streaming LSP diagnostics — type errors and lint warnings de
 Generating code without verification is open-loop. The LLM emits tokens, hopes they compile, and only learns otherwise when something later in the pipeline complains. The longer the loop, the more wasted generation and the more drift between intent and output.
 
 ```mermaid
-flowchart LR
+flowchart TB
     A["Generate"] --> B["Write to disk"] --> C["Run build/test"] --> D{"Error?"}
     D -->|Yes| E["Read error"] --> F["Regenerate"] --> A
     D -->|No| G["Done"]
@@ -30,14 +30,14 @@ flowchart LR
     style G fill:#dcfce7,stroke:#15803d,color:#000
 ```
 
-Each iteration through this loop costs at minimum a process spawn (build, test runner), at worst tens of seconds of CI. The LLM has likely produced more code in the interim that depends on the broken code. The loop *works*, but it is expensive and slow.
+Each iteration through this loop costs at minimum a process spawn (build, test runner), at worst tens of seconds of CI. The LLM has likely produced more code in the interim that depends on the broken code. The loop _works_, but it is expensive and slow.
 
 ## LSP Diagnostics Collapse the Loop
 
-`textDocument/publishDiagnostics` is a push notification. The language server continuously analyzes the open editor state and emits errors *as the code changes*. There is no build to wait for.
+`textDocument/publishDiagnostics` is a push notification. The language server continuously analyzes the open editor state and emits errors _as the code changes_. There is no build to wait for.
 
 ```mermaid
-flowchart LR
+flowchart TB
     A["Generate"] --> B["Write to buffer"] --> C(["LSP analyzes<br/>(no build)"]) --> D{"Error?"}
     D -->|Yes| F["Regenerate<br/>(no process spawn)"] --> A
     D -->|No| G["Done"]
@@ -56,15 +56,15 @@ The verification step is inside the LLM's edit-and-check loop, not outside it. F
 
 LSP diagnostics cover everything the language server can compute without execution:
 
-| Diagnostic Kind | Example | Severity |
-|:--|:--|:--|
-| Type mismatch | Passing `number` where `string` is expected | Error |
-| Missing import | Symbol used but not imported | Error |
-| Unresolved symbol | Calling a function that does not exist | Error |
-| Missing required field | TypeScript object literal missing `required: true` | Error |
-| Unused variable | Declared but never referenced | Warning |
-| Lint rule violation | ESLint / `tslint` rule failure (when wired in) | Warning |
-| Deprecated API | Use of `@deprecated` symbol | Warning |
+| Diagnostic Kind        | Example                                            | Severity |
+| :--------------------- | :------------------------------------------------- | :------- |
+| Type mismatch          | Passing `number` where `string` is expected        | Error    |
+| Missing import         | Symbol used but not imported                       | Error    |
+| Unresolved symbol      | Calling a function that does not exist             | Error    |
+| Missing required field | TypeScript object literal missing `required: true` | Error    |
+| Unused variable        | Declared but never referenced                      | Warning  |
+| Lint rule violation    | ESLint / `tslint` rule failure (when wired in)     | Warning  |
+| Deprecated API         | Use of `@deprecated` symbol                        | Warning  |
 
 Errors are blocking signals; warnings inform but do not gate. Both arrive in the same channel, instantly.
 

@@ -26,7 +26,7 @@ The wrong choice does not produce wrong answers, but it does produce wasted cont
 ## The Decision Tree
 
 ```mermaid
-flowchart TD
+flowchart TB
     Q["What do I need<br/>to know?"]
     Q1{"Is the target<br/>a code symbol?"}
     Q2{"Do I know which file<br/>and need its full content?"}
@@ -133,4 +133,4 @@ The reverse is also true: if the target is a string concept, do not bother with 
 
 > **Previous**: [Live Type Errors](live-type-errors.md)
 
-> **Part 9 Complete → Next**: [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md)
+> **Part 9 Complete → Next**: [Part 10: Multi-Session Coordination — Agent Teams](../10-multi-session/index.md)

@@ -116,6 +116,17 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					],
 				},
 				{
+					text: '10. マルチセッション協調',
+					collapsed: true,
+					items: [
+						{ text: '概要', link: '/ja/10-multi-session/' },
+						{ text: 'Subagent vs Agent Team', link: '/ja/10-multi-session/subagent-vs-team' },
+						{ text: 'セッション境界の設計', link: '/ja/10-multi-session/session-boundary-design' },
+						{ text: 'ピアメッセージング', link: '/ja/10-multi-session/peer-messaging' },
+						{ text: '長期実行タスク', link: '/ja/10-multi-session/long-running-tasks' },
+					],
+				},
+				{
 					text: '11. 他LLMへの応用',
 					collapsed: true,
 					items: [
@@ -133,6 +144,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 						{ text: 'ライフサイクル × 設定マップ', link: '/ja/appendix/lifecycle-config-map' },
 						{ text: 'Claude Code 設定リファレンス', link: '/ja/appendix/claude-code-config-reference' },
 						{ text: 'FAQ', link: '/ja/appendix/faq' },
+						{ text: 'Plugins & Marketplaces', link: '/ja/appendix/plugins-and-marketplaces' },
 						{ text: '用語集', link: '/ja/appendix/glossary' },
 					],
 				},

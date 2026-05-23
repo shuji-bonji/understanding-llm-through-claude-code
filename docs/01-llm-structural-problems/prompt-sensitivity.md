@@ -61,6 +61,7 @@ LLMs respond largely to **statistical patterns in tokens** rather than meaning. 
 | **Skills description design** | Include diverse user natural language expressions | Similar to SEO principles, improves matching accuracy across varied phrasings |
 | **Conditional injection via `.claude/rules/`** | Reduces number of simultaneously active instructions | Prevents sensitivity degradation (effect increases with more instructions) |
 | **Hooks and tests** | External validation independent of prompt wording | Verifies results regardless of how the prompt is written |
+| **Plugins / Marketplaces** | Distribute verified prompts as installable packages | See [Appendix: Plugins & Marketplaces](../appendix/plugins-and-marketplaces.md) — team-wide calibration instead of per-engineer trial and error |
 
 ### Writing Effective CLAUDE.md
 

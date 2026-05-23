@@ -30,6 +30,9 @@ features:
   - title: "Part 9: Code Intelligence"
     details: LSP によるコードシンボルへの接地 — MCP と並ぶ「事実への接地」の第二の柱
     link: /ja/09-code-intelligence/
+  - title: "Part 10: Agent Teams"
+    details: マルチセッション協調による、スケール時の Context Rot 根本対策
+    link: /ja/10-multi-session/
   - title: "Part 11: 他LLMへの応用"
     details: Cursor、Cline、Copilot にも適用できる普遍的パターン
     link: /ja/11-cross-llm-principles/

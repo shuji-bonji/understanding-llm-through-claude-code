@@ -3,7 +3,7 @@
 # 実践例
 
 > [!NOTE]
-> 本編（Part 1〜9）で学んだ LLM の構造的制約と Claude Code の設計原理を、具体的なプロジェクト設定に落とし込んだ実例集。
+> 本編（Part 1〜11）で学んだ LLM の構造的制約と Claude Code の設計原理を、具体的なプロジェクト設定に落とし込んだ実例集。
 
 ## プロジェクト別の設定例
 
@@ -27,6 +27,9 @@
 | Hooks（lint・テスト自動実行） | [Part 7: ランタイムレイヤー](../docs/ja/07-runtime-layer/) | Hallucination, Sycophancy |
 | Agents（レビュー専門） | [Part 5: オンデマンドコンテキスト](../docs/ja/05-on-demand-context/) | Sycophancy, Knowledge Boundary |
 | セッション管理戦略 | [Part 8: セッション管理](../docs/ja/08-session-management/) | Instruction Decay |
+| IDE / 言語サーバー統合 | [Part 9: Code Intelligence](../docs/ja/09-code-intelligence/) | Hallucination, Knowledge Boundary |
+| 長期リファクタの役割別セッション分割 | [Part 10: マルチセッション協調](../docs/ja/10-multi-session/) | Context Rot, Lost in the Middle, Priority Saturation |
+| チーム慣習を Plugin としてパッケージ化 | [付録: Plugins & Marketplaces](../docs/ja/appendix/plugins-and-marketplaces.md) | Prompt Sensitivity, Instruction Decay |
 
 ## 使い方
 

@@ -22,4 +22,4 @@ If you understand the principles, the design approach remains the same even when
 
 ---
 
-> **Previous**: [Part 9: Code-World Grounding — Code Intelligence](../09-code-intelligence/index.md)
+> **Previous**: [Part 10: Multi-Session Coordination — Agent Teams](../10-multi-session/index.md)

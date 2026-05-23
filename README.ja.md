@@ -107,6 +107,16 @@
 - [ライブ型エラー](docs/ja/09-code-intelligence/live-type-errors.md)
 - [Grep / Read / LSP — どれをいつ使うか？](docs/ja/09-code-intelligence/vs-grep-vs-read.md)
 
+### Part 10: マルチセッション協調 — Agent Teams
+
+> 複数の独立したセッションが P2P で協調する。→ Why: Context Rot / Lost in the Middle / Priority Saturation 対策（スケール時）
+
+- [概要](docs/ja/10-multi-session/index.md)
+- [Subagent vs Agent Team](docs/ja/10-multi-session/subagent-vs-team.md)
+- [セッション境界の設計](docs/ja/10-multi-session/session-boundary-design.md)
+- [ピアメッセージング](docs/ja/10-multi-session/peer-messaging.md)
+- [長期実行タスク](docs/ja/10-multi-session/long-running-tasks.md)
+
 ### Part 11: 他LLMへの応用
 
 > Claude Code 固有の知識を他ツール・他LLMに応用可能な形に昇華する。
@@ -122,6 +132,7 @@
 - [ライフサイクル × 設定マップ](docs/ja/appendix/lifecycle-config-map.md)
 - [Claude Code 設定ファイル一覧](docs/ja/appendix/claude-code-config-reference.md)
 - [FAQ — よくある質問と設計判断](docs/ja/appendix/faq.md)
+- [Plugins & Marketplaces — 検証済み設定の配布機構](docs/ja/appendix/plugins-and-marketplaces.md)
 - [用語集](docs/ja/appendix/glossary.md)
 
 ### 実践例

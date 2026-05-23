@@ -30,6 +30,9 @@ features:
   - title: "Part 9: Code Intelligence"
     details: "LSP-driven grounding for code symbols — the second pillar of factual grounding alongside MCP"
     link: /09-code-intelligence/
+  - title: "Part 10: Agent Teams"
+    details: "Multi-session coordination as the root-cause fix for Context Rot at scale"
+    link: /10-multi-session/
   - title: "Part 11: Cross-LLM Principles"
     details: Universal patterns that apply to Cursor, Cline, Copilot, and beyond
     link: /11-cross-llm-principles/

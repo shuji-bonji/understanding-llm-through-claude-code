@@ -19,7 +19,7 @@ The Language Server Protocol (LSP) is a JSON-RPC protocol originally designed so
 Claude Code uses four LSP capabilities. Each one shuts down a specific failure mode.
 
 ```mermaid
-flowchart LR
+flowchart TB
     LLM(["LLM"])
 
     DEF(["Definition<br/>Jump to where<br/>a symbol is declared"])

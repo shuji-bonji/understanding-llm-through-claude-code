@@ -14,12 +14,12 @@
 
 ## このパートのドキュメント
 
-| ドキュメント | 内容 |
-|:--|:--|
-| [構造的制約は全モデル共通](universal-patterns.md) | LLM 共通の原理 |
+| ドキュメント                                                 | 内容                     |
+| :----------------------------------------------------------- | :----------------------- |
+| [構造的制約は全モデル共通](universal-patterns.md)            | LLM 共通の原理           |
 | [ツール支援がない環境での実践](prompt-driven-development.md) | プロンプト駆動開発の手法 |
-| [Cursor / Cline / Copilot 対応表](cursor-cline-mapping.md) | ツール間の機能マッピング |
+| [Cursor / Cline / Copilot 対応表](cursor-cline-mapping.md)   | ツール間の機能マッピング |
 
 ---
 
-> **前へ**: [Part 9: コード世界の接地 — Code Intelligence](../09-code-intelligence/index.md)
+> **前へ**: [Part 10: マルチセッション協調 — Agent Teams](../10-multi-session/index.md)

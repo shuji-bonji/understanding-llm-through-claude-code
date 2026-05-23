@@ -74,6 +74,9 @@ You are an Angular/NgRx code review specialist.
 - Indirect invocation via bash commands is also prohibited
 - Always use the `Agent(subagent_type="agent-name", ...)` tool
 
+> [!TIP]
+> When the work spans days/weeks, sub-agents need to talk to each other, or the parent's context fills up with summaries — the right pattern is no longer Subagent but **Agent Teams**. See [Part 10: Multi-Session Coordination](../10-multi-session/index.md).
+
 ---
 
 > **Previous**: [Skills Design Principles](skills.md)
