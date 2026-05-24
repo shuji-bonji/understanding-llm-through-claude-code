@@ -77,6 +77,10 @@ You are an Angular/NgRx code review specialist.
 > [!TIP]
 > When the work spans days/weeks, sub-agents need to talk to each other, or the parent's context fills up with summaries — the right pattern is no longer Subagent but **Agent Teams**. See [Part 10: Multi-Session Coordination](../10-multi-session/index.md).
 
+## Related Documents
+
+For a systematic taxonomy of agent terminology (custom agents, sub-agents, meta-agents, Orchestrator-Worker, Swarm — cross-framework organization), see the sister project: [ai-agent-architecture / Agent Taxonomy](https://shuji-bonji.github.io/ai-agent-architecture/agents/agent-taxonomy).
+
 ---
 
 > **Previous**: [Skills Design Principles](skills.md)
