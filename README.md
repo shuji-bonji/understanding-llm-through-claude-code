@@ -11,11 +11,11 @@
 
 Three projects connect in a "Learn → Understand → Apply" sequence.
 
-| Phase                                     | Project                                                                                                                   | Status                    |
-| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------------ |
-| **1. Understand LLMs**                    | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | 👈 **This repository** |
-| 2. Understand AI Agent Architecture       | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | In progress               |
-| 3. Apply AI to Systems & Services         | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | In progress               |
+| Phase                                     | Project                                                                                                                   | Focus / Status                                                                                            |
+| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------- |
+| **1. Understand LLMs**                    | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | 👈 **This repository** — LLM structural constraints and the *why* behind configuration design          |
+| 2. Understand AI Agent Architecture       | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | ✅ Published — MCP, Skills, Agent, Memory & Agent ID — composition and implementation patterns (*what/how*) |
+| 3. Apply AI to Systems & Services         | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 🚧 In progress                                                                                            |
 
 ## Table of Contents
 

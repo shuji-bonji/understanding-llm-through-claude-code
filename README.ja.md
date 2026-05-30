@@ -11,11 +11,11 @@
 
 3つのプロジェクトが「学ぶ → 知る → 適用する」の順序で繋がります。
 
-| フェーズ                              | プロジェクト                                                                                                              | 状態                  |
-| :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :-------------------- |
-| **1. LLM を知る**                     | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | 👈 **このリポジトリ** |
-| 2. AI エージェントの設計を知る        | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | 準備中                |
-| 3. システム・サービスに AI を適用する | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 準備中                |
+| フェーズ                              | プロジェクト                                                                                                              | 内容 / 状態                                                                              |
+| :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
+| **1. LLM を知る**                     | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | 👈 **このリポジトリ** — LLM の構造的制約と「なぜそう設計するのか」（Why の本棚）         |
+| 2. AI エージェントの設計を知る        | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | ✅ 公開中 — MCP・Skills・Agent・Memory・Agent ID の構成と実装パターン（What/How の地図） |
+| 3. システム・サービスに AI を適用する | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 🚧 準備中                                                                                |
 
 ## 目次
 

@@ -1,7 +1,10 @@
-.claude/
+# Claude Code local-only files (Skills and Commands are shared via git)
+.claude/settings.local.json
+.claude/worktrees/
 
 # VitePress
 node_modules/
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+.DS_Store
 
