@@ -1,3 +1,8 @@
+---
+title: "Context Rot（文脈腐敗）— トークンが増えると性能が落ちる"
+description: "Context Rot は LLM の入力トークンが増えるほど出力品質が劣化する構造的問題。200Kコンテキストウィンドウでも50Kで既に劣化が始まる。Claude Code での検出と対策を解説。"
+---
+
 🌐 [English](../../01-llm-structural-problems/context-rot.md)
 
 # Context Rot（文脈腐敗）— トークンが増えると出力品質が低下する

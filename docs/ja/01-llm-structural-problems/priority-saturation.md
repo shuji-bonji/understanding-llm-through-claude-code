@@ -1,3 +1,8 @@
+---
+title: "Priority Saturation（優先度飽和）— 指示が増えるほど遵守率が落ちる"
+description: "Priority Saturation は LLM への指示数が増えるほど個々の指示遵守率が低下する構造的問題。CLAUDE.md の200行制限の科学的根拠と Claude Code での対策。"
+---
+
 🌐 [English](../../01-llm-structural-problems/priority-saturation.md)
 
 # Priority Saturation（優先度飽和）— 指示が多いと全体の遵守率が低下する

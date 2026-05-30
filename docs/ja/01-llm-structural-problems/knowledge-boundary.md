@@ -1,3 +1,8 @@
+---
+title: "Knowledge Boundary（知識境界）— LLMは「知らない」と言えない"
+description: "Knowledge Boundary は LLM が自分の知識限界を正確に把握できない構造的問題。較正不良によるハルシネーションの原因と Claude Code での対策を解説。"
+---
+
 🌐 [English](../../01-llm-structural-problems/knowledge-boundary.md)
 
 # Knowledge Boundary（知識境界）— LLMは「知らない」と言えない

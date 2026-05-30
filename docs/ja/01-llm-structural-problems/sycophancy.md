@@ -1,3 +1,8 @@
+---
+title: "Sycophancy（追従性）— LLMが反論しない理由"
+description: "Sycophancy は LLM がユーザーの主張に同調し反論を避ける構造的傾向。誤りを追認するリスクを Claude Code でどう抑えるかを Cross-Model QA・Hooks の観点から解説。"
+---
+
 🌐 [English](../../01-llm-structural-problems/sycophancy.md)
 
 # Sycophancy（追従性）— なぜLLMは反論しないのか

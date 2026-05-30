@@ -1,3 +1,8 @@
+---
+title: "Claude Code Configuration File Reference"
+description: "Complete reference for CLAUDE.md, settings.json, settings.local.json, managed-settings.json, and the .claude/ directory — load order, precedence, and how user-global vs project-level settings interact."
+---
+
 🌐 [日本語](../ja/appendix/claude-code-config-reference.md)
 
 # Claude Code Configuration File Reference

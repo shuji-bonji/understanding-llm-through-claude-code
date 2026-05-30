@@ -1,3 +1,8 @@
+---
+title: "コンテキストウィンドウとは何か — LLM が「見る」ものの全体像"
+description: "Claude Code がコンテキストウィンドウの中に配置する全要素（System Prompt / CLAUDE.md / Rules / Skills / MCP / 会話履歴）と、コンテキスト外の要素（settings.json / Hooks）を整理。"
+---
+
 🌐 [English](../../02-context-window/what-llm-sees.md)
 
 # コンテキストウィンドウとは何か — LLM が「見る」もの

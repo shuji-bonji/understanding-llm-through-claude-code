@@ -1,3 +1,8 @@
+---
+title: "Instruction Decay（指示遵守の減衰）— 長い会話でルールを忘れる"
+description: "Instruction Decay は LLM が長い会話の中で初期指示への遵守率を低下させる構造的問題。マルチターン会話で平均39%性能低下。Claude Code でのセッション境界戦略を解説。"
+---
+
 🌐 [English](../../01-llm-structural-problems/instruction-decay.md)
 
 # Instruction Decay（指示遵守の減衰）— 長い会話でルールを忘れる

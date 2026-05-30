@@ -1,3 +1,8 @@
+---
+title: "Prompt Sensitivity（プロンプト感受性）— 同じ意味でも結果が変わる"
+description: "Prompt Sensitivity は意味的に同じプロンプトでも表現差で LLM 出力が大きく変わる構造的制約。最大76精度ポイントの差。Claude Code での影響範囲と対策を解説。"
+---
+
 🌐 [English](../../01-llm-structural-problems/prompt-sensitivity.md)
 
 # Prompt Sensitivity（プロンプト感受性）— 同じ意味なのに結果が変わる

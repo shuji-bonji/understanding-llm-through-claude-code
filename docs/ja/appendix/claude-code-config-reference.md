@@ -1,3 +1,8 @@
+---
+title: "Claude Code 設定ファイル完全リファレンス"
+description: "CLAUDE.md / settings.json / settings.local.json / managed-settings.json / .claude/ ディレクトリ構造・優先度・読み込み順を完全網羅。ユーザーグローバル設定とプロジェクト設定の使い分けも解説。"
+---
+
 🌐 [English](../../appendix/claude-code-config-reference.md)
 
 # Claude Code 設定ファイル一覧

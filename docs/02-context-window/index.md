@@ -1,3 +1,8 @@
+---
+title: "Part 2: What is a Context Window"
+description: "The context window is the LLM's thinking space — Claude's 200K–1M tokens. What goes in, when, and how much, as the foundation for every Claude Code configuration file."
+---
+
 🌐 [日本語](../ja/02-context-window/index.md)
 
 # Part 2: Understanding Context Window

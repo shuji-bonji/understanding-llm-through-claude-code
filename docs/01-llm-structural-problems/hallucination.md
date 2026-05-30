@@ -1,6 +1,6 @@
 ---
-title: "Hallucination"
-description: "Why LLMs generate confident-sounding false statements as a structural outcome of next-token prediction, not a correctable bug."
+title: "Hallucination — Two Sides of the Same Coin as Creativity"
+description: "LLM hallucination and creativity are mathematically equivalent — eliminating one eliminates the other. How to keep both while detecting and managing false outputs in Claude Code."
 ---
 
 🌐 [日本語](../ja/01-llm-structural-problems/hallucination.md)
@@ -68,6 +68,22 @@ Hallucination cannot be eliminated. Mitigation is based on a **detection and man
 | **MCP External References** | Direct reference to trusted external sources | Based on external facts, not internal LLM knowledge |
 | **Code Intelligence (LSP)** | Symbol-level grounding via language server | See [Part 9](../09-code-intelligence/hallucination-and-symbols.md) — confirms symbols exist before code is committed |
 | **Agents (Knowledge Separation)** | Delegate specific domains to specialized agents | Narrower knowledge domain reduces hallucination probability |
+
+## Managing the Trade-off with Creativity
+
+Since hallucination and creativity are mathematically equivalent (Karpowicz, 2025), **you cannot eliminate one without losing the other**. The practical question is not "how do I make Claude stop hallucinating?" but rather **"how do I keep creativity for design tasks while suppressing hallucination for factual tasks?"**
+
+Claude Code's design implicitly answers this by separating the two regimes:
+
+| Task type | What you want | Recommended setup |
+|:--|:--|:--|
+| **Design / brainstorming** (architecture proposals, refactoring ideas, naming) | Creativity ON — accept some hallucination as the price | Plain conversation, no LSP grounding required |
+| **Factual / code generation** (API calls, type signatures, version-specific syntax) | Hallucination suppressed — accept narrower output | LSP grounding (Part 9), Hooks (test execution), CLAUDE.md version pinning, MCP external references |
+
+In other words, the trade-off is not resolved by a single setting — it is resolved by **switching mitigation layers on and off depending on the task**. The mitigation table above is the toolbox for the "suppress" mode; for "creative" mode you deliberately leave most of them off.
+
+> [!IMPORTANT]
+> **Why the trade-off cannot be optimized away**: Karpowicz (2025) proves this via mechanism design — any scoring rule that strictly penalizes false outputs also penalizes novel-but-plausible outputs. The two are not separable signals. Trying to "tune up truthfulness without losing creativity" is mathematically equivalent to trying to find a free lunch.
 
 ## Paradigm Shift: From Elimination to Management
 

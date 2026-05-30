@@ -1,3 +1,8 @@
+---
+title: "Lost in the Middle — コンテキスト中間部が無視される"
+description: "Lost in the Middle は LLM が先頭と末尾の情報をよく覚え、中間部の情報を著しく無視する構造的問題。20文書中5〜15番目で精度が30%以上低下。Claude Code での配置戦略。"
+---
+
 🌐 [English](../../01-llm-structural-problems/lost-in-the-middle.md)
 
 # Lost in the Middle — コンテキスト中間部の情報を無視する
