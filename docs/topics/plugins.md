@@ -21,6 +21,15 @@
 - [Knowledge Boundary](/01-llm-structural-problems/knowledge-boundary) — plugins package up specialized procedures the base model lacks.
 - [Context Rot](/01-llm-structural-problems/context-rot) — by shipping capabilities as Skills/MCP, plugins keep the always-loaded surface minimal.
 
+## Beyond structural problems
+
+Plugins also solve **operational** problems that aren't LLM constraints — and this is the main reason they exist as a layer above individual Skills/MCP/Hooks:
+
+- **Reproducibility** — the same setup works on every machine, every teammate, every session.
+- **Versioning** — a plugin pins exact Skills/MCP/Hooks versions, so behavior doesn't silently drift.
+- **Distribution** — Marketplaces turn private configuration into shareable, discoverable units.
+- **Standardization** — teams converge on a known-good baseline instead of each developer wiring up their own `.claude/`.
+
 ## See also
 
 - [Topic: Skills & Agents](/topics/skills-and-agents)

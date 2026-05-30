@@ -21,6 +21,15 @@
 - [Knowledge Boundary](/ja/01-llm-structural-problems/knowledge-boundary) — モデルに欠けている専門手順をパッケージ化
 - [Context Rot](/ja/01-llm-structural-problems/context-rot) — 能力を Skills/MCP として配布することで常駐面を最小化
 
+## 構造的問題の外にある価値
+
+Plugins は **LLM の制約**ではなく**運用上の課題**も解く — そして実はこちらが、Skills/MCP/Hooks の上位レイヤーとして Plugin が独立して存在する本来の理由でもある:
+
+- **再現性 (Reproducibility)** — どのマシンでも、どのチームメンバーでも、どのセッションでも同じ構成が動く
+- **バージョン管理 (Versioning)** — Plugin が Skills/MCP/Hooks の正確なバージョンを固定し、挙動が静かにドリフトしない
+- **配布 (Distribution)** — Marketplace により、プライベートな設定が共有可能・発見可能な単位になる
+- **標準化 (Standardization)** — 各開発者が個別に `.claude/` を組み立てるのではなく、チームが既知の良いベースラインに収束する
+
 ## 関連トピック
 
 - [Topic: Skills & Agents](/ja/topics/skills-and-agents)
