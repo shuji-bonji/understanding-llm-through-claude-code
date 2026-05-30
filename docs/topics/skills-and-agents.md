@@ -25,9 +25,14 @@
 - [Knowledge Boundary](/01-llm-structural-problems/knowledge-boundary) — Skills inject up-to-date procedural knowledge.
 - [Hallucination](/01-llm-structural-problems/hallucination) — Agents isolate risky reasoning into a fresh context.
 
+## When a single Agent isn't enough
+
+For a one-shot delegation, an Agent (sub-agent) is the right primitive. When the work needs to **survive across many sessions**, **let children talk to each other**, or **avoid filling the parent's context with summaries**, the next step is [Agent Teams](/topics/agent-teams) — peer-to-peer, persistent sessions covered in Part 10.
+
 ## See also
 
 - [Topic: CLAUDE.md](/topics/claude-md) — for always-loaded context.
 - [Topic: Rules](/topics/rules) — for context triggered by file globs.
 - [Topic: MCP](/topics/mcp) — for tool-based external context.
+- [Topic: Agent Teams](/topics/agent-teams) — multi-session coordination when one Subagent isn't enough.
 - [Feature Index](/appendix/feature-index)

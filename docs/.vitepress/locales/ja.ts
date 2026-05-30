@@ -144,6 +144,8 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 						{ text: 'MCP', link: '/ja/topics/mcp' },
 						{ text: 'Hooks', link: '/ja/topics/hooks' },
 						{ text: 'Plugins', link: '/ja/topics/plugins' },
+						{ text: 'Code Intelligence', link: '/ja/topics/code-intelligence' },
+						{ text: 'Agent Teams', link: '/ja/topics/agent-teams' },
 					],
 				},
 				{

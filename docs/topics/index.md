@@ -23,6 +23,12 @@ features:
   - title: Plugins
     details: Bundles of skills, MCPs, and tools — distribution and marketplaces.
     link: /topics/plugins
+  - title: Code Intelligence
+    details: Language-server grounding — confirm symbols, types, and references against the live repository.
+    link: /topics/code-intelligence
+  - title: Agent Teams
+    details: Multi-session coordination — peer-to-peer persistent sessions for work that outgrows a single conversation.
+    link: /topics/agent-teams
 ---
 
 🌐 [日本語](/ja/topics/)

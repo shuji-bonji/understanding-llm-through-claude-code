@@ -23,6 +23,12 @@ features:
   - title: Plugins
     details: Skills / MCP / Hooks をひとまとめに配布するバンドルとマーケットプレイス。
     link: /ja/topics/plugins
+  - title: Code Intelligence
+    details: 言語サーバーによる接地 — リポジトリ内のシンボル・型・参照を生きた状態で確認する。
+    link: /ja/topics/code-intelligence
+  - title: Agent Teams
+    details: マルチセッション協調 — 1 つの会話に収まらない作業のための、永続的なピアツーピアセッション群。
+    link: /ja/topics/agent-teams
 ---
 
 🌐 [English](/topics/)

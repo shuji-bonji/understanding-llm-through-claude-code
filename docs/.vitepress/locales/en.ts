@@ -138,6 +138,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					{ text: 'MCP', link: '/topics/mcp' },
 					{ text: 'Hooks', link: '/topics/hooks' },
 					{ text: 'Plugins', link: '/topics/plugins' },
+					{ text: 'Code Intelligence', link: '/topics/code-intelligence' },
+					{ text: 'Agent Teams', link: '/topics/agent-teams' },
 				],
 			},
 			{
