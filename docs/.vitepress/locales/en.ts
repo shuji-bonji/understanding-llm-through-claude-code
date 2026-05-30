@@ -5,10 +5,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 	themeConfig: {
 		nav: [
 			{ text: 'Home', link: '/' },
-			{ text: 'LLM Problems', link: '/01-llm-structural-problems/' },
-			{ text: 'Context Window', link: '/02-context-window/' },
-			{ text: 'Configuration', link: '/03-always-loaded-context/' },
-			{ text: 'Appendix', link: '/appendix/glossary' },
+			{ text: 'Topics', link: '/topics/' },
 		],
 		sidebar: [
 			{
@@ -131,11 +128,25 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 				],
 			},
 			{
+				text: 'Topics (by feature)',
+				collapsed: true,
+				items: [
+					{ text: 'Topics index', link: '/topics/' },
+					{ text: 'CLAUDE.md', link: '/topics/claude-md' },
+					{ text: 'Rules', link: '/topics/rules' },
+					{ text: 'Skills & Agents', link: '/topics/skills-and-agents' },
+					{ text: 'MCP', link: '/topics/mcp' },
+					{ text: 'Hooks', link: '/topics/hooks' },
+					{ text: 'Plugins', link: '/topics/plugins' },
+				],
+			},
+			{
 				text: 'Appendix',
 				collapsed: true,
 				items: [
 					{ text: 'Problems × Countermeasures Map', link: '/appendix/problem-countermeasure-map' },
 					{ text: 'Lifecycle × Config Map', link: '/appendix/lifecycle-config-map' },
+					{ text: 'Feature Index', link: '/appendix/feature-index' },
 					{ text: 'Configuration Reference', link: '/appendix/claude-code-config-reference' },
 					{ text: 'FAQ', link: '/appendix/faq' },
 					{ text: 'Plugins & Marketplaces', link: '/appendix/plugins-and-marketplaces' },

@@ -244,8 +244,8 @@ Spawns a subagent that can read files, search code, and use other tools to verif
 
 | Framework | Recipe |
 | :--- | :--- |
-| Angular + NgRx + RxJS | [examples/angular-ngrx/](../../examples/angular-ngrx/) |
-| SvelteKit + Svelte 5 | [examples/svelte-kit/](../../examples/svelte-kit/) |
+| Angular + NgRx + RxJS | [examples/angular-ngrx/](https://github.com/shuji-bonji/understanding-llm-through-claude-code/tree/main/examples/angular-ngrx) |
+| SvelteKit + Svelte 5 | [examples/svelte-kit/](https://github.com/shuji-bonji/understanding-llm-through-claude-code/tree/main/examples/svelte-kit) |
 
 ## 8 Problems × Hooks: Quick Reference
 

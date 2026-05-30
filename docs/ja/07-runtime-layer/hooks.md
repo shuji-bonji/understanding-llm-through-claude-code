@@ -244,8 +244,8 @@ Hook 入力を JSON として HTTP エンドポイントに POST する。エン
 
 | フレームワーク | レシピ |
 | :--- | :--- |
-| Angular + NgRx + RxJS | [examples/angular-ngrx/](../../../examples/angular-ngrx/) |
-| SvelteKit + Svelte 5 | [examples/svelte-kit/](../../../examples/svelte-kit/) |
+| Angular + NgRx + RxJS | [examples/angular-ngrx/](https://github.com/shuji-bonji/understanding-llm-through-claude-code/tree/main/examples/angular-ngrx) |
+| SvelteKit + Svelte 5 | [examples/svelte-kit/](https://github.com/shuji-bonji/understanding-llm-through-claude-code/tree/main/examples/svelte-kit) |
 
 ## 8問題 × Hooks: クイックリファレンス
 

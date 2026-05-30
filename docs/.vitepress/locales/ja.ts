@@ -10,10 +10,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 	themeConfig: {
 		nav: [
 			{ text: 'ホーム', link: '/ja/' },
-			{ text: 'LLMの問題', link: '/ja/01-llm-structural-problems/' },
-			{ text: 'コンテキスト', link: '/ja/02-context-window/' },
-			{ text: '設定レイヤー', link: '/ja/03-always-loaded-context/' },
-			{ text: '付録', link: '/ja/appendix/glossary' },
+			{ text: 'Topics', link: '/ja/topics/' },
 		],
 		sidebar: {
 			'/ja/': [
@@ -137,11 +134,25 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					],
 				},
 				{
+					text: 'Topics（機能別）',
+					collapsed: true,
+					items: [
+						{ text: 'Topics 一覧', link: '/ja/topics/' },
+						{ text: 'CLAUDE.md', link: '/ja/topics/claude-md' },
+						{ text: 'Rules', link: '/ja/topics/rules' },
+						{ text: 'Skills & Agents', link: '/ja/topics/skills-and-agents' },
+						{ text: 'MCP', link: '/ja/topics/mcp' },
+						{ text: 'Hooks', link: '/ja/topics/hooks' },
+						{ text: 'Plugins', link: '/ja/topics/plugins' },
+					],
+				},
+				{
 					text: '付録',
 					collapsed: true,
 					items: [
 						{ text: '構造的問題 × 対策マップ', link: '/ja/appendix/problem-countermeasure-map' },
 						{ text: 'ライフサイクル × 設定マップ', link: '/ja/appendix/lifecycle-config-map' },
+						{ text: '機能別早見表', link: '/ja/appendix/feature-index' },
 						{ text: 'Claude Code 設定リファレンス', link: '/ja/appendix/claude-code-config-reference' },
 						{ text: 'FAQ', link: '/ja/appendix/faq' },
 						{ text: 'Plugins & Marketplaces', link: '/ja/appendix/plugins-and-marketplaces' },
