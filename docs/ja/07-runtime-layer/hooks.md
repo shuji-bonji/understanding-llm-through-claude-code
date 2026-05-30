@@ -14,8 +14,8 @@ Hooks は Claude Code のライフサイクルイベントにフックして実�
 | 属性             | 値                                      |
 | :--------------- | :-------------------------------------- |
 | 注入タイミング   | **コンテキストに注入されない**          |
-| コンテキスト消費 | なし（Prompt Hook を除く）              |
-| 実行場所         | Claude Code ランタイム（シェル / HTTP） |
+| コンテキスト消費 | なし（Prompt/Agent Hook の `reason` は `ok: false` 時に Claude にフィードバック）              |
+| 実行場所         | Claude Code ランタイム（シェル / HTTP / サブ LLM / サブエージェント） |
 | 定義場所         | settings.json 内の `hooks` キー         |
 
 ## なぜ存在するのか
@@ -133,35 +133,46 @@ flowchart TB
 
 ## Hook の種類
 
+> [!IMPORTANT]
+> 4種類すべて同じネスト構造: `event → [{ matcher?, hooks: [{ type, ... }] }]`。`matcher` フィールドは **ツール名に対する文字列正規表現**（例: `"Edit|Write"`）で、`toolName` / `pathPattern` を持つオブジェクトではない。ツール名は PascalCase（`Edit`, `Write`, `Bash`）。
+
 ### Command Hook（最も一般的）
+
+シェルコマンドを実行する。Hook 入力は **stdin に JSON として届く**ので、`jq` でフィールド（`file_path` 等）を抽出する。`exit 0` で許可、`exit 2` でブロック（stderr が Claude にフィードバック）。
 
 ```jsonc
 {
   "hooks": {
     "PostToolUse": [
       {
-        "type": "command",
-        "command": "npx prettier --write $CLAUDE_FILE_PATH",
-        "matcher": {
-          "toolName": "edit_file",
-          "pathPattern": "**/*.ts",
-        },
-        "timeout": 10000,
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | xargs -r npx prettier --write --ignore-unknown",
+          },
+        ],
       },
     ],
   },
 }
 ```
 
-### Prompt Hook（唯一コンテキストに影響する）
+### Prompt Hook（シングルターン LLM 判定）
+
+Hook 入力を Claude モデル（デフォルト Haiku）に送り、yes/no 判定を委ねる。モデルは `{"ok": true}` で許可、`{"ok": false, "reason": "..."}` でブロックを返す。`Stop` イベントでは `reason` が Claude にフィードバックされ、作業継続のヒントになる。
 
 ```jsonc
 {
   "hooks": {
-    "UserPromptSubmit": [
+    "Stop": [
       {
-        "type": "prompt",
-        "prompt": "必ず変更前にgit stashしてください",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "すべてのタスクが完了しているか確認してください。未完了なら {\"ok\": false, \"reason\": \"残作業\"} を返してください。",
+          },
+        ],
       },
     ],
   },
@@ -170,45 +181,95 @@ flowchart TB
 
 ### HTTP Hook（外部サービス連携）
 
+Hook 入力を JSON として HTTP エンドポイントに POST する。エンドポイントはレスポンスボディに同じ `ok`/`reason` JSON を返す。チーム共有の監査サービス等に有用。
+
 ```jsonc
 {
   "hooks": {
     "PostToolUse": [
       {
-        "type": "http",
-        "url": "https://my-service.com/webhook",
-        "matcher": { "toolName": "execute_command" },
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:8080/hooks/tool-use",
+            "headers": { "Authorization": "Bearer $MY_TOKEN" },
+            "allowedEnvVars": ["MY_TOKEN"],
+          },
+        ],
       },
     ],
   },
 }
 ```
 
-### Agent Hook（マルチターン検証）
+### Agent Hook（マルチターン検証、Experimental）
 
-ファイルの読み取りやコマンド実行が必要な検証に使用。サブエージェントを起動し、最大50ターンのツール使用で条件を確認する。
+> [!WARNING]
+> Agent Hook は **Experimental**（実験的）であり、挙動・設定は変更される可能性がある。本番ワークフローでは Command Hook を優先すること。
+
+ファイル読み取りやコマンド実行が必要な検証に使用。サブエージェントを起動し、最大50ターンのツール使用で条件を確認、`{"ok": ..., "reason": ...}` を返す。デフォルトタイムアウト60秒。
 
 ```jsonc
 {
   "hooks": {
     "Stop": [
       {
-        "type": "agent",
-        "prompt": "全てのユニットテストが通るか検証してください。テストスイートを実行し結果を確認してください。",
-        "timeout": 120,
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "全てのユニットテストが通るか検証してください。テストスイートを実行し結果を確認してください。$ARGUMENTS",
+            "timeout": 120,
+          },
+        ],
       },
     ],
   },
 }
 ```
 
-## Exit Code の意味
+> [!TIP]
+> どれを選ぶか: **Command** は決定論的なシェルルール（lint、整形、ファイル保護）。**Prompt** は Hook 入力だけで判断できる場合（Haiku レベルの評価）。**Agent** はファイル読み取りやコマンド実行を伴う検証（テスト実行等）。**HTTP** は外部サービスにロジックを委譲する場合。
+
+## Exit Code の意味（Command Hook のみ）
 
 | Exit Code | 意味                                                      |
 | :-------- | :-------------------------------------------------------- |
-| 0         | 操作を許可（そのまま続行。stdout をコンテキストに追加可） |
+| 0         | 操作を許可（そのまま続行。stdout を `additionalContext` 経由でコンテキストに追加可） |
 | 2         | 操作をブロック（stderr の内容を Claude にフィードバック） |
 | その他    | 操作は続行。stderr はログに記録されるが Claude には非表示 |
+
+> Prompt/Agent/HTTP Hook は Exit Code ではなく `{"ok": true/false, "reason": "..."}` JSON レスポンス形式を使う。
+
+## フレームワーク別 実践レシピ
+
+| フレームワーク | レシピ |
+| :--- | :--- |
+| Angular + NgRx + RxJS | [examples/angular-ngrx/](../../../examples/angular-ngrx/) |
+| SvelteKit + Svelte 5 | [examples/svelte-kit/](../../../examples/svelte-kit/) |
+
+## 8問題 × Hooks: クイックリファレンス
+
+> [!IMPORTANT]
+> Hooks は構造的問題のすべてに万能ではない。下表は Hooks が強い領域・部分的に効く領域・他層（rules / Agents / セッション管理）の方が効く領域を示す。「ここで Hook を使うべきか？」の判断補助として使う。
+
+| 構造的問題 | 推奨 Hook イベント | 具体的なコマンド / タイプ | 効果 | 強度 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Context Rot** | `SessionStart` (matcher: `compact`) | `echo` でプロジェクト規約、`git log --oneline -5` | コンパクション後に重要ルールを再注入 | ◯ 部分的 — `/compact` 自体が主対策 |
+| **Lost in the Middle** | （Hooks 単独では効果薄） | — | Hooks はコンテキスト位置を制御しない | △ Rules / Agents の方が効果的 |
+| **Priority Saturation** | `PostToolUse`, `Stop` | `prettier`, `eslint`, `tsc --noEmit` | 機械的ルールを CLAUDE.md から外す | ◎ 強 — 指示予算を解放 |
+| **Hallucination** | `PostToolUse`, `Stop` | `tsc --noEmit`, `svelte-check`, `vitest run` | コンパイラ・型チェッカーは幻覚しない | ◎ 強 — 主対策 |
+| **Sycophancy** | `Stop` | Command: `eslint --no-warn-ignored`<br>Agent Hook: 「テストが通るか検証」 | LLM の追従バイアスはランナーに効かない | ◎ 強 — 機械的検証は追従しない |
+| **Knowledge Boundary** | `Stop` | `svelte-check`（Svelte 5 に混入するレガシー構文を検出）、`tsc`（型欠落を検出） | 古い API・構文の混入を検出 | ◯ 部分的 — 境界が検証可能な場合のみ |
+| **Prompt Sensitivity** | `PreToolUse`, `Stop` | Hallucination と同じ機械的検証 | プロンプトの表現に出力品質が依存しなくなる | ◯ 部分的 — 最後の防衛線 |
+| **Instruction Decay** | `Stop`, `PreToolUse` | `block-dangerous-commands.sh`, `tsc --noEmit` | コンテキスト依存しない強制実行 | ◎ 強 — Hooks は「忘れる」ことができない |
+
+> [!TIP]
+> **強度欄の読み方**:
+> - ◎ 強: その問題に対する主たる対策
+> - ◯ 部分的: 効くが、他層（rules / Agents / セッション）の方が大きく寄与する
+> - △ 弱: ここで Hook を最初に使うべきではない。別の層で対応
+
+全層（rules、Skills、Agents、セッション、plugins）を横断した対策マップは [付録: 構造的問題 × Claude Code 対策マップ](../appendix/problem-countermeasure-map.md) 参照。
 
 ---
 

@@ -9,8 +9,8 @@
 
 | Project | Tech Stack | Status |
 |:--|:--|:--|
-| [Angular/NgRx](./angular-ngrx/) | Angular 18 + NgRx + RxJS | 🚧 Coming Soon |
-| [SvelteKit](./svelte-kit/) | SvelteKit + Svelte 5 | 🚧 Coming Soon |
+| [Angular/NgRx](./angular-ngrx/) | Angular 18 + NgRx + RxJS | 🟡 Hooks recipe ready |
+| [SvelteKit](./svelte-kit/) | SvelteKit + Svelte 5 | 🟡 Hooks recipe ready |
 | [e-shiwake](https://github.com/shuji-bonji/e-shiwake/tree/main/.claude) | SvelteKit + Svelte 5 + Dexie.js (PWA) | ✅ Real Project |
 
 ## Mapping Examples to Main Content

@@ -14,8 +14,8 @@ Hooks are context-independent processing triggered by Claude Code lifecycle even
 | Attribute | Value |
 | :--- | :--- |
 | Injection Timing | **Not injected into context** |
-| Context Consumption | None (except Prompt Hook) |
-| Execution Location | Claude Code runtime (shell / HTTP) |
+| Context Consumption | None (Prompt/Agent Hook `reason` is fed back to Claude on `ok: false`) |
+| Execution Location | Claude Code runtime (shell / HTTP / sub-LLM / subagent) |
 | Definition Location | `hooks` key in settings.json |
 
 ## Why They Exist
@@ -133,35 +133,46 @@ flowchart TB
 
 ## Hook Types
 
+> [!IMPORTANT]
+> All four types share the same nesting structure: `event → [{ matcher?, hooks: [{ type, ... }] }]`. The `matcher` field is a string regex (e.g. `"Edit|Write"`) against tool names, **not** an object with `toolName` / `pathPattern` keys. Tool names are PascalCase (`Edit`, `Write`, `Bash`).
+
 ### Command Hook (most common)
+
+Runs a shell command. Hook input arrives on **stdin as JSON**; parse it with `jq` to extract fields like `file_path`. `exit 0` allows, `exit 2` blocks with stderr fed back to Claude.
 
 ```jsonc
 {
   "hooks": {
     "PostToolUse": [
       {
-        "type": "command",
-        "command": "npx prettier --write $CLAUDE_FILE_PATH",
-        "matcher": {
-          "toolName": "edit_file",
-          "pathPattern": "**/*.ts",
-        },
-        "timeout": 10000,
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | xargs -r npx prettier --write --ignore-unknown",
+          },
+        ],
       },
     ],
   },
 }
 ```
 
-### Prompt Hook (only one affecting context)
+### Prompt Hook (single-turn LLM judgment)
+
+Sends the hook input to a Claude model (Haiku by default) for a yes/no decision. The model must return `{"ok": true}` to allow, or `{"ok": false, "reason": "..."}` to block. On `Stop` events, the `reason` is fed back to Claude so it keeps working.
 
 ```jsonc
 {
   "hooks": {
-    "UserPromptSubmit": [
+    "Stop": [
       {
-        "type": "prompt",
-        "prompt": "Always git stash before making changes",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if all tasks are complete. If not, respond with {\"ok\": false, \"reason\": \"what remains to be done\"}.",
+          },
+        ],
       },
     ],
   },
@@ -170,48 +181,98 @@ flowchart TB
 
 ### HTTP Hook (external service integration)
 
+POSTs the hook input as JSON to an HTTP endpoint. The endpoint returns the same `ok`/`reason` JSON via response body. Useful for shared audit services across a team.
+
 ```jsonc
 {
   "hooks": {
     "PostToolUse": [
       {
-        "type": "http",
-        "url": "https://my-service.com/webhook",
-        "matcher": { "toolName": "execute_command" },
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:8080/hooks/tool-use",
+            "headers": { "Authorization": "Bearer $MY_TOKEN" },
+            "allowedEnvVars": ["MY_TOKEN"],
+          },
+        ],
       },
     ],
   },
 }
 ```
 
-### Agent Hook (multi-turn validation)
+### Agent Hook (multi-turn verification, experimental)
 
-Used for validations requiring file reading or command execution. Spawns a subagent to verify conditions with up to 50 turns of tool use.
+> [!WARNING]
+> Agent hooks are **experimental**. Behavior and configuration may change. For production workflows, prefer Command hooks.
+
+Spawns a subagent that can read files, search code, and use other tools to verify conditions before returning `{"ok": ..., "reason": ...}`. Default timeout 60s, up to 50 tool-use turns.
 
 ```jsonc
 {
   "hooks": {
     "Stop": [
       {
-        "type": "agent",
-        "prompt": "Verify that all unit tests pass. Run the test suite and check the results.",
-        "timeout": 120,
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Verify that all unit tests pass. Run the test suite and check the results. $ARGUMENTS",
+            "timeout": 120,
+          },
+        ],
       },
     ],
   },
 }
 ```
 
-## Exit Code Meanings
+> [!TIP]
+> When to choose which: **Command** for deterministic shell rules (lint, format, file protection). **Prompt** when input data alone is enough for judgment (Haiku-level evaluation). **Agent** when verification needs to read files or run commands (e.g. test execution). **HTTP** when an external service should handle the logic.
+
+## Exit Code Meanings (Command Hook only)
 
 | Exit Code | Meaning |
 | :--- | :--- |
-| 0 | Allow operation (continue as is. stdout may be added to context) |
+| 0 | Allow operation (continue as is. stdout may be added to context via `additionalContext`) |
 | 2 | Block operation (stderr content fed back to Claude) |
 | Other | Continue operation. stderr logged but not shown to Claude |
 
+> Prompt/Agent/HTTP hooks use the `{"ok": true/false, "reason": "..."}` JSON response format instead of exit codes.
+
+## Practical Recipes by Framework
+
+| Framework | Recipe |
+| :--- | :--- |
+| Angular + NgRx + RxJS | [examples/angular-ngrx/](../../examples/angular-ngrx/) |
+| SvelteKit + Svelte 5 | [examples/svelte-kit/](../../examples/svelte-kit/) |
+
+## 8 Problems × Hooks: Quick Reference
+
+> [!IMPORTANT]
+> Hooks aren't a silver bullet for every structural problem. The table below shows where Hooks are strong, where they're partial, and where other layers (rules / Agents / sessions) carry more weight. Use this as a "should I reach for a Hook here?" decision aid.
+
+| Structural Problem | Recommended Hook Event | Concrete Command / Type | Effect | Strength |
+| :--- | :--- | :--- | :--- | :--- |
+| **Context Rot** | `SessionStart` (matcher: `compact`) | `echo` project conventions, `git log --oneline -5` | Re-injects key rules after compaction | ◯ Partial — `/compact` itself is the main mitigation |
+| **Lost in the Middle** | (Hooks alone are weak) | — | Hooks don't reposition context | △ Rules / Agents are more effective |
+| **Priority Saturation** | `PostToolUse`, `Stop` | `prettier`, `eslint`, `tsc --noEmit` | Removes mechanical rules from CLAUDE.md | ◎ Strong — frees the instruction budget |
+| **Hallucination** | `PostToolUse`, `Stop` | `tsc --noEmit`, `svelte-check`, `vitest run` | Compilers / type checkers don't hallucinate | ◎ Strong — primary mitigation |
+| **Sycophancy** | `Stop` | Command: `eslint --no-warn-ignored`<br>Agent Hook: "verify tests pass" | LLM agreement bias doesn't affect runners | ◎ Strong — mechanical verifiers don't flatter |
+| **Knowledge Boundary** | `Stop` | `svelte-check` (catches legacy Svelte syntax mixed with Svelte 5), `tsc` (catches missing types) | Detects outdated API / syntax patterns | ◯ Partial — works only when the boundary is checkable |
+| **Prompt Sensitivity** | `PreToolUse`, `Stop` | Same mechanical checks as Hallucination | Output quality doesn't depend on prompt wording | ◯ Partial — last line of defense |
+| **Instruction Decay** | `Stop`, `PreToolUse` | `block-dangerous-commands.sh`, `tsc --noEmit` | Forced execution independent of context | ◎ Strong — Hooks can't be "forgotten" |
+
+> [!TIP]
+> **Reading the strength column**:
+> - ◎ Strong: Hooks are the primary mitigation for this problem
+> - ◯ Partial: Hooks help, but other layers (rules / Agents / sessions) do more
+> - △ Weak: Don't reach for Hooks first — use a different layer
+
+For the full countermeasure landscape across all layers (rules, Skills, Agents, sessions, plugins), see [Appendix: Problem × Countermeasure Map](../appendix/problem-countermeasure-map.md).
+
 ---
 
-> **前へ**: [The Role of settings.json](settings-json.md)
+> **Previous**: [The Role of settings.json](settings-json.md)
 
-> **次へ**: [Why Not Show LLMs](why-not-in-context.md)
+> **Next**: [Why Not Show LLMs](why-not-in-context.md)
