@@ -146,6 +146,15 @@ Using `!` backtick syntax, you can execute shell commands when a Skill is invoke
 - Changed files list: !`gh pr diff --name-only`
 ```
 
+## 🔗 See implementation patterns and catalog
+
+This page covers the **design principles (why)** of Skills. For concrete "how to write, how to place, and how to decide between Skills and MCP" — see the sister site for implementation patterns and examples.
+
+- [ai-agent-architecture / What is Skills](https://shuji-bonji.github.io/ai-agent-architecture/skills/what-is-skills) — Skills components and tool comparison (Cursor / Cline / Vercel)
+- [ai-agent-architecture / Skill Design Guide](https://shuji-bonji.github.io/ai-agent-architecture/skills/creating-skills) — Design decisions and naming
+- [ai-agent-architecture / MCP vs Skills](https://shuji-bonji.github.io/ai-agent-architecture/skills/vs-mcp) — Decision flow
+- [ai-agent-architecture / Anti-Patterns](https://shuji-bonji.github.io/ai-agent-architecture/skills/anti-patterns) — Designs to avoid
+
 ---
 
 > **Previous**: [Part 4: Conditional Context](../04-conditional-context/index.md)

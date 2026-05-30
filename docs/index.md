@@ -49,3 +49,16 @@ features:
     details: Maps, configuration reference, FAQ, plugins, and glossary.
     link: /appendix/problem-countermeasure-map
 ---
+
+## 📚 Sister Projects
+
+A 3-phase learning path: "Know LLMs → Know Agent Design → Apply to Systems."
+
+| Phase | Project | Focus |
+| --- | --- | --- |
+| **1. Know LLMs** | 👈 **This site** | LLM structural constraints and the *why* behind configuration design |
+| **2. Know Agent Design** | [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/) | MCP, Skills, and Agent composition with implementation patterns (*what/how*) |
+| **3. Apply to Systems** | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | _Coming soon_ — System operations in the AI era |
+
+> [!TIP]
+> **For readers who learned the "why" here** — for concrete implementation patterns (MCP catalog, Skills design, Agent taxonomy, A2A protocol, etc.), read the sister site [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/) alongside this one to connect the *why* with the *how*.

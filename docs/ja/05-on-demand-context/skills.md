@@ -146,6 +146,15 @@ e-shiwake（電子仕訳）は個人事業主・フリーランス向けの PWA 
 - 変更ファイル一覧: !`gh pr diff --name-only`
 ```
 
+## 🔗 実装パターン・カタログを見る
+
+本ページは Skills の **設計原理（Why）** を扱った。具体的な「**どう書くか・どう配置するか・MCP とどう使い分けるか**」を実装パターンや事例で学びたい場合は、姉妹サイトを参照。
+
+- [ai-agent-architecture / Skillsとは](https://shuji-bonji.github.io/ai-agent-architecture/ja/skills/what-is-skills) — Skills の構成要素・他ツール（Cursor / Cline / Vercel）での扱い
+- [ai-agent-architecture / Skill設計ガイド](https://shuji-bonji.github.io/ai-agent-architecture/ja/skills/creating-skills) — 設計判断と命名
+- [ai-agent-architecture / MCP vs Skills](https://shuji-bonji.github.io/ai-agent-architecture/ja/skills/vs-mcp) — 選択判断フロー
+- [ai-agent-architecture / アンチパターン集](https://shuji-bonji.github.io/ai-agent-architecture/ja/skills/anti-patterns) — 避けるべき設計
+
 ---
 
 > **前へ**: [Part 4: 条件付きコンテキスト](../04-conditional-context/index.md)

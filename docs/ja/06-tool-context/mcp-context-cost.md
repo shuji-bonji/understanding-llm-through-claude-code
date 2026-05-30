@@ -56,6 +56,15 @@ MCP は Context Rot のリスクを持つ一方で、**Knowledge Boundary** の�
 - MCP の合計が 20K トークンを超えないよう監視
 - 使用頻度の低い MCP は必要な時だけ接続
 
+## 🔗 実装パターン・カタログ・セキュリティを見る
+
+本ページは MCP の **コンテキストコスト構造（Why）** を扱った。具体的な「**どんな MCP が存在するか・どう作るか・セキュリティ要件は何か**」を実装観点で学びたい場合は、姉妹サイトを参照。
+
+- [ai-agent-architecture / MCPとは](https://shuji-bonji.github.io/ai-agent-architecture/ja/mcp/what-is-mcp) — MCP の構成要素
+- [ai-agent-architecture / MCP Catalog](https://shuji-bonji.github.io/ai-agent-architecture/ja/mcp/catalog) — 構築済み MCP の一覧
+- [ai-agent-architecture / MCP Development](https://shuji-bonji.github.io/ai-agent-architecture/ja/mcp/development) — MCP サーバの実装
+- [ai-agent-architecture / MCP Security](https://shuji-bonji.github.io/ai-agent-architecture/ja/mcp/security) — セキュリティ設計
+
 ---
 
 > **前へ**: [Part 6: ツール定義としてのコンテキスト](index.md)

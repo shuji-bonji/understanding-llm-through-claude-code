@@ -49,3 +49,16 @@ features:
     details: 各種マップ、設定リファレンス、FAQ、Plugins、用語集。
     link: /ja/appendix/problem-countermeasure-map
 ---
+
+## 📚 姉妹プロジェクト
+
+「LLM を知る → AI Agent 設計を知る → システムに適用する」を順序立てて学べる 3 つの姉妹プロジェクトです。
+
+| フェーズ | プロジェクト | 内容 |
+| --- | --- | --- |
+| **1. LLM を知る** | 👈 **このサイト** | LLM の構造的制約と「なぜそう設計するのか」（Why の本棚） |
+| **2. AI Agent 設計を知る** | [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/ja/) | MCP・Skills・Agent の構成と実装パターン（What/How の地図） |
+| **3. システムに適用する** | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | _準備中_ — AI 時代のシステム運用 |
+
+> [!TIP]
+> **このサイトで Why を理解した方へ** — 具体的な実装パターン（MCP カタログ、Skills 設計、Agent 分類、A2A プロトコル等）を求める場合は、姉妹サイトの [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/ja/) を併読すると、Why と How が繋がります。

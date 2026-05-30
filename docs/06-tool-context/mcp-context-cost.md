@@ -56,6 +56,15 @@ While MCP carries Context Rot risk, it is also the most fundamental mitigation f
 - Monitor that total MCP consumption doesn't exceed 20K tokens
 - Connect infrequently-used MCPs only when needed
 
+## 🔗 See implementation patterns, catalog, and security
+
+This page covers the **context cost structure (why)** of MCP. For concrete "what MCPs exist, how to build them, and what security requirements apply" — see the sister site for implementation views.
+
+- [ai-agent-architecture / What is MCP](https://shuji-bonji.github.io/ai-agent-architecture/mcp/what-is-mcp) — MCP components
+- [ai-agent-architecture / MCP Catalog](https://shuji-bonji.github.io/ai-agent-architecture/mcp/catalog) — Catalog of built MCPs
+- [ai-agent-architecture / MCP Development](https://shuji-bonji.github.io/ai-agent-architecture/mcp/development) — Building MCP servers
+- [ai-agent-architecture / MCP Security](https://shuji-bonji.github.io/ai-agent-architecture/mcp/security) — Security design
+
 ---
 
 > **Previous**: [Part 6: Context as Tool Definitions](index.md)
