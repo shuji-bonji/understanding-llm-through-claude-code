@@ -154,6 +154,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					items: [
 						{ text: '構造的問題 × 対策マップ', link: '/ja/appendix/problem-countermeasure-map' },
 						{ text: 'Harness と LLM の構造的制約', link: '/ja/appendix/harness-and-llm-constraints' },
+						{ text: 'Authority と LLM の構造的制約', link: '/ja/appendix/authority-and-llm-constraints' },
 						{ text: 'ライフサイクル × 設定マップ', link: '/ja/appendix/lifecycle-config-map' },
 						{ text: '機能別早見表', link: '/ja/appendix/feature-index' },
 						{ text: 'Claude Code 設定リファレンス', link: '/ja/appendix/claude-code-config-reference' },

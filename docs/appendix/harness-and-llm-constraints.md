@@ -193,5 +193,5 @@ This page covered **diagnosing harness elements through the 8 problems (Why)**. 
 
 ---
 
-> **Next**: [Lifecycle × Config Map](./lifecycle-config-map.md)
+> **Next**: [Authority and LLM Constraints](./authority-and-llm-constraints.md)
 > **Previous**: [Problems × Countermeasures Map](./problem-countermeasure-map.md)

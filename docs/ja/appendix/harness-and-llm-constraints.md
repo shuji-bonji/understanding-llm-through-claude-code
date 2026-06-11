@@ -193,5 +193,5 @@ graph TB
 
 ---
 
-> **次へ**: [ライフサイクル × 設定マップ](./lifecycle-config-map.md)
+> **次へ**: [Authority と LLM の構造的制約](./authority-and-llm-constraints.md)
 > **前へ**: [構造的問題 × 対策マップ](./problem-countermeasure-map.md)
