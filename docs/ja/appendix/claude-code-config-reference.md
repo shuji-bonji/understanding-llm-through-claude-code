@@ -65,14 +65,19 @@ my-project/
 ### 設定の優先順位
 
 ```
-Managed（最高）  managed-settings.json（組織ポリシー）
+Managed（最高）   managed-settings.json（組織ポリシー）
   ↓
-Project          .claude/settings.json（チーム共有）
+Command line      CLI 引数（--settings, --permission-mode 等）
   ↓
-Project Local    .claude/settings.local.json（個人ローカル）
+Project Local     .claude/settings.local.json（個人ローカル）
   ↓
-User（最低）     ~/.claude/settings.json（グローバル個人）
+Project           .claude/settings.json（チーム共有）
+  ↓
+User（最低）      ~/.claude/settings.json（グローバル個人）
 ```
+
+> [!IMPORTANT]
+> ローカル設定（`.claude/settings.local.json`）はチーム共有設定（`.claude/settings.json`）より優先され、コマンドライン引数はさらにその上に来る。上書きできないのは Managed 設定のみ。
 
 以下では、各ファイル/ディレクトリを「コンテキストへの関わり方」で分類して解説する。
 
@@ -95,7 +100,7 @@ User（最低）     ~/.claude/settings.json（グローバル個人）
 |                                        | `~/.claude/settings.json`                      | グローバル個人設定（最低優先）      | [settings.json](../07-runtime-layer/settings-json.md)        |
 |                                        | 環境変数                                       | シェル or `env` セクション          | 本ページ内「環境変数」セクション                             |
 |                                        | Hooks                                          | LLM の行動前後に自動実行            | [ライフサイクル](../07-runtime-layer/hooks.md)               |
-| **セッション管理**（Part 8）           | `/compact` · `/clear`                          | 手動 or 50%閾値で自動               | [使い分け](../08-session-management/compact-and-clear.md)    |
+| **セッション管理**（Part 8）           | `/compact` · `/clear`                          | 手動 or コンテキスト上限付近で自動  | [使い分け](../08-session-management/compact-and-clear.md)    |
 |                                        | Memory                                         | セッション横断で永続化              | [何を覚えるか](../08-session-management/what-to-remember.md) |
 | **プラグイン拡張**                     | `.claude-plugin/plugin.json`                   | インストール時に有効化              | [プラグイン](plugins-and-marketplaces.md)                    |
 |                                        | `marketplace.json`                             | `/plugin marketplace add` で登録    | [マーケットプレイス](plugins-and-marketplaces.md)            |
@@ -290,7 +295,7 @@ MCP サーバは**3つのスコープ**で設定可能。スコープによっ�
 
 | 項目                   | 内容                                                                                                                                                                           |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **接続タイプ**         | `stdio`（コマンド実行）/ `http`（HTTP+OAuth）/ `sse`（Server-Sent Events）                                                                                                     |
+| **接続タイプ**         | `stdio`（コマンド実行）/ `http`（Streamable HTTP + OAuth）/ `sse`（Server-Sent Events、**非推奨** — `http` へ移行）                                                              |
 | **コンテキストコスト** | ツール定義そのものがトークンを消費する（20K超で性能劣化）                                                                                                                      |
 | **役割**               | 外部ツール・API との連携（DB参照、ファイル操作、外部サービス呼び出し等）                                                                                                       |
 | **承認**               | `.mcp.json` のサーバは初回起動時に承認待ち（`claude mcp list` で `⏸ Pending approval` 表示）                                                                                   |
@@ -481,6 +486,7 @@ API キーをスクリプトで動的に取得する仕組み。社内 Vault や
 | :--------------------- | :------------------- | :------------------------------------------------- |
 | **セッション単位**     | `SessionStart`       | セッション開始時 / 再開時                          |
 |                        | `SessionEnd`         | セッション終了時                                   |
+|                        | `Setup`              | CI/スクリプト向けの一回限り準備（`--init-only`、または `-p` モードの `--init`/`--maintenance`） |
 |                        | `InstructionsLoaded` | CLAUDE.md / rules がロードされた時（デバッグ向き） |
 | **ターン単位**         | `UserPromptSubmit`   | ユーザーがプロンプト送信した時（Claude処理前）     |
 |                        | `Stop`               | アシスタント応答が完了した時                       |
@@ -489,6 +495,7 @@ API キーをスクリプトで動的に取得する仕組み。社内 Vault や
 | **Subagent 関連**      | `SubagentStart`      | Subagent が起動した時                              |
 |                        | `SubagentStop`       | Subagent が完了した時                              |
 | **コンテキスト管理**   | `PreCompact`         | `/compact` 実行直前                                |
+|                        | `PostCompact`        | 圧縮完了直後                                       |
 | **その他**             | `Notification`       | 通知発生時                                         |
 |                        | `PermissionRequest`  | permission 確認が必要になった時                    |
 
@@ -503,7 +510,7 @@ API キーをスクリプトで動的に取得する仕組み。社内 Vault や
 
 | コマンド   | 動作                       | 用途                                          |
 | ---------- | -------------------------- | --------------------------------------------- |
-| `/compact` | コンテキストを要約して圧縮 | Context Rot の予防的対処。50%閾値で自動実行も |
+| `/compact` | コンテキストを要約して圧縮 | Context Rot の予防的対処。コンテキストウィンドウが上限に近づくと自動実行（`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` で前倒し可能） |
 | `/clear`   | コンテキストを完全リセット | タスク切り替え時。蓄積したノイズを一掃        |
 
 | 項目             | 内容                                                                                                                                                                                                            |
@@ -598,7 +605,7 @@ Claude Code には**2系統のメモリ機構**がある: ユーザーが書く 
 | `/plugin`  | プラグインのインストール・管理。`/plugin marketplace add <url>` でマーケットプレイス追加                    |
 | `/mcp`     | MCP サーバ一覧、認証状態、接続テスト                                                                        |
 | `/init`    | CLAUDE.md を自動生成（コードベースを解析してプロジェクト規約を抽出）。`CLAUDE_CODE_NEW_INIT=1` で対話モード |
-| `/compact` | コンテキストを要約圧縮（手動 / 50% 閾値で自動）                                                             |
+| `/compact` | コンテキストを要約圧縮（手動 / コンテキスト上限付近で自動）                                                 |
 | `/clear`   | コンテキストを完全リセット                                                                                  |
 | `/help`    | ヘルプ表示                                                                                                  |
 
@@ -611,7 +618,7 @@ Claude の**応答スタイル（システムプロンプトの一部）を切�
 | 項目           | 内容                                                                                                                          |
 | :------------- | :---------------------------------------------------------------------------------------------------------------------------- |
 | **設定場所**   | `settings.json` の `outputStyle` キー / `/config` メニュー / `.claude/output-styles/*.md`                                     |
-| **ビルトイン** | `Default`（標準）/ `Explanatory`（教育的「Insights」を追加）/ `Learning`（コードに `TODO(human)` マーカーを残して協働モード） |
+| **ビルトイン** | `Default`（標準）/ `Proactive`（仮定を置いて自律的に実行、計画より行動を優先）/ `Explanatory`（教育的「Insights」を追加）/ `Learning`（コードに `TODO(human)` マーカーを残して協働モード） |
 | **カスタム**   | `.claude/output-styles/<name>.md` に frontmatter + システムプロンプト追記                                                     |
 | **反映**       | システムプロンプトの一部なので、**変更後は `/clear` または新規セッション**で初めて効く                                        |
 
@@ -672,7 +679,7 @@ keep-coding-instructions が true のため、コーディング作業時は通�
 | フラグ                                 | 役割                                                                                 |
 | :------------------------------------- | :----------------------------------------------------------------------------------- |
 | `--permission-mode <mode>`             | 起動時 permission モード（`default` / `acceptEdits` / `plan` / `bypassPermissions`） |
-| `--allow-dangerously-skip-permissions` | `Shift+Tab` で `bypassPermissions` モードに切替可にする（起動時は適用しない）        |
+| `--dangerously-skip-permissions`       | 全 permission 確認をスキップ（`bypassPermissions` モードで起動）。コンテナ/VM 等の隔離環境でのみ使用 |
 
 ### Agent / Subagent
 
@@ -691,7 +698,7 @@ keep-coding-instructions が true のため、コーディング作業時は通�
 | `claude install <ver>` | 特定バージョンをインストール（`stable` / `latest` / 例: `2.1.118`） |
 
 > [!WARNING]
-> `claude --help` には**全フラグが載っていない**。`--bare` `--allow-dangerously-skip-permissions` 等の重要フラグは公式ドキュメントの [CLI reference](https://docs.claude.com/en/docs/claude-code/cli-reference) で確認すること。
+> `claude --help` には**全フラグが載っていない**。`--bare` `--dangerously-skip-permissions` 等の重要フラグは公式ドキュメントの [CLI reference](https://docs.claude.com/en/docs/claude-code/cli-reference) で確認すること。
 
 ---
 
@@ -749,7 +756,8 @@ Claude Code の挙動は環境変数でも制御できる。`settings.json` の 
 | `ANTHROPIC_API_KEY`                            | Claude API 認証キー                                               |
 | `ANTHROPIC_AUTH_TOKEN`                         | Bearer トークン認証                                               |
 | `ANTHROPIC_MODEL`                              | 使用するモデルを指定                                              |
-| `ANTHROPIC_SMALL_FAST_MODEL`                   | 軽量タスク用の小型モデル指定                                      |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL`                | `haiku`・バックグラウンド処理用の小型モデル指定（非推奨の `ANTHROPIC_SMALL_FAST_MODEL` の後継） |
+| `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`              | オートコンパクトを前倒し（例: `70` = 70% で発動）                 |
 | `CLAUDE_CODE_USE_BEDROCK`                      | `1` で Amazon Bedrock 経由に切り替え                              |
 | `CLAUDE_CODE_USE_VERTEX`                       | `1` で Google Vertex AI 経由に切り替え                            |
 | `CLAUDE_CODE_USE_FOUNDRY`                      | `1` で Microsoft Azure 経由に切り替え                             |
@@ -811,7 +819,7 @@ graph TD
     ST -->|PreToolUse等| HOOK["Hooks 自動実行"]
     HOOK --> WORK
 
-    WORK -->|50%到達 or 手動| COMPACT["/compact 圧縮"]
+    WORK -->|上限付近 or 手動| COMPACT["/compact 圧縮"]
     WORK -->|タスク切替| CLEAR["/clear リセット"]
 
     style START fill:#eff6ff,stroke:#1d4ed8,color:#000

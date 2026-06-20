@@ -67,12 +67,17 @@ my-project/
 ```
 Managed (Highest)   managed-settings.json (organization policy)
   ↓
-Project             .claude/settings.json (team-shared)
+Command line        CLI args (--settings, --permission-mode, etc.)
   ↓
 Project Local       .claude/settings.local.json (personal local)
   ↓
+Project             .claude/settings.json (team-shared)
+  ↓
 User (Lowest)       ~/.claude/settings.json (global personal)
 ```
+
+> [!IMPORTANT]
+> Local project settings (`.claude/settings.local.json`) take precedence over shared project settings (`.claude/settings.json`), and command-line arguments override both. Only managed settings cannot be overridden.
 
 Below, each file/directory is explained by categorizing "how it affects context."
 
@@ -95,7 +100,7 @@ Below, each file/directory is explained by categorizing "how it affects context.
 | | `~/.claude/settings.json` | Global personal settings (lowest priority) | [settings.json](../07-runtime-layer/settings-json.md) |
 | | Environment variables | Shell or `env` section | [Environment Variables](#environment-variables) |
 | | Hooks | Auto-execute around LLM behavior | [Lifecycle](../07-runtime-layer/hooks.md) |
-| **Session Management** (Part 8) | `/compact` · `/clear` | Manual or auto at 50% threshold | [Usage](../08-session-management/compact-and-clear.md) |
+| **Session Management** (Part 8) | `/compact` · `/clear` | Manual or auto near the context limit | [Usage](../08-session-management/compact-and-clear.md) |
 | | Memory | Persist across sessions | [What to Remember](../08-session-management/what-to-remember.md) |
 | **Plugin Extensions** | `.claude-plugin/plugin.json` | Activated on installation | [Plugins](plugins-and-marketplaces.md) |
 | | `marketplace.json` | Registered via `/plugin marketplace add` | [Marketplaces](plugins-and-marketplaces.md) |
@@ -288,7 +293,7 @@ MCP servers can be configured at **three scopes**, each backed by a different fi
 
 | Item | Content |
 | --- | --- |
-| **Transport types** | `stdio` (run command) / `http` (HTTP + OAuth) / `sse` (Server-Sent Events) |
+| **Transport types** | `stdio` (run command) / `http` (Streamable HTTP + OAuth) / `sse` (Server-Sent Events, **deprecated** — migrate to `http`) |
 | **Context Cost** | Tool definitions themselves consume tokens (degradation past ~20K) |
 | **Role** | Connect external tools, APIs (DB queries, file operations, external service calls, etc.) |
 | **Approval** | Servers in `.mcp.json` require approval on first launch (shown as `⏸ Pending approval` in `claude mcp list`) |
@@ -486,6 +491,7 @@ Dynamically fetch the API key via a script — useful for internal Vault or AWS 
 | :------------------- | :------------------- | :-------------------------------------------------------------------- |
 | **Per session**      | `SessionStart`       | Session start or resume                                               |
 |                      | `SessionEnd`         | Session end                                                           |
+|                      | `Setup`              | One-time prep for CI/scripts (`--init-only`, or `--init`/`--maintenance` in `-p` mode) |
 |                      | `InstructionsLoaded` | When CLAUDE.md / rules are loaded (great for debugging)               |
 | **Per turn**         | `UserPromptSubmit`   | When user submits a prompt (before Claude processes it)               |
 |                      | `Stop`               | When assistant response completes                                     |
@@ -494,6 +500,7 @@ Dynamically fetch the API key via a script — useful for internal Vault or AWS 
 | **Subagent-related** | `SubagentStart`      | Subagent spawned                                                      |
 |                      | `SubagentStop`       | Subagent completed                                                    |
 | **Context mgmt**     | `PreCompact`         | Just before `/compact` runs                                           |
+|                      | `PostCompact`        | Just after compaction completes                                       |
 | **Other**            | `Notification`       | On notification                                                       |
 |                      | `PermissionRequest`  | When a permission prompt is required                                  |
 
@@ -508,7 +515,7 @@ Dynamically fetch the API key via a script — useful for internal Vault or AWS 
 
 | Command | Behavior | Use Case |
 | --- | --- | --- |
-| `/compact` | Summarize and compress context | Preventive handling of Context Rot. Also auto-executes at 50% threshold |
+| `/compact` | Summarize and compress context | Preventive handling of Context Rot. Also auto-executes as the context window nears capacity (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` triggers it earlier) |
 | `/clear` | Completely reset context | Task switching. Eliminate accumulated noise |
 
 | Item | Content |
@@ -603,7 +610,7 @@ Separate from user-defined `.claude/commands/` — these are first-class command
 | `/plugin`         | Install and manage plugins. `/plugin marketplace add <url>` to add a marketplace                                    |
 | `/mcp`            | List MCP servers, auth status, test connections                                                                     |
 | `/init`           | Auto-generate CLAUDE.md (analyzes codebase for project conventions). Set `CLAUDE_CODE_NEW_INIT=1` for interactive mode |
-| `/compact`        | Summarize and compress context (manual / auto at 50% threshold)                                                     |
+| `/compact`        | Summarize and compress context (manual / auto as the context window nears capacity)                                 |
 | `/clear`          | Completely reset context                                                                                            |
 | `/help`           | Show help                                                                                                           |
 
@@ -616,7 +623,7 @@ Switches Claude's **response style (part of the system prompt)**. Changes *how* 
 | Item              | Content                                                                                                                          |
 | :---------------- | :------------------------------------------------------------------------------------------------------------------------------- |
 | **Location**      | `outputStyle` key in `settings.json` / `/config` menu / `.claude/output-styles/*.md`                                            |
-| **Built-in**      | `Default` / `Explanatory` (adds educational "Insights") / `Learning` (leaves `TODO(human)` markers in code for collaboration)   |
+| **Built-in**      | `Default` / `Proactive` (acts autonomously, prefers action over planning) / `Explanatory` (adds educational "Insights") / `Learning` (leaves `TODO(human)` markers in code for collaboration) |
 | **Custom**        | `.claude/output-styles/<name>.md` with frontmatter + system prompt addition                                                     |
 | **When applied**  | Part of the system prompt — **takes effect only after `/clear` or a new session**                                              |
 
@@ -677,7 +684,7 @@ Startup options for the `claude` command — temporary overrides of `settings.js
 | Flag                                         | Role                                                                            |
 | :------------------------------------------- | :------------------------------------------------------------------------------ |
 | `--permission-mode <mode>`                   | Startup permission mode (`default` / `acceptEdits` / `plan` / `bypassPermissions`) |
-| `--allow-dangerously-skip-permissions`       | Allow `Shift+Tab` to cycle into `bypassPermissions` (don't start in it)         |
+| `--dangerously-skip-permissions`             | Skip all permission prompts (start in `bypassPermissions` mode). Use only in isolated environments such as containers/VMs |
 
 ### Agent / Subagent
 
@@ -696,7 +703,7 @@ Startup options for the `claude` command — temporary overrides of `settings.js
 | `claude install <ver>` | Install a specific version (`stable` / `latest` / e.g. `2.1.118`)                                            |
 
 > [!WARNING]
-> `claude --help` does **not** list every flag. Check the official [CLI reference](https://docs.claude.com/en/docs/claude-code/cli-reference) for `--bare`, `--allow-dangerously-skip-permissions`, and other important flags.
+> `claude --help` does **not** list every flag. Check the official [CLI reference](https://docs.claude.com/en/docs/claude-code/cli-reference) for `--bare`, `--dangerously-skip-permissions`, and other important flags.
 
 ---
 
@@ -754,7 +761,8 @@ Claude Code behavior can also be controlled via environment variables. Writing t
 | `ANTHROPIC_API_KEY`                            | Claude API authentication key                                                 |
 | `ANTHROPIC_AUTH_TOKEN`                         | Bearer token authentication                                                   |
 | `ANTHROPIC_MODEL`                              | Specifies which Claude model to use                                           |
-| `ANTHROPIC_SMALL_FAST_MODEL`                   | Specifies a smaller model for lightweight tasks                               |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL`                | Small model for `haiku`/background tasks (replaces the deprecated `ANTHROPIC_SMALL_FAST_MODEL`) |
+| `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`              | Trigger auto-compaction earlier (e.g. `70` = at 70% capacity)                 |
 | `CLAUDE_CODE_USE_BEDROCK`                      | Set to `1` to route through Amazon Bedrock                                    |
 | `CLAUDE_CODE_USE_VERTEX`                       | Set to `1` to route through Google Vertex AI                                  |
 | `CLAUDE_CODE_USE_FOUNDRY`                      | Set to `1` to route through Microsoft Azure                                   |
@@ -815,7 +823,7 @@ graph TD
     ST -->|PreToolUse, etc.| HOOK["Auto-Execute Hooks"]
     HOOK --> WORK
 
-    WORK -->|50% Reached or Manual| COMPACT["/compact Compress"]
+    WORK -->|Near limit or Manual| COMPACT["/compact Compress"]
     WORK -->|Task Switch| CLEAR["/clear Reset"]
 
     style START fill:#eff6ff,stroke:#1d4ed8,color:#000
