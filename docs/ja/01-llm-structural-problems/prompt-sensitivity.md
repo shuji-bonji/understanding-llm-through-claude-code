@@ -1,6 +1,6 @@
 ---
 title: "Prompt Sensitivity（プロンプト感受性）— 同じ意味でも結果が変わる"
-description: "Prompt Sensitivity は意味的に同じプロンプトでも表現差で LLM 出力が大きく変わる構造的制約。最大76精度ポイントの差。Claude Code での影響範囲と対策を解説。"
+description: "Prompt Sensitivity は意味的に同じプロンプトでも表現やフォーマットの差で LLM 出力が変わる現象。few-shot フォーマット変更で最大76精度ポイントの差（観測値は評価法に依存）。Claude Code での影響範囲と対策を解説。"
 ---
 
 🌐 [English](../../01-llm-structural-problems/prompt-sensitivity.md)
@@ -9,8 +9,8 @@ description: "Prompt Sensitivity は意味的に同じプロンプトでも表�
 
 > [!NOTE]
 > **一言で言うと**: LLM は意味的に同等なプロンプトに対して大きく異なる出力を生成する。
-> 同じ質問を異なる表現で問うと、最大 76 精度ポイントの差が生じる。
-> これは単なる不安定性ではなく、モデルの理解の浅さを示す構造的制約である。
+> few-shot のフォーマットを変えるだけで最大 76 精度ポイントの差が生じた報告もある（Sclar et al. 2023）。
+> これは単なる不安定性ではなく、モデルがトークンの統計的パターンに依存していることの反映である。ただし観測される差の大きさは評価方法にも依存する（後述）。
 
 ## Prompt Sensitivity とは何か
 
@@ -26,32 +26,42 @@ Prompt Sensitivity とは、**意味的に同じプロンプトでも、表現�
 
 ## なぜ発生するのか
 
-### 数学的説明
+### 数学的説明（概念的な一次近似）
 
-テイラー展開による分析では、出力差は以下で決まる:
+入力の微小変化に対する出力の感度は、**概念的には**一次近似（テイラー展開＋コーシー・シュワルツの上界）で次のように見積もれる:
 
 ```
-出力差 ≈ 勾配ノルム × 埋め込み差ノルム
+出力差 ≲ 勾配ノルム × 埋め込み差ノルム
 ```
 
-重要な点: **LLM は意味的に類似した入力を内部的にクラスタリングしない**。同じ意味でもトークン列が異なれば、異なる埋め込みベクトルが生成され、異なる出力につながる。
+> [!NOTE]
+> これは特定論文の定理ではなく、勾配サリエンシー（`saliency = ‖∇(出力ロジット)‖`、Lu et al. 2024）に基づく概念的な目安である。Transformer は強く非線形（Attention・FFN）なので、一次近似はあくまで局所的な感度の指標にすぎず、全域的な説明力は限定的である。
+
+注意すべき点: 埋め込み空間では意味の近い入力はクラスタリングされている。それでも感受性が生じるのは、**埋め込みの小さな差が後段の非線形変換で増幅される**ためである。「意味は近いが、出力分布への影響は大きい」場合がある、という言い方が正確である。
 
 ### 表面的な形式の影響
 
 LLM は意味ではなく**トークンの統計的パターン**に反応する部分が大きい。そのため:
 
 - 命令文 vs 疑問文で結果が変わる
-- �条書き vs 自由文で結果が変わる
+- 箇条書き vs 自由文で結果が変わる
 - 専門用語 vs 平易な表現で結果が変わる
 
 ## 定量的な根拠
 
-- 同じ質問の異なる表現間で**最大 76 精度ポイントの差**
-- これは「不安定」ではなく「特定の表現パターンに対して訓練されている」ことの反映
+- few-shot の**フォーマット**（区切り文字・記号・大小文字など表層的・spurious な特徴）を変えるだけで、LLaMA-2-13B において**最大 76 精度ポイントの差**（Sclar et al. 2023）
+- この「76 ポイント」は意味等価のパラフレーズではなく**フォーマット変更**による差である点に注意。意味を変えない言い換えでの感受性とは別物として扱う
+- 感受性の大きさは**タスク・モデル・評価方法によって大きく変わる**
+
+> [!NOTE]
+> 観測される感受性の相当部分は、評価指標の脆さ（log-likelihood scoring や厳格な answer matching が、意味的に正しい別表現の解答を取りこぼすこと）に由来するアーティファクトであり、適切な評価設計のもとでは現代の LLM は報告より頑健、という反証研究もある（Hua et al. 2025）。したがって「prompt sensitivity は Transformer の不可避な構造的制約」と強く一般化しすぎないこと。効果は実在するが、**観測される大きさは評価法に依存する**。実務上の含意（曖昧な指示は不安定）は変わらないが、数値はベンチマーク設定込みで読む必要がある。
 
 ## 指定欠落（Underspecification）— 軸を指定しないと事前分布が支配する {#underspecification}
 
 Prompt Sensitivity の双子の問題に **Underspecification（指定欠落）** がある。Prompt Sensitivity が「指定済みのプロンプトの**表現**を変えると出力が変わる」現象なら、Underspecification は「ある軸を**そもそも指定しない**と、その軸をモデルが事前分布から埋める」現象である。指定欠落は感受性の極限ケース — 指定がゼロの軸では、出力を決めるのは推論ではなく訓練データの最頻パターンになる。
+
+> [!NOTE]
+> 「Underspecification を Prompt Sensitivity の双子／極限ケースとして捉える」整理と、後述の姉妹サイトとの接続は、本サイト独自のフレーミングである（個々の引用論文がこの対応関係を主張しているわけではない）。
 
 ### なぜモデルは自分で決められないのか
 
@@ -152,8 +162,10 @@ flowchart TD
 
 ## 参考文献
 
-- Zhuo, J., Zhang, S., Fang, X., Duan, H., Lin, D., & Chen, K. (2024). "Assessing and Understanding the Prompt Sensitivity of LLMs." _EMNLP 2024 Findings_. [ACL Anthology](https://aclanthology.org/2024.findings-emnlp.108/) — 一次テイラー展開とコーシー・シュワルツの不等式による Prompt Sensitivity の数学的定式化
-- Lu, S., Schuff, H., & Gurevych, I. (2024). "How are Prompts Different in Terms of Sensitivity?" _NAACL 2024_. [ACL Anthology](https://aclanthology.org/2024.naacl-long.325/) — プロンプトの微小な変更が出力を大きく変えるメカニズムの分析
+- Sclar, M., Choi, Y., Tsvetkov, Y., & Suhr, A. (2023). "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design." _arXiv:2310.11324_. [arXiv](https://arxiv.org/abs/2310.11324) — few-shot のフォーマット変更（spurious feature）で LLaMA-2-13B が最大 76 精度ポイントの差。本ページの「76 ポイント」の出典
+- Zhuo, J., Zhang, S., Fang, X., Duan, H., Lin, D., & Chen, K. (2024). "ProSA: Assessing and Understanding the Prompt Sensitivity of LLMs." _EMNLP 2024 Findings_. [ACL Anthology](https://aclanthology.org/2024.findings-emnlp.108/) — PromptSensiScore（PSS）と decoding confidence による経験的な感受性評価（テイラー展開による定式化は本論文には無い）
+- Lu, S., Schuff, H., & Gurevych, I. (2024). "How are Prompts Different in Terms of Sensitivity?" _NAACL 2024_. [ACL Anthology](https://aclanthology.org/2024.naacl-long.325/) — 勾配サリエンシー（`‖∇出力‖`）でプロンプトの感受性を分析。本ページの一次近似の根拠
+- Hua, A., Tang, K., Gu, C., Gu, J., Wong, E., & Qin, Y. (2025). "Flaw or Artifact? Rethinking Prompt Sensitivity in Evaluating LLMs." _EMNLP 2025_. [arXiv](https://arxiv.org/abs/2509.01790) — 観測される感受性の相当部分は評価指標の脆さに由来するアーティファクトで、適切な評価設計下では LLM は報告より頑健
 
 ---
 

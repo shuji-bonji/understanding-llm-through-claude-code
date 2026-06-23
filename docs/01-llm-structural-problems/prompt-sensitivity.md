@@ -8,7 +8,7 @@ description: "Why semantically equivalent prompts produce different outputs, and
 # Prompt Sensitivity — Same Meaning, Different Results
 
 > [!NOTE]
-> **In short**: LLMs generate significantly different outputs for semantically equivalent prompts. Asking the same question with different wording can result in differences of up to 76 percentage points in accuracy. This is not merely instability, but a structural constraint that reveals shallow model understanding.
+> **In short**: LLMs generate significantly different outputs for semantically equivalent prompts. Merely changing the few-shot *formatting* has been reported to cause differences of up to 76 percentage points in accuracy (Sclar et al. 2023). This is not merely instability, but a reflection of the model's reliance on statistical token patterns — though the magnitude of the observed difference also depends on the evaluation method (see below).
 
 ## What is Prompt Sensitivity?
 
@@ -24,15 +24,18 @@ Although these are semantically nearly equivalent, an LLM may generate different
 
 ## Why Does It Occur?
 
-### Mathematical Explanation
+### Mathematical Explanation (a conceptual first-order approximation)
 
-Analysis using Taylor expansion shows that output differences are determined by:
+The output's sensitivity to a small change in the input can, **conceptually**, be estimated by a first-order approximation (a Taylor expansion with a Cauchy-Schwarz upper bound):
 
 ```
-Output Difference ≈ Gradient Norm × Embedding Difference Norm
+Output Difference ≲ Gradient Norm × Embedding Difference Norm
 ```
 
-The crucial point: **LLMs do not internally cluster semantically similar inputs**. Even with the same meaning, different token sequences generate different embedding vectors, leading to different outputs.
+> [!NOTE]
+> This is not a theorem from any specific paper, but a conceptual heuristic grounded in gradient-based saliency (`saliency = ‖∇(output logit)‖`, Lu et al. 2024). Because Transformers are strongly nonlinear (Attention, FFN), a first-order approximation is only a local indicator of sensitivity, with limited global explanatory power.
+
+The point to note: in embedding space, semantically similar inputs *are* clustered. Sensitivity still arises because **small embedding differences are amplified by downstream nonlinear transformations**. The accurate framing is "the meaning is close, yet the effect on the output distribution can be large."
 
 ### Impact of Surface Form
 
@@ -44,12 +47,19 @@ LLMs respond largely to **statistical patterns in tokens** rather than meaning. 
 
 ## Quantitative Evidence
 
-- **Up to 76 percentage points difference** between different phrasings of the same question
-- This reflects not "instability" but "training on specific expression patterns"
+- Merely changing the few-shot **formatting** (surface-level, spurious features such as separators, symbols, and casing) produces a difference of **up to 76 accuracy points** on LLaMA-2-13B (Sclar et al. 2023)
+- Note that this "76 points" is a difference due to **formatting changes**, not semantically equivalent paraphrases. Treat it as distinct from sensitivity to meaning-preserving rephrasing
+- The magnitude of sensitivity **varies greatly by task, model, and evaluation method**
+
+> [!NOTE]
+> A substantial part of the observed sensitivity is an artifact of brittle evaluation metrics (log-likelihood scoring and rigid answer matching overlooking semantically correct answers expressed through alternative phrasings); under appropriate evaluation design, modern LLMs are more robust than previously reported (Hua et al. 2025). So do not over-generalize "prompt sensitivity is an inevitable structural constraint of the Transformer." The effect is real, but **the observed magnitude depends on the evaluation method**. The practical implication (ambiguous instructions are unstable) is unchanged, but the numbers must be read together with the benchmark setup.
 
 ## Underspecification — When an Axis Is Left Unstated, the Prior Takes Over {#underspecification}
 
 A twin problem of Prompt Sensitivity is **Underspecification**. If Prompt Sensitivity is "changing the **wording** of an already-specified prompt changes the output," Underspecification is "leaving an axis **unstated entirely** lets the model fill it from its prior distribution." Underspecification is the limiting case of sensitivity — for an axis with zero specification, the output is decided not by reasoning but by the most frequent pattern in the training data.
+
+> [!NOTE]
+> Framing Underspecification as a twin / limiting case of Prompt Sensitivity, and the connection to the sister site below, is this site's own framing (none of the individual cited papers claim this correspondence).
 
 ### Why the Model Cannot Decide on Its Own
 
@@ -150,8 +160,10 @@ flowchart TD
 
 ## References
 
-- Zhuo, J., Zhang, S., Fang, X., Duan, H., Lin, D., & Chen, K. (2024). "Assessing and Understanding the Prompt Sensitivity of LLMs." _EMNLP 2024 Findings_. [ACL Anthology](https://aclanthology.org/2024.findings-emnlp.108/) — Mathematical formulation of Prompt Sensitivity using first-order Taylor expansion and Cauchy-Schwarz inequality
-- Lu, S., Schuff, H., & Gurevych, I. (2024). "How are Prompts Different in Terms of Sensitivity?" _NAACL 2024_. [ACL Anthology](https://aclanthology.org/2024.naacl-long.325/) — Analysis of the mechanism by which minor prompt changes produce large output differences
+- Sclar, M., Choi, Y., Tsvetkov, Y., & Suhr, A. (2023). "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design." _arXiv:2310.11324_. [arXiv](https://arxiv.org/abs/2310.11324) — Up to 76 accuracy points on LLaMA-2-13B from few-shot formatting (spurious feature) changes. The source of this page's "76 points"
+- Zhuo, J., Zhang, S., Fang, X., Duan, H., Lin, D., & Chen, K. (2024). "ProSA: Assessing and Understanding the Prompt Sensitivity of LLMs." _EMNLP 2024 Findings_. [ACL Anthology](https://aclanthology.org/2024.findings-emnlp.108/) — Empirical sensitivity assessment via PromptSensiScore (PSS) and decoding confidence (no Taylor-expansion formulation appears in this paper)
+- Lu, S., Schuff, H., & Gurevych, I. (2024). "How are Prompts Different in Terms of Sensitivity?" _NAACL 2024_. [ACL Anthology](https://aclanthology.org/2024.naacl-long.325/) — Analyzes prompt sensitivity via gradient-based saliency (`‖∇output‖`). The grounding for this page's first-order approximation
+- Hua, A., Tang, K., Gu, C., Gu, J., Wong, E., & Qin, Y. (2025). "Flaw or Artifact? Rethinking Prompt Sensitivity in Evaluating LLMs." _EMNLP 2025_. [arXiv](https://arxiv.org/abs/2509.01790) — A substantial part of observed sensitivity is an artifact of brittle evaluation metrics; under proper evaluation design, LLMs are more robust than reported
 
 ---
 
