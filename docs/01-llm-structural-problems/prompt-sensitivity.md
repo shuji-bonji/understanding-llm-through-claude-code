@@ -47,6 +47,34 @@ LLMs respond largely to **statistical patterns in tokens** rather than meaning. 
 - **Up to 76 percentage points difference** between different phrasings of the same question
 - This reflects not "instability" but "training on specific expression patterns"
 
+## Underspecification — When an Axis Is Left Unstated, the Prior Takes Over {#underspecification}
+
+A twin problem of Prompt Sensitivity is **Underspecification**. If Prompt Sensitivity is "changing the **wording** of an already-specified prompt changes the output," Underspecification is "leaving an axis **unstated entirely** lets the model fill it from its prior distribution." Underspecification is the limiting case of sensitivity — for an axis with zero specification, the output is decided not by reasoning but by the most frequent pattern in the training data.
+
+### Why the Model Cannot Decide on Its Own
+
+An LLM's output is a sample from the conditional probability distribution `P(output | token sequence)`. The prompt is merely the token sequence that **conditions** that distribution.
+
+- If the prompt specifies an axis (role, output format, success criteria, etc.), the distribution is sharply narrowed along that axis.
+- If it does not, the conditioning on that axis stays weak, and the model **fills it by sampling from its prior — the pattern most frequent in the training data**.
+
+So the model does not "fail to decide." It **mechanically fills the unspecified axis from a statistical prior rather than by reasoning**. Because that prior shifts with context and token sequence, the same request gets filled differently across sessions — and that is exactly the source of nondeterminism (the parts that drift each time).
+
+> [!IMPORTANT]
+> When we say "without a stated role, the model cannot decide which perspective to answer from," strictly speaking it **is not deciding**. It is merely filling a weakly-specified axis with the mode of its prior. So the remedy is not "get the model to decide well" but **to explicitly specify the axes you do not want to vary, sharpening the conditioning**.
+
+| Request | Unspecified axis | What the model fills from its prior |
+| :--- | :--- | :--- |
+| "Write tests" | Test framework | Whatever is most frequent in training data (Jest, etc., depending on the project) |
+| "Document this function" | Output format (JSDoc / Markdown / comments) | The most frequent style per language |
+| "Review this" | Lens (bugs / design / style) and strictness | A generic, "safe" lens |
+
+### Connection to the Sister Site
+
+The sister site ai-agent-architecture organizes the **seven conditions** of a well-formed prompt (Role, Premise, Objective, Input, Process/Constraints, Output Format, Examples) as "independent axes along which output can vary." This section carries the **why** behind it — the principle by which weakly-specified axes get filled from the prior. For the design decision to externalize each axis into a layer instead of re-filling it in every prompt, see there.
+
+- [ai-agent-architecture / Prompt Decomposition](https://shuji-bonji.github.io/ai-agent-architecture/concepts/09-prompt-decomposition) — externalizing the seven conditions into five layers (What / How)
+
 ## Impact on Coding
 
 - Rules written ambiguously in CLAUDE.md are less likely to be followed
