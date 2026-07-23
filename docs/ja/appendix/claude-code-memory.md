@@ -41,16 +41,18 @@ flowchart TB
 
 ### 配置場所とロード順
 
-CLAUDE.md は複数の場所に置ける。**広いスコープ → 狭いスコープ**の順にロードされ、後にロードされたもの（＝作業ディレクトリに近いもの）ほど後勝ちで効く。
+CLAUDE.md は複数の場所に置ける。読み込む順番は**スコープの広いものが先、狭いものが後**（Managed policy → User → Project → Local）。見つかったファイルは互いに打ち消し合わず**すべて読み込まれる**が、指示が食い違ったときは**後から読まれた設定のほうが優先されやすい**。
 
-| スコープ                 | 配置場所                                                                                                                                                      | 用途                            | 共有範囲               |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------ | :--------------------- |
-| **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | 組織全体のポリシー（IT/DevOps） | 組織の全ユーザー       |
-| **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                                                         | 全プロジェクト共通の個人設定    | 自分だけ（全 project） |
-| **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                                                        | チーム共有のプロジェクト規約    | チーム（Git 管理）     |
-| **Local instructions**   | `./CLAUDE.local.md`                                                                                                                                           | 個人的なプロジェクト固有設定    | 自分だけ（現 project） |
+| 読み込み順 | スコープ                 | 配置場所                                                                                                                                                      | 用途                            | 共有範囲               |
+| :--------: | :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------ | :--------------------- |
+|   **①**    | **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | 組織全体のポリシー（IT/DevOps） | 組織の全ユーザー       |
+|   **②**    | **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                                                         | 全プロジェクト共通の個人設定    | 自分だけ（全 project） |
+|   **③**    | **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                                                        | チーム共有のプロジェクト規約    | チーム（Git 管理）     |
+|   **④**    | **Local instructions**   | `./CLAUDE.local.md`                                                                                                                                           | 個人的なプロジェクト固有設定    | 自分だけ（現 project） |
 
-作業ディレクトリより**上位**の階層にある `CLAUDE.md` / `CLAUDE.local.md` は起動時に全文ロードされる。**サブディレクトリ**の CLAUDE.md は、Claude がそのディレクトリのファイルを読んだときにオンデマンドでロードされる。ロード後は上書きではなく**連結**され、ファイルシステムのルート側 → 作業ディレクトリ側の順に並ぶ。
+作業ディレクトリと、**そこから上の階層**（親フォルダ、その親…）にある `CLAUDE.md` / `CLAUDE.local.md` は、起動時にまとめて読み込まれる。複数見つかっても**どれか1つが他を上書きするのではなく、全部つなげて（連結して）**コンテキストに入る。つなぐ順番は**上の階層（例: リポジトリのルート）が先、下の階層（作業ディレクトリ）が後**。一方、**作業ディレクトリより下のサブフォルダ**にある CLAUDE.md は起動時には読まれず、Claude がそのフォルダのファイルを触ったときに初めて読み込まれる。
+
+たとえば `repo/app/` で起動した場合、`repo/CLAUDE.md`（先）→ `repo/app/CLAUDE.md`（後）の順に両方が読まれ、両者で指示が食い違えば後に読まれた `app/` 側が効きやすい。`repo/app/api/CLAUDE.md` は、Claude が `api/` のファイルを開いたときに追加で読み込まれる。
 
 > [!TIP]
 > `/init` でプロジェクトの雛形 CLAUDE.md を自動生成できる。既存の CLAUDE.md がある場合は上書きせず改善提案に切り替わる。実際にどのファイルがロードされたかは `/context` の **Memory files** で確認する。

@@ -41,16 +41,18 @@ flowchart TB
 
 ### Locations and load order
 
-CLAUDE.md can live in several places. Files load **broadest scope → most specific**, so a file loaded later (closer to your working directory) wins.
+CLAUDE.md can live in several places. They load **broadest scope first, most specific last** (Managed policy → User → Project → Local). Every file found is **loaded — none cancels another out** — but when instructions conflict, the setting **read later tends to win**.
 
-| Scope                    | Location                                                                                                                                                      | Purpose                         | Shared with             |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------ | :---------------------- |
-| **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | Org-wide policy (IT/DevOps)     | All users in org        |
-| **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                                                         | Personal prefs, all projects    | Just you (all projects) |
-| **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                                                        | Team-shared project rules       | Team (source control)   |
-| **Local instructions**   | `./CLAUDE.local.md`                                                                                                                                           | Personal project-specific prefs | Just you (this project) |
+| Load order | Scope                    | Location                                                                                                                                                      | Purpose                         | Shared with             |
+| :--------: | :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------ | :---------------------- |
+|   **①**    | **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | Org-wide policy (IT/DevOps)     | All users in org        |
+|   **②**    | **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                                                         | Personal prefs, all projects    | Just you (all projects) |
+|   **③**    | **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                                                        | Team-shared project rules       | Team (source control)   |
+|   **④**    | **Local instructions**   | `./CLAUDE.local.md`                                                                                                                                           | Personal project-specific prefs | Just you (this project) |
 
-CLAUDE.md / CLAUDE.local.md files **above** your working directory load in full at launch. Files in **subdirectories** load on demand when Claude reads files there. Discovered files are **concatenated**, not overridden, ordered from filesystem root down to the working directory.
+Your working directory and **every folder above it** (its parent, that parent's parent, …) are checked for `CLAUDE.md` / `CLAUDE.local.md`, and all of them load together at launch. When several are found, **no single file overrides another — they are all joined (concatenated)** into context. The join order is **higher folders first (e.g. the repo root), lower folders last (the working directory)**. Files in **subfolders below** your working directory are _not_ read at launch; they load only when Claude touches a file in that subfolder.
+
+For example, launching in `repo/app/` loads both `repo/CLAUDE.md` (first) and `repo/app/CLAUDE.md` (last); if they conflict, the `app/` one read last tends to win. `repo/app/api/CLAUDE.md` loads later, when Claude opens a file under `api/`.
 
 > [!TIP]
 > Run `/init` to generate a starter CLAUDE.md. If one already exists, `/init` suggests improvements instead of overwriting. Verify what actually loaded via `/context` under **Memory files**.
