@@ -34,11 +34,8 @@ flowchart TB
 | Claude Code 組み込み | CLAUDE.md 群 / Auto Memory            | Anthropic（同梱・追加インストール不要）     | 開発作業に特化。規約・ビルドコマンド・学習パターンの記憶 |
 | 外部 MCP サーバー    | `@modelcontextprotocol/server-memory` | MCP 公式リポジトリのリファレンス実装（MIT） | 汎用ナレッジグラフ。対話のパーソナライズ・関係性の構造化 |
 
-> [!NOTE]
-> `server-memory` は「サードパーティ製」ではなく **MCP 公式リポジトリのリファレンス実装**。MCP は Anthropic が策定したオープン標準であり、[modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) はその公式リファレンス実装群（MIT）。区別すべきは「first/third-party」ではなく、**Claude Code に組み込みか／別途インストールが要る外部 MCP サーバーか**という軸。server-memory は後者にあたる。
-
 > [!IMPORTANT]
-> CLAUDE.md も Auto Memory も**「強制設定」ではなく「コンテキスト」** として毎セッション先頭に注入される。Claude はそれを読んで従おうとするが、厳密な遵守は保証されない。**必ず実行させたい**（例: コミット前に必ず lint）指示は、メモリではなく [PreToolUse フックや hooks](../07-runtime-layer/hooks.md) で技術的に強制する。
+> CLAUDE.md も Auto Memory も**「強制設定」ではなく「コンテキスト」** ``として毎セッション先頭に注入される。Claude はそれを読んで従おうとするが、厳密な遵守は保証されない。**必ず実行させたい**（例: コミット前に必ず lint）指示は、メモリではなく [PreToolUse フックや hooks](../07-runtime-layer/hooks.md) で技術的に強制する。
 
 ## 1. CLAUDE.md — 人が書く指示
 

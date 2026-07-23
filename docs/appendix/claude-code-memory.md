@@ -34,9 +34,6 @@ flowchart TB
 | Built into Claude Code | CLAUDE.md files / Auto Memory         | Anthropic (bundled, no install)                  | Dev-focused: conventions, build commands, learned patterns       |
 | External MCP server    | `@modelcontextprotocol/server-memory` | MCP official-repo reference implementation (MIT) | General knowledge graph: conversation personalization, relations |
 
-> [!NOTE]
-> `server-memory` is not a "third-party" product — it's the **official MCP reference implementation**. MCP is an open standard created by Anthropic, and [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) is its set of official reference servers (MIT). The distinction that matters is not first/third-party but **built into Claude Code vs. an external MCP server you install separately** — server-memory is the latter.
-
 > [!IMPORTANT]
 > Both CLAUDE.md and Auto Memory are injected as **context, not enforced configuration** , at the start of every session. Claude reads and tries to follow them, but strict compliance is not guaranteed. For anything that **must** run (e.g. lint before every commit), enforce it with a [PreToolUse hook](../07-runtime-layer/hooks.md), not memory.
 
