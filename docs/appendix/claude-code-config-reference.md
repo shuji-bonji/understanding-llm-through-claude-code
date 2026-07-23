@@ -535,19 +535,7 @@ Claude Code has **two memory systems**: CLAUDE.md (user-written) and Auto Memory
 | **Loaded into**    | Every session (full content)                                                       | Every session: first 200 lines or 25KB of `MEMORY.md`                                                                                                                                      |
 | **Problems addressed** | [Priority Saturation](../01-llm-structural-problems/priority-saturation.md)    | [Context Rot](../01-llm-structural-problems/context-rot.md) (rescue info lost in compaction), [Instruction Decay](../01-llm-structural-problems/instruction-decay.md)                      |
 
-**Auto Memory location:**
-
-```
-~/.claude/projects/<project>/memory/
-├── MEMORY.md          # Index loaded every session
-├── debugging.md       # Topic-specific notes (loaded on demand)
-├── api-conventions.md
-└── ...
-```
-
-`<project>` is derived from the git repository, so **all worktrees and subdirectories share one Auto Memory**. Auto Memory is machine-local — not synced across machines or cloud environments.
-
-**Related settings (`settings.json`):**
+**Key settings (`settings.json`):**
 
 | Key                                  | Role                                                                  |
 | :----------------------------------- | :-------------------------------------------------------------------- |
@@ -556,24 +544,11 @@ Claude Code has **two memory systems**: CLAUDE.md (user-written) and Auto Memory
 | `claudeMdExcludes`                   | Glob patterns of CLAUDE.md files to skip loading                      |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY`    | Set to `1` to disable Auto Memory via env var                         |
 
-**Commands:**
-
-| Command   | Behavior                                                                                  |
-| :-------- | :---------------------------------------------------------------------------------------- |
-| `/memory` | List loaded CLAUDE.md / rules / Auto Memory files, open in editor, toggle Auto Memory     |
-
 > [!IMPORTANT]
 > **Auto Memory requires Claude Code v2.1.59 or later**. Check with `claude --version`.
 
-> [!WARNING]
-> Root CLAUDE.md **survives `/compact`** (re-injected from disk). Subdirectory CLAUDE.md files do NOT auto-reload after compaction. Put instructions that must always persist in the root CLAUDE.md.
-
-**Detailed explanations:**
-
-- [Why Memory Matters](../08-session-management/memory-problem.md)
-- [What to Remember](../08-session-management/what-to-remember.md)
-- [When and How to Recall](../08-session-management/when-to-recall.md)
-- [Tool Comparison and Selection](../08-session-management/tools-comparison.md)
+> [!TIP]
+> CLAUDE.md locations and load order, `.claude/rules/` (path-scoped rules), `@path` imports, Managed policy, how Auto Memory works, the difference from MCP `server-memory`, and scale-based operational strategy are consolidated in **[Claude Code Memory Mechanisms](claude-code-memory.md)**. For the structural background ("why memory becomes a problem"), see [Part 8: Session Management](../08-session-management/index.md).
 
 ---
 

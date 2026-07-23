@@ -158,6 +158,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 						{ text: 'ライフサイクル × 設定マップ', link: '/ja/appendix/lifecycle-config-map' },
 						{ text: '機能別早見表', link: '/ja/appendix/feature-index' },
 						{ text: 'Claude Code 設定リファレンス', link: '/ja/appendix/claude-code-config-reference' },
+						{ text: 'Claude Code のメモリ機構', link: '/ja/appendix/claude-code-memory' },
 						{ text: 'FAQ', link: '/ja/appendix/faq' },
 						{ text: 'Plugins & Marketplaces', link: '/ja/appendix/plugins-and-marketplaces' },
 						{ text: '用語集', link: '/ja/appendix/glossary' },

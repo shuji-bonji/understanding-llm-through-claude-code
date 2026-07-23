@@ -152,6 +152,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					{ text: 'Lifecycle × Config Map', link: '/appendix/lifecycle-config-map' },
 					{ text: 'Feature Index', link: '/appendix/feature-index' },
 					{ text: 'Configuration Reference', link: '/appendix/claude-code-config-reference' },
+					{ text: 'Memory Mechanisms', link: '/appendix/claude-code-memory' },
 					{ text: 'FAQ', link: '/appendix/faq' },
 					{ text: 'Plugins & Marketplaces', link: '/appendix/plugins-and-marketplaces' },
 					{ text: 'Glossary', link: '/appendix/glossary' },

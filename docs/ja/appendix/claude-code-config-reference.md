@@ -530,19 +530,7 @@ Claude Code には**2系統のメモリ機構**がある: ユーザーが書く 
 | **ロード**       | 毎セッション全文                                                            | 毎セッションで `MEMORY.md` の先頭 200 行 or 25KB                                                                                                                 |
 | **対策する問題** | [Priority Saturation](../01-llm-structural-problems/priority-saturation.md) | [Context Rot](../01-llm-structural-problems/context-rot.md)（圧縮で失われる情報を救済）、[Instruction Decay](../01-llm-structural-problems/instruction-decay.md) |
 
-**Auto Memory の場所:**
-
-```
-~/.claude/projects/<project>/memory/
-├── MEMORY.md          # 全セッションでロードされるインデックス
-├── debugging.md       # トピック別の詳細メモ（オンデマンド読み込み）
-├── api-conventions.md
-└── ...
-```
-
-`<project>` は git リポジトリから派生したパス。**worktree とサブディレクトリは1つの Auto Memory を共有**する。Auto Memory はマシンローカルで、クラウド同期されない。
-
-**関連設定（`settings.json`）:**
+**主な設定（`settings.json`）:**
 
 | 設定キー                          | 役割                                                  |
 | :-------------------------------- | :---------------------------------------------------- |
@@ -551,24 +539,11 @@ Claude Code には**2系統のメモリ機構**がある: ユーザーが書く 
 | `claudeMdExcludes`                | ロード対象から除外する CLAUDE.md のパスパターン配列   |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | `1` で Auto Memory を環境変数経由で無効化             |
 
-**操作コマンド:**
-
-| コマンド  | 動作                                                                            |
-| :-------- | :------------------------------------------------------------------------------ |
-| `/memory` | ロード中の CLAUDE.md / rules / Auto Memory 一覧表示、エディタで開く、トグル切替 |
-
 > [!IMPORTANT]
 > **Auto Memory が要求する Claude Code バージョン**: v2.1.59 以降。`claude --version` で確認。
 
-> [!WARNING]
-> CLAUDE.md は **`/compact` を生き残る**（再ロードされる）が、サブディレクトリの CLAUDE.md は再注入されない。コンパクト後も必ず効いていてほしい指示はルート CLAUDE.md に書くこと。
-
-**詳細解説:**
-
-- [なぜメモリが問題になるのか](../08-session-management/memory-problem.md)
-- [何を覚えるか](../08-session-management/what-to-remember.md)
-- [いつ・どう思い出すか](../08-session-management/when-to-recall.md)
-- [ツール比較と選定基準](../08-session-management/tools-comparison.md)
+> [!TIP]
+> CLAUDE.md の配置場所とロード順、`.claude/rules/`（path-scoped rules）、`@path` import、Managed policy、Auto Memory の仕組み、MCP `server-memory` との違い、規模別の運用戦略までを1ページにまとめた **[Claude Code のメモリ機構](claude-code-memory.md)** を参照。「なぜメモリが問題になるのか」等の構造的背景は [Part 8: セッション管理と記憶の永続化](../08-session-management/index.md) を参照。
 
 ---
 
