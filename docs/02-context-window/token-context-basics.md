@@ -1,6 +1,6 @@
 ---
-title: "Token, Context, Context Window"
-description: "The three foundational concepts you need to reason about LLM behavior: tokens, context, and the context window."
+title: 'Token, Context, Context Window'
+description: 'The three foundational concepts you need to reason about LLM behavior: tokens, context, and the context window.'
 ---
 
 🌐 [日本語](../ja/02-context-window/token-context-basics.md)
@@ -54,13 +54,13 @@ The token unit threads through this entire pipeline. That's why every capability
 
 ### Getting a Feel for Tokens
 
-| Reference                        | Token Count                    |
-| :------------------------------- | :------------------------------ |
-| 1 English word                   | ~1 token                        |
-| 1 Japanese character             | ~1–3 tokens                     |
-| This README.md (~135 lines)       | ~2,000 tokens                   |
-| A typical source file (200 lines) | ~1,000–3,000 tokens             |
-| Claude's 200K context            | ~2 books in English / ~1 book in Japanese |
+| Reference                         | Token Count                               |
+| :-------------------------------- | :---------------------------------------- |
+| 1 English word                    | ~1 token                                  |
+| 1 Japanese character              | ~1–3 tokens                               |
+| This README.md (~135 lines)       | ~2,000 tokens                             |
+| A typical source file (200 lines) | ~1,000–3,000 tokens                       |
+| Claude's 200K context             | ~2 books in English / ~1 book in Japanese |
 
 > [!TIP]
 > **Developer analogy**: A token is like a byte in memory. It's the smallest unit that the CPU (LLM) processes, and the memory capacity (context window) is measured in bytes (tokens).
@@ -73,11 +73,11 @@ Context is **all the text that an LLM reads to generate a single response**.
 
 As a developer, you might think of it this way:
 
-| Analogy          | What Corresponds to Context     |
-| :--------------- | :------------------------------ |
-| Function call    | All data passed as arguments    |
-| HTTP request     | The entire request body         |
-| Compilation      | All source files passed to compiler |
+| Analogy       | What Corresponds to Context         |
+| :------------ | :---------------------------------- |
+| Function call | All data passed as arguments        |
+| HTTP request  | The entire request body             |
+| Compilation   | All source files passed to compiler |
 
 LLMs are stateless. They don't "remember" past conversations; instead, **each time, the entire conversation history is passed as Context, and the LLM reads it to generate a response**.
 
@@ -169,12 +169,12 @@ The LLM doesn't "remember" past conversations; it "reads" the entire history on 
 
 A Context Window is **the maximum size of Context that an LLM can process at one time**.
 
-| Model                        | Context Window Size         |
-| :--------------------------- | :--------------------------- |
+| Model                        | Context Window Size                |
+| :--------------------------- | :--------------------------------- |
 | Claude Sonnet 4.6 / Opus 4.6 | 1M tokens (200K+ at standard rate) |
-| Claude Sonnet 4 / Opus 4     | 200K tokens                 |
-| GPT-4o                       | 128K tokens                 |
-| Gemini 2.5 Pro               | 1M tokens                   |
+| Claude Sonnet 4 / Opus 4     | 200K tokens                        |
+| GPT-4o                       | 128K tokens                        |
+| Gemini 2.5 Pro               | 1M tokens                          |
 
 > [!TIP]
 > **Developer analogy**: A context window is like the memory space allocated to a process. Just as exceeding this space causes OOM (Out of Memory), exceeding the context window results in tokens being truncated.
@@ -229,25 +229,25 @@ graph LR
     class TOKEN,CONTEXT,CW concept
 ```
 
-| Concept            | In One Word      | Developer Analogy     |
-| :----------------- | :--------------- | :-------------------- |
+| Concept            | In One Word           | Developer Analogy    |
+| :----------------- | :-------------------- | :------------------- |
 | **Token**          | LLM's processing unit | Memory bytes         |
-| **Context**        | All input to LLM | HTTP request body     |
-| **Context Window** | Input size limit | Process memory space  |
+| **Context**        | All input to LLM      | HTTP request body    |
+| **Context Window** | Input size limit      | Process memory space |
 
 ## All Claude Code Design Is Based on Context Window Constraints
 
 Every Claude Code feature you'll learn in Part 3 and beyond is a mechanism to **use the context window efficiently**.
 
-| Claude Code Feature | Context Window Strategy                 |
-| :------------------ | :--------------------------------------- |
-| CLAUDE.md 200-line limit | Keep resident Context to a minimum  |
-| `.claude/rules/`    | Inject Context only on glob match        |
-| Skills              | Consume Context only on user call or LLM decision |
-| Agents              | Run in a separate context window         |
-| `/compact`          | Compress Context to recover space        |
-| `/clear`            | Reset Context                            |
-| Hooks               | Consume zero Context                     |
+| Claude Code Feature      | Context Window Strategy                           |
+| :----------------------- | :------------------------------------------------ |
+| CLAUDE.md 200-line limit | Keep resident Context to a minimum                |
+| `.claude/rules/`         | Inject Context only on glob match                 |
+| Skills                   | Consume Context only on user call or LLM decision |
+| Agents                   | Run in a separate context window                  |
+| `/compact`               | Compress Context to recover space                 |
+| `/clear`                 | Reset Context                                     |
+| Hooks                    | Consume zero Context                              |
 
 The next page explores the full picture of **what, when, and how** enters the context window.
 

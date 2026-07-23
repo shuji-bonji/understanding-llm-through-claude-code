@@ -14,7 +14,7 @@ flowchart TB
         C["CLAUDE.md 群<br/>人が書く指示・ルール"]
         A["Auto Memory<br/>Claude が書く学習メモ"]
     end
-    subgraph THIRD["サードパーティ（MCP・別インストール）"]
+    subgraph THIRD["外部 MCP サーバー（Claude Code 非組み込み・別途インストール）"]
         S["@modelcontextprotocol/server-memory<br/>ナレッジグラフによる永続記憶"]
     end
     C -->|"毎セッション全文ロード"| CTX["セッションのコンテキスト"]
@@ -29,13 +29,16 @@ flowchart TB
     style CTX fill:#f3f4f6,stroke:#374151,color:#000
 ```
 
-| 分類             | 名称                                  | 提供元             | 役割                                                       |
-| :--------------- | :------------------------------------ | :----------------- | :--------------------------------------------------------- |
-| 公式機能         | CLAUDE.md 群 / Auto Memory            | Anthropic（同梱）  | 開発作業に特化。規約・ビルドコマンド・学習パターンの記憶   |
-| サードパーティ   | `@modelcontextprotocol/server-memory` | MCP 公式リポジトリ | 汎用ナレッジグラフ。対話のパーソナライズ・関係性の構造化   |
+| 分類                 | 名称                                  | 提供元・出自                                | 役割                                                     |
+| :------------------- | :------------------------------------ | :------------------------------------------ | :------------------------------------------------------- |
+| Claude Code 組み込み | CLAUDE.md 群 / Auto Memory            | Anthropic（同梱・追加インストール不要）     | 開発作業に特化。規約・ビルドコマンド・学習パターンの記憶 |
+| 外部 MCP サーバー    | `@modelcontextprotocol/server-memory` | MCP 公式リポジトリのリファレンス実装（MIT） | 汎用ナレッジグラフ。対話のパーソナライズ・関係性の構造化 |
+
+> [!NOTE]
+> `server-memory` は「サードパーティ製」ではなく **MCP 公式リポジトリのリファレンス実装**。MCP は Anthropic が策定したオープン標準であり、[modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) はその公式リファレンス実装群（MIT）。区別すべきは「first/third-party」ではなく、**Claude Code に組み込みか／別途インストールが要る外部 MCP サーバーか**という軸。server-memory は後者にあたる。
 
 > [!IMPORTANT]
-> CLAUDE.md も Auto Memory も**「強制設定」ではなく「コンテキスト」**として毎セッション先頭に注入される。Claude はそれを読んで従おうとするが、厳密な遵守は保証されない。**必ず実行させたい**（例: コミット前に必ず lint）指示は、メモリではなく [PreToolUse フックや hooks](../07-runtime-layer/hooks.md) で技術的に強制する。
+> CLAUDE.md も Auto Memory も**「強制設定」ではなく「コンテキスト」** として毎セッション先頭に注入される。Claude はそれを読んで従おうとするが、厳密な遵守は保証されない。**必ず実行させたい**（例: コミット前に必ず lint）指示は、メモリではなく [PreToolUse フックや hooks](../07-runtime-layer/hooks.md) で技術的に強制する。
 
 ## 1. CLAUDE.md — 人が書く指示
 
@@ -43,12 +46,12 @@ flowchart TB
 
 CLAUDE.md は複数の場所に置ける。**広いスコープ → 狭いスコープ**の順にロードされ、後にロードされたもの（＝作業ディレクトリに近いもの）ほど後勝ちで効く。
 
-| スコープ             | 配置場所                                                                                                                    | 用途                              | 共有範囲              |
-| :------------------- | :------------------------------------------------------------------------------------------------------------------------- | :-------------------------------- | :-------------------- |
-| **Managed policy**   | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | 組織全体のポリシー（IT/DevOps）   | 組織の全ユーザー      |
-| **User instructions**| `~/.claude/CLAUDE.md`                                                                                                       | 全プロジェクト共通の個人設定      | 自分だけ（全 project）|
-| **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                  | チーム共有のプロジェクト規約      | チーム（Git 管理）    |
-| **Local instructions** | `./CLAUDE.local.md`                                                                                                       | 個人的なプロジェクト固有設定      | 自分だけ（現 project）|
+| スコープ                 | 配置場所                                                                                                                                                      | 用途                            | 共有範囲               |
+| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------ | :--------------------- |
+| **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | 組織全体のポリシー（IT/DevOps） | 組織の全ユーザー       |
+| **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                                                         | 全プロジェクト共通の個人設定    | 自分だけ（全 project） |
+| **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                                                        | チーム共有のプロジェクト規約    | チーム（Git 管理）     |
+| **Local instructions**   | `./CLAUDE.local.md`                                                                                                                                           | 個人的なプロジェクト固有設定    | 自分だけ（現 project） |
 
 作業ディレクトリより**上位**の階層にある `CLAUDE.md` / `CLAUDE.local.md` は起動時に全文ロードされる。**サブディレクトリ**の CLAUDE.md は、Claude がそのディレクトリのファイルを読んだときにオンデマンドでロードされる。ロード後は上書きではなく**連結**され、ファイルシステムのルート側 → 作業ディレクトリ側の順に並ぶ。
 
@@ -71,6 +74,7 @@ CLAUDE.md は `@path/to/file` で外部ファイルを取り込める。相対�
 プロジェクト概要は @README.md、npm コマンドは @package.json を参照。
 
 # Git 運用
+
 - @docs/git-workflow.md
 ```
 
@@ -102,20 +106,21 @@ YAML frontmatter の `paths` で、**特定パスのファイルを触るとき�
 ```markdown
 ---
 paths:
-  - "src/api/**/*.ts"
+  - 'src/api/**/*.ts'
 ---
 
 # API 開発ルール
+
 - すべての API エンドポイントに入力バリデーションを入れる
 - エラーレスポンスは標準フォーマットを使う
 ```
 
-| パターン               | マッチ対象                             |
-| :--------------------- | :------------------------------------- |
-| `**/*.ts`              | 任意ディレクトリの全 TypeScript ファイル |
-| `src/**/*`             | `src/` 以下の全ファイル                |
-| `*.md`                 | プロジェクトルートの Markdown          |
-| `src/**/*.{ts,tsx}`    | ブレース展開で複数拡張子をまとめて指定 |
+| パターン            | マッチ対象                               |
+| :------------------ | :--------------------------------------- |
+| `**/*.ts`           | 任意ディレクトリの全 TypeScript ファイル |
+| `src/**/*`          | `src/` 以下の全ファイル                  |
+| `*.md`              | プロジェクトルートの Markdown            |
+| `src/**/*.{ts,tsx}` | ブレース展開で複数拡張子をまとめて指定   |
 
 - `paths` を持たないルールは**全ファイルに無条件適用**。
 - ユーザーレベル `~/.claude/rules/*.md` は全プロジェクトに適用され、**プロジェクトルールより先に**ロードされる（＝プロジェクトルールが優先）。
@@ -163,13 +168,13 @@ Auto Memory は Claude が作業中に**自分で**書き溜めるメモ。ビ�
 
 `@modelcontextprotocol/server-memory` は MCP 公式リポジトリのリファレンス実装（MIT）。**Claude Code の組み込み機能ではない**。ナレッジグラフで Entity / Relation / Observation を構造的に記録し、対話のパーソナライズや人・組織・プロジェクト間の関係管理に向く。Claude Desktop など MCP 対応クライアントでの利用が主な想定。
 
-| 観点       | 公式（CLAUDE.md / Auto Memory）    | server-memory（MCP）                  |
-| :--------- | :--------------------------------- | :------------------------------------ |
-| 提供形態   | Claude Code 組み込み               | MCP 経由の外部サーバー                |
-| 主な用途   | 開発ルール・プロジェクト知識の記憶 | 対話の文脈・ユーザー情報の記憶        |
-| データ形式 | Markdown ファイル                  | ナレッジグラフ（JSONL）               |
-| チーム共有 | Git 管理で共有可能                 | ファイル共有可・Git 管理は想定外      |
-| セットアップ | 不要（同梱）                     | MCP 設定が必要                        |
+| 観点         | 公式（CLAUDE.md / Auto Memory）    | server-memory（MCP）             |
+| :----------- | :--------------------------------- | :------------------------------- |
+| 提供形態     | Claude Code 組み込み               | MCP 経由の外部サーバー           |
+| 主な用途     | 開発ルール・プロジェクト知識の記憶 | 対話の文脈・ユーザー情報の記憶   |
+| データ形式   | Markdown ファイル                  | ナレッジグラフ（JSONL）          |
+| チーム共有   | Git 管理で共有可能                 | ファイル共有可・Git 管理は想定外 |
+| セットアップ | 不要（同梱）                       | MCP 設定が必要                   |
 
 > [!NOTE]
 > どちらか一方を選ぶ話ではなく、用途が違う。Claude Code での開発作業だけが目的なら公式の CLAUDE.md + Auto Memory で足りる。エージェント記憶層としての「ナレッジグラフ / Memory-first 設計」の設計論は姉妹サイト [ai-agent-architecture / 記憶と知識統合](https://shuji-bonji.github.io/ai-agent-architecture/ja/concepts/08-memory-and-knowledge) を参照。
@@ -214,11 +219,11 @@ project/
 
 ## 6. 運用コマンドとトラブルシュート
 
-| コマンド   | 動作                                                                        |
-| :--------- | :-------------------------------------------------------------------------- |
-| `/init`    | プロジェクトを解析して雛形 CLAUDE.md を生成（既存があれば改善提案）          |
-| `/memory`  | CLAUDE.md / rules / Auto Memory の一覧・エディタで開く・Auto Memory トグル   |
-| `/context` | **実際にロードされた** Memory files を確認                                   |
+| コマンド   | 動作                                                                       |
+| :--------- | :------------------------------------------------------------------------- |
+| `/init`    | プロジェクトを解析して雛形 CLAUDE.md を生成（既存があれば改善提案）        |
+| `/memory`  | CLAUDE.md / rules / Auto Memory の一覧・エディタで開く・Auto Memory トグル |
+| `/context` | **実際にロードされた** Memory files を確認                                 |
 
 **Claude が CLAUDE.md に従わないとき**は、`/context` でロードを確認 → 配置場所が正しいか → 指示を具体化 → 矛盾を除去、の順に切り分ける。それでも「必ず特定タイミングで実行」させたいなら hooks へ、システムプロンプトレベルで効かせたいなら `--append-system-prompt` へ。
 

@@ -14,7 +14,7 @@ flowchart TB
         C["CLAUDE.md files<br/>instructions & rules you write"]
         A["Auto Memory<br/>learnings Claude writes"]
     end
-    subgraph THIRD["Third-party (MCP, separate install)"]
+    subgraph THIRD["External MCP server (not built into Claude Code, install separately)"]
         S["@modelcontextprotocol/server-memory<br/>knowledge-graph persistence"]
     end
     C -->|"full content, every session"| CTX["Session context"]
@@ -29,13 +29,16 @@ flowchart TB
     style CTX fill:#f3f4f6,stroke:#374151,color:#000
 ```
 
-| Category    | Name                                  | Provider           | Role                                                          |
-| :---------- | :------------------------------------ | :----------------- | :----------------------------------------------------------- |
-| Official    | CLAUDE.md files / Auto Memory         | Anthropic (bundled)| Dev-focused: conventions, build commands, learned patterns   |
-| Third-party | `@modelcontextprotocol/server-memory` | MCP official repo  | General knowledge graph: conversation personalization, relations |
+| Category               | Name                                  | Provider / origin                                | Role                                                             |
+| :--------------------- | :------------------------------------ | :----------------------------------------------- | :--------------------------------------------------------------- |
+| Built into Claude Code | CLAUDE.md files / Auto Memory         | Anthropic (bundled, no install)                  | Dev-focused: conventions, build commands, learned patterns       |
+| External MCP server    | `@modelcontextprotocol/server-memory` | MCP official-repo reference implementation (MIT) | General knowledge graph: conversation personalization, relations |
+
+> [!NOTE]
+> `server-memory` is not a "third-party" product — it's the **official MCP reference implementation**. MCP is an open standard created by Anthropic, and [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) is its set of official reference servers (MIT). The distinction that matters is not first/third-party but **built into Claude Code vs. an external MCP server you install separately** — server-memory is the latter.
 
 > [!IMPORTANT]
-> Both CLAUDE.md and Auto Memory are injected as **context, not enforced configuration**, at the start of every session. Claude reads and tries to follow them, but strict compliance is not guaranteed. For anything that **must** run (e.g. lint before every commit), enforce it with a [PreToolUse hook](../07-runtime-layer/hooks.md), not memory.
+> Both CLAUDE.md and Auto Memory are injected as **context, not enforced configuration** , at the start of every session. Claude reads and tries to follow them, but strict compliance is not guaranteed. For anything that **must** run (e.g. lint before every commit), enforce it with a [PreToolUse hook](../07-runtime-layer/hooks.md), not memory.
 
 ## 1. CLAUDE.md — instructions you write
 
@@ -43,12 +46,12 @@ flowchart TB
 
 CLAUDE.md can live in several places. Files load **broadest scope → most specific**, so a file loaded later (closer to your working directory) wins.
 
-| Scope                    | Location                                                                                                                    | Purpose                          | Shared with              |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------- | :------------------------------- | :----------------------- |
-| **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | Org-wide policy (IT/DevOps)      | All users in org         |
-| **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                       | Personal prefs, all projects     | Just you (all projects)  |
-| **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                      | Team-shared project rules        | Team (source control)    |
-| **Local instructions**   | `./CLAUDE.local.md`                                                                                                         | Personal project-specific prefs  | Just you (this project)  |
+| Scope                    | Location                                                                                                                                                      | Purpose                         | Shared with             |
+| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------ | :---------------------- |
+| **Managed policy**       | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux/WSL: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\Program Files\ClaudeCode\CLAUDE.md` | Org-wide policy (IT/DevOps)     | All users in org        |
+| **User instructions**    | `~/.claude/CLAUDE.md`                                                                                                                                         | Personal prefs, all projects    | Just you (all projects) |
+| **Project instructions** | `./CLAUDE.md` or `./.claude/CLAUDE.md`                                                                                                                        | Team-shared project rules       | Team (source control)   |
+| **Local instructions**   | `./CLAUDE.local.md`                                                                                                                                           | Personal project-specific prefs | Just you (this project) |
 
 CLAUDE.md / CLAUDE.local.md files **above** your working directory load in full at launch. Files in **subdirectories** load on demand when Claude reads files there. Discovered files are **concatenated**, not overridden, ordered from filesystem root down to the working directory.
 
@@ -71,6 +74,7 @@ CLAUDE.md can pull in files with `@path/to/file`. Relative paths resolve **relat
 See @README for the overview and @package.json for npm commands.
 
 # Git workflow
+
 - @docs/git-workflow.md
 ```
 
@@ -102,20 +106,21 @@ YAML `paths` frontmatter makes a rule conditional — it loads **only when Claud
 ```markdown
 ---
 paths:
-  - "src/api/**/*.ts"
+  - 'src/api/**/*.ts'
 ---
 
 # API Development Rules
+
 - All API endpoints must include input validation
 - Use the standard error response format
 ```
 
-| Pattern                | Matches                                     |
-| :--------------------- | :------------------------------------------ |
-| `**/*.ts`              | All TypeScript files in any directory       |
-| `src/**/*`             | All files under `src/`                       |
-| `*.md`                 | Markdown in the project root                 |
-| `src/**/*.{ts,tsx}`    | Brace expansion for multiple extensions      |
+| Pattern             | Matches                                 |
+| :------------------ | :-------------------------------------- |
+| `**/*.ts`           | All TypeScript files in any directory   |
+| `src/**/*`          | All files under `src/`                  |
+| `*.md`              | Markdown in the project root            |
+| `src/**/*.{ts,tsx}` | Brace expansion for multiple extensions |
 
 - Rules **without** `paths` apply to all files unconditionally.
 - User-level `~/.claude/rules/*.md` apply to every project and load **before** project rules (so project rules win).
@@ -163,13 +168,13 @@ Disable via env var with `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. Change the locatio
 
 `@modelcontextprotocol/server-memory` is the MCP official-repo reference implementation (MIT). It is **not** a built-in Claude Code feature. It records Entity / Relation / Observation as a knowledge graph, fitting conversation personalization and modeling relations among people, orgs, and projects — mainly for MCP clients like Claude Desktop.
 
-| Aspect       | Official (CLAUDE.md / Auto Memory) | server-memory (MCP)               |
-| :----------- | :--------------------------------- | :-------------------------------- |
-| Delivery     | Built into Claude Code             | External server via MCP           |
-| Main use     | Dev rules & project knowledge      | Conversation context & user info  |
-| Data format  | Markdown files                     | Knowledge graph (JSONL)           |
-| Team sharing | Shareable via Git                  | File-shareable; Git not intended  |
-| Setup        | None (bundled)                     | Requires MCP config               |
+| Aspect       | Official (CLAUDE.md / Auto Memory) | server-memory (MCP)              |
+| :----------- | :--------------------------------- | :------------------------------- |
+| Delivery     | Built into Claude Code             | External server via MCP          |
+| Main use     | Dev rules & project knowledge      | Conversation context & user info |
+| Data format  | Markdown files                     | Knowledge graph (JSONL)          |
+| Team sharing | Shareable via Git                  | File-shareable; Git not intended |
+| Setup        | None (bundled)                     | Requires MCP config              |
 
 > [!NOTE]
 > It's not either/or — the uses differ. If your goal is just dev work in Claude Code, official CLAUDE.md + Auto Memory suffice. For the design theory of an agent memory layer (knowledge graphs / Memory-first design), see the sister site [ai-agent-architecture / Memory & Knowledge Integration](https://shuji-bonji.github.io/ai-agent-architecture/concepts/08-memory-and-knowledge).
@@ -214,11 +219,11 @@ Commit `.claude/CLAUDE.md` and `.claude/rules/` to share. Splitting rules makes 
 
 ## 6. Commands and troubleshooting
 
-| Command    | Behavior                                                              |
-| :--------- | :------------------------------------------------------------------- |
+| Command    | Behavior                                                                                    |
+| :--------- | :------------------------------------------------------------------------------------------ |
 | `/init`    | Analyze the codebase and generate a starter CLAUDE.md (suggests improvements if one exists) |
-| `/memory`  | List CLAUDE.md / rules / Auto Memory, open in editor, toggle Auto Memory |
-| `/context` | See which Memory files **actually loaded**                            |
+| `/memory`  | List CLAUDE.md / rules / Auto Memory, open in editor, toggle Auto Memory                    |
+| `/context` | See which Memory files **actually loaded**                                                  |
 
 **When Claude isn't following CLAUDE.md**, debug in order: `/context` to confirm it loaded → check the location loads for your session → make instructions more specific → remove conflicts. If it must run at a fixed point, move it to a hook; for system-prompt-level instructions, use `--append-system-prompt`.
 
