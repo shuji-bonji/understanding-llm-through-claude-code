@@ -49,8 +49,11 @@ flowchart LR
 
 **Place rules requiring judgment in CLAUDE.md / Rules; place mechanically enforceable rules in Hooks.**
 
+> [!WARNING]
+> There is one trap in this flow. **If the Hook itself judges via an LLM (Prompt Hook / Agent Hook), Instruction Decay, Sycophancy, and non-determinism all move straight into the gatekeeper.** What makes a gate deterministic is not "we moved it to Hooks" but "we made it a Command Hook." For what happens when a verdict is delegated to an LLM, see [Judgment Drift](../appendix/judgment-drift.md).
+
 ---
 
-> **前へ**: [Hooks Lifecycle](hooks.md)
+> **Previous**: [Hooks Lifecycle](hooks.md)
 
 > **Part 7 Complete → Next**: [Part 8: Session Management and Memory Persistence](../08-session-management/index.md)

@@ -49,6 +49,9 @@ flowchart LR
 
 **ルールで判断が必要なものは CLAUDE.md / Rules に、機械的に強制できるものは Hooks に書く。**
 
+> [!WARNING]
+> このフローには一つ落とし穴がある。**Hooks 自体を LLM に判定させると（Prompt Hook / Agent Hook）、Instruction Decay も Sycophancy も非決定性も、そのままゲートキーパーの中に入り込む。** 「Hooks に移したから機械的」ではなく、「Command Hook にしたから決定論的」である。判定を LLM に委ねたときに何が起きるかは [判定ドリフト](../appendix/judgment-drift.md) を参照。
+
 ---
 
 > **前へ**: [Hooks のライフサイクル](hooks.md)

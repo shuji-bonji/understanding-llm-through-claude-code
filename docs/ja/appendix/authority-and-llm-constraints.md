@@ -112,6 +112,7 @@ permission モデルはこの能力に依存しない。承認は外部の人間
 
 ## 関連ページ
 
+- [判定ドリフト](./judgment-drift.md) — 「行為の裁量」ではなく「**判定を出す権限**」を渡せるか。非再現性の 3 層と `temperature=0` の限界
 - [Harness と LLM の構造的制約](./harness-and-llm-constraints.md) — ハーネス 4 要素 ⇔ 8 問題の対応（本ページの姉妹編）
 - [構造的問題 × 対策マップ](./problem-countermeasure-map.md) — 8 問題 × Claude Code 機能の対応
 - [Part 1: 構造的問題](../01-llm-structural-problems/) — 8 問題の全体像
@@ -125,5 +126,5 @@ permission モデルはこの能力に依存しない。承認は外部の人間
 
 ---
 
-> **次へ**: [ライフサイクル × 設定マップ](./lifecycle-config-map.md)
+> **次へ**: [判定ドリフト](./judgment-drift.md)
 > **前へ**: [Harness と LLM の構造的制約](./harness-and-llm-constraints.md)

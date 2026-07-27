@@ -112,6 +112,7 @@ The erosion of the three capabilities is structural, but it can be mitigated. Ev
 
 ## Related Pages
 
+- [Judgment Drift](./judgment-drift.md) — delegating the **power to issue a verdict** rather than discretion over actions: the three layers of irreproducibility and the limits of `temperature=0`
 - [Harness and LLM Constraints](./harness-and-llm-constraints.md) — the four harness elements mapped to the eight problems (companion to this page)
 - [Problems × Countermeasures Map](./problem-countermeasure-map.md) — the eight problems × Claude Code features
 - [Part 1: Structural Problems](../01-llm-structural-problems/) — overview of the eight problems
@@ -125,5 +126,5 @@ This page covered **why** durable authority is hard to hand over (Why). For **ho
 
 ---
 
-> **Next**: [Lifecycle × Config Map](./lifecycle-config-map.md)
+> **Next**: [Judgment Drift](./judgment-drift.md)
 > **Previous**: [Harness and LLM Constraints](./harness-and-llm-constraints.md)
