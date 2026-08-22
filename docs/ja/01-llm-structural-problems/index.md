@@ -10,7 +10,7 @@
 
 Claude Code の設定ファイル（CLAUDE.md, rules/, skills/, hooks 等）は、単なる「便利機能」ではない。LLM が抱える構造的問題への**設計的な回答**である。
 
-例えば:
+例えば、
 - CLAUDE.md の200行制限 → **Priority Saturation** への対策
 - `.claude/rules/` の条件付き注入 → **Lost in the Middle** への対策
 - Hooks の機械的検証 → **Hallucination** への対策
