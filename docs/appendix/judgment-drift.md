@@ -193,5 +193,5 @@ This page covered **why** LLM verdicts do not reproduce. For **where to put the 
 
 ---
 
-> **Next**: [Lifecycle × Config Map](./lifecycle-config-map.md)
+> **Next**: [Output Format Constraints and Accuracy](./output-format-constraints.md)
 > **Previous**: [Authority and LLM Constraints](./authority-and-llm-constraints.md)

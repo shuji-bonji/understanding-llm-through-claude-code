@@ -34,7 +34,10 @@ The Transformer self-attention mechanism performs O(N²) pairwise computations. 
 
 ### 3. Distractor Interference
 
-Unrelated but semantically similar information misleads the model. Structured text is particularly prone to generating incorrect outputs. This is especially severe in coding, where similar function names and import statements cause interference.
+When unrelated but semantically similar information is **present in the input context**, the model cannot separate it from the target and returns wrong output. In Chroma's experiments, a single distractor already reduced accuracy, and accuracy kept dropping as distractors were added. Moreover, a logically coherent haystack (text that preserves its original flow) performed *worse* than a shuffled one, because coherent prose blurs the boundary between distractor and target. This is especially severe in coding, where similar function names and import statements cause interference.
+
+> [!NOTE]
+> This is an **input-side** phenomenon. The separate claim that "forcing an output format such as JSON lowers accuracy" is an output-side issue, covered in [Output Format Constraints and Accuracy](../appendix/output-format-constraints.md).
 
 ## Impact on Semantic Understanding
 

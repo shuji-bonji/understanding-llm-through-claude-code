@@ -156,6 +156,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 						{ text: 'Harness と LLM の構造的制約', link: '/ja/appendix/harness-and-llm-constraints' },
 						{ text: 'Authority と LLM の構造的制約', link: '/ja/appendix/authority-and-llm-constraints' },
 						{ text: '判定ドリフト', link: '/ja/appendix/judgment-drift' },
+						{ text: '出力フォーマット制約と精度', link: '/ja/appendix/output-format-constraints' },
 						{ text: 'ライフサイクル × 設定マップ', link: '/ja/appendix/lifecycle-config-map' },
 						{ text: '機能別早見表', link: '/ja/appendix/feature-index' },
 						{ text: 'Claude Code 設定リファレンス', link: '/ja/appendix/claude-code-config-reference' },

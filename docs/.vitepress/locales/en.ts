@@ -150,6 +150,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					{ text: 'Harness and LLM Constraints', link: '/appendix/harness-and-llm-constraints' },
 					{ text: 'Authority and LLM Constraints', link: '/appendix/authority-and-llm-constraints' },
 					{ text: 'Judgment Drift', link: '/appendix/judgment-drift' },
+					{ text: 'Output Format Constraints', link: '/appendix/output-format-constraints' },
 					{ text: 'Lifecycle × Config Map', link: '/appendix/lifecycle-config-map' },
 					{ text: 'Feature Index', link: '/appendix/feature-index' },
 					{ text: 'Configuration Reference', link: '/appendix/claude-code-config-reference' },
