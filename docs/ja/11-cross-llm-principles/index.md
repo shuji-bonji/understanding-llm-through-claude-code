@@ -41,3 +41,5 @@ Cursor や Cline、あるいは素のプロンプト設計でも、同じ構造�
 ---
 
 > **前へ**: [Part 10: マルチセッション協調 — Agent Teams](../10-multi-session/index.md)
+
+> **次へ**: [構造的制約は全モデル共通](universal-patterns.md)

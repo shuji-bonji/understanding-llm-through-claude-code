@@ -3,8 +3,9 @@
 # Part 4: 条件付きコンテキスト — Rules
 
 > [!NOTE]
-> 必要な時だけ注入する仕組み。
-> CLAUDE.md の Priority Saturation を解決する「条件付き分散」。
+> 必要な時だけ注入する仕組みである。
+> CLAUDE.md の Priority Saturation を、条件付き分散で抑える。
+> `.claude/rules/` は Claude Code における代表例である。使わないルールを常時載せない、という考え方は製品を問わない。
 
 ## なぜ存在するのか
 
