@@ -1,54 +1,48 @@
----
-title: "Universal Structural Constraints"
-description: "Structural constraints that affect every LLM regardless of vendor: context limits, hallucination, instruction decay, and more."
----
-
 🌐 [日本語](../ja/11-cross-llm-principles/universal-patterns.md)
 
-# Structural Constraints Are Universal Across All Models
+# Structural Constraints Are Universal Across Models
 
 > [!NOTE]
-> The 8 structural problems learned in Part 1 are not specific to Claude, but common to all LLMs.
+> The eight problems in Part 1 are not defects of Claude as a product.
+> They come from Transformer-based models and their training.
+> In any environment that uses cloud LLMs, the same constraints appear, to varying degrees.
 
-## Why They Are Common
+## Why they are shared
 
-All 8 structural problems stem from the **Transformer architecture** and the **RLHF training process**. These are foundational technologies commonly adopted by modern LLMs, not problems unique to specific models.
+It is more accurate to explain the eight problems as two layers than as bugs in a particular implementation.
 
-| Problem | Root Cause | GPT | Claude | Gemini | LLaMA |
-| :--- | :--- | :-- | :----- | :----- | :---- |
-| Context Rot | O(N²) self-attention | ✓ | ✓ | ✓ | ✓ |
-| Lost in the Middle | RoPE / positional encoding | ✓ | ✓ | ✓ | ✓ |
-| Priority Saturation | Limitations of in-context learning | ✓ | ✓ | ✓ | ✓ |
-| Hallucination | Next-token prediction structure | ✓ | ✓ | ✓ | ✓ |
-| Sycophancy | RLHF side effect | ✓ | ✓ | ✓ | ✓ |
-| Knowledge Boundary | No reward for "I don't know" in objective function | ✓ | ✓ | ✓ | ✓ |
-| Prompt Sensitivity | Non-clustering in embedding space | ✓ | ✓ | ✓ | ✓ |
-| Instruction Decay | Temporal composition of above 7 problems | ✓ | ✓ | ✓ | ✓ |
+- **Transformer structure** — self-attention, positional encoding, next-token prediction
+- **Training objective and RLHF** — reward for predicting the next token and for producing preferred replies
 
-## The Principles of Solutions Are Also Universal
+Models that share these two layers fail in the same kinds of ways, even away from a given product. Degree and presentation differ by model. The same failure does not occur at the same magnitude.
 
-The mitigation principles adopted by Claude Code are applicable regardless of which tool is used.
+| Problem | Mainly arises from | Product-independent implication |
+| :------ | :----------------- | :------------------------------ |
+| Context Rot | Cost of self-attention and dilution of attention | Keep input short |
+| Lost in the Middle | Bias of attention from positional encoding | Do not put important information in the middle |
+| Priority Saturation | Limit on how many instructions can condition at once | Do not grow always-on instructions |
+| Hallucination | Next-token prediction | Put factual checks outside the model |
+| Sycophancy | RLHF preferring agreement | Separate generation from verification. Do not ask "is this fine?" |
+| Knowledge Boundary | Weak reward for "I don't know" | Ground in primary sources outside the model |
+| Prompt Sensitivity | Dependence on statistical patterns in the token sequence | Make the axes you do not want to vary explicit |
+| Instruction Decay | The above stacking over time | Keep conversations short. Persist decisions in files |
 
-1. **Keep resident context minimal** → Instruction files should be concise in any tool
-2. **Distribute instructions with conditional injection** → Load rules only when needed
-3. **Validate with independent context** → Separate generation and verification
-4. **Mechanical validation outside context** → Testing, linting, CI/CD don't depend on LLMs
-5. **Keep sessions short** → Reset per task
+Sycophancy is especially visible in models that went through RLHF. Base models can look different. Measured Prompt Sensitivity also depends on the evaluation method. The constraint is not absent. Its apparent size changes with how it is measured.
 
-## Common Design Patterns Across Tools
+## What in the countermeasures does not depend on the product
 
-> See [Cursor / Cline / Copilot Reference Table](cursor-cline-mapping.md) for details
+Each Claude Code feature is a representative example. Feature names need not be ported. What transfers is the way of thinking.
 
-| Principle | Claude Code | Implementation in Other Tools |
-| :--- | :--- | :--- |
-| Resident context | CLAUDE.md | .cursorrules, .clinerules |
-| Conditional injection | .claude/rules/ | @ mentions (Cursor) |
-| On-demand knowledge | Skills | Docs reference (Cursor) |
-| Context-external validation | Hooks | CI/CD, pre-commit hooks |
-| External knowledge reference | MCP | MCP (Cursor, Cline) |
+1. **Keep always-on context minimal** — keep instructions that are passed every turn short
+2. **Read conditionally** — load rules only when they apply
+3. **Verify in an independent Context** — do not ratify in the same conversation that produced the output
+4. **Put mechanical checks outside Context** — tests, lint, and CI do not depend on the LLM
+5. **Keep sessions short** — drop or summarize history at task boundaries
+
+These five can be done without dedicated commands. The procedure is in [Practice Without Tool Support](prompt-driven-development.md). Confirmed placement on other products is in [Cursor / Cline / Copilot Mapping](cursor-cline-mapping.md).
 
 ---
 
 > **Previous**: [Part 11: Applying to Other LLMs](index.md)
 
-> **Next**: [Practical Application Without Tool Support](prompt-driven-development.md)
+> **Next**: [Practice Without Tool Support](prompt-driven-development.md)

@@ -4,7 +4,7 @@
 
 > [!NOTE]
 > Shows which configuration layers are active at each phase of Claude Code's task flow.
-> A cross-sectional reference organizing the complete picture of configuration learned in Parts 3-7, from the perspective of lifecycle.
+> Configuration names are representative examples. Layers from Parts 3–7 are cut across the lifecycle.
 >
 > Related Issue: [#21](https://github.com/shuji-bonji/understanding-llm-through-claude-code/issues/21)
 

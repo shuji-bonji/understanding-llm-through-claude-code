@@ -2,20 +2,28 @@
 
 # Understanding LLMs Through Claude Code
 
-> **Understand the structural constraints of LLMs and learn "why" configurations are designed the way they are.**
+> **Understand the structural constraints of LLMs and learn why designs look the way they do.**
 >
-> This learning repository emphasizes not just "What" and "How,"
-> but **"Why"** — the reasoning behind each design decision.
+> Claude Code is the subject, and a representative example. The object of study is not a product setup guide.
+> It is the constraints shared by Transformer-based models, and the design principles that respond to them.
+
+## Readers and subject
+
+The intended reader is a developer who uses cloud LLMs daily. The goal is to understand the structural constraints and apply them across environments.
+
+Claude Code is the main subject because it is a representative example that can be described in detail and accurately today. The structural constraints and design principles in this repository do not depend on a specific product. The same constraints appear in Cursor, Cline, or plain prompt design. The same way of thinking applies.
+
+The destination is [Part 11: Cross-LLM Principles](docs/11-cross-llm-principles/index.md). Parts 1–10 confirm the principles through the representative example. Part 11 extracts what does not depend on the product.
 
 ## Project Positioning
 
-Three projects connect in a "Learn → Understand → Apply" sequence.
+Three projects connect in a "Learn → Understand → Apply" sequence. This repository is the "bookshelf of Why."
 
-| Phase                                     | Project                                                                                                                   | Focus / Status                                                                                            |
-| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------- |
-| **1. Understand LLMs**                    | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | 👈 **This repository** — LLM structural constraints and the *why* behind configuration design          |
-| 2. Understand AI Agent Architecture       | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | ✅ Published — MCP, Skills, Agent, Memory & Agent ID — composition and implementation patterns (*what/how*) |
-| 3. Apply AI to Systems & Services         | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 🚧 In progress                                                                                            |
+| Phase | Project | Focus / Status |
+| :---- | :------ | :------------- |
+| **1. Understand LLMs** | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code) | **This repository** — LLM structural constraints and why designs look the way they do (bookshelf of Why) |
+| 2. Understand AI Agent Architecture | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture) | Published — MCP, Skills, Agent, Memory & Agent ID — composition and implementation patterns (*what/how*) |
+| 3. Apply AI to Systems & Services | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | In progress |
 
 ## Table of Contents
 
@@ -119,7 +127,7 @@ Three projects connect in a "Learn → Understand → Apply" sequence.
 
 ### Part 11: Applying to Other LLMs
 
-> Elevating Claude Code-specific knowledge into universally applicable principles.
+> The destination of the whole work. Extract product-independent principles and apply them to Cursor, Cline, and plain prompt design.
 
 - [Overview](docs/11-cross-llm-principles/index.md)
 - [Structural Constraints Are Universal](docs/11-cross-llm-principles/universal-patterns.md)

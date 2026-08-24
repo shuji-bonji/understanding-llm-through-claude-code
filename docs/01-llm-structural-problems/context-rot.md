@@ -52,9 +52,11 @@ Context Rot becomes most severe in coding tasks. Understanding code requires bro
 | All 18 models | —                      | —                      | **Confirmed across all models** |
 
 > [!IMPORTANT]
-> **Critical insight**: The problem is not "LLMs are unintelligent" but "input design is poor."
+> The main cause of quality drop is not that "the LLM is unintelligent." It is input design.
 
 ## Mitigation in Claude Code
+
+The following are representative examples in Claude Code.
 
 | Mitigation              | Mechanism                                      | Addresses Mechanism(s)                   |
 | :---------------------- | :---------------------------------------------- | :---------------------------------------- |
@@ -72,6 +74,18 @@ Context Rot becomes most severe in coding tasks. Understanding code requires bro
 - [Lost in the Middle](lost-in-the-middle.md) — Most concrete manifestation of Context Rot
 - [Priority Saturation](priority-saturation.md) — Degradation from instruction density perspective
 - [Instruction Decay](instruction-decay.md) — Accumulation of Context Rot over time
+
+## This constraint is not unique to Claude
+
+Context Rot is not a defect of a specific product. It is a phenomenon that appears when Transformer-based models process long input. As prompts grow, or as chat history accumulates, output quality drops on cloud LLMs as well. The essence is input length and how attention is allocated.
+
+How it shows up elsewhere:
+
+- As chat history grows, agreements made in the middle stop showing up in later replies
+- Pasting a long spec or log in one shot lets similar but irrelevant information interfere
+- Quality starts falling before the displayed capacity is exhausted
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

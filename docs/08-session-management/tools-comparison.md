@@ -3,7 +3,8 @@
 # Tool Comparison and Selection
 
 > [!NOTE]
-> Comparison of tools available for memory persistence.
+> Comparison of means available for persisting memory.
+> Tool names include representative examples in Claude Code. The selection axes (always-on, conditional, persist outside) are not product-specific.
 
 ## Tool Comparison Table
 

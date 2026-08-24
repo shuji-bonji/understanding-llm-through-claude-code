@@ -30,20 +30,20 @@ globs: '**/*.actions.ts,**/*.effects.ts,**/*.reducer.ts'
 ### Avoid Overly Broad Patterns
 
 ```yaml
-# ❌ Too broad — fires on almost all files, making Rules pointless
+# Bad example — Too broad — fires on almost all files, making Rules pointless
 globs: "**/*.ts"
 
-# ✅ Appropriate scope
+# Good example — Appropriate scope
 globs: "src/app/**/*.component.ts"
 ```
 
 ### Separate by Domain
 
 ```
-# ❌ Multiple domains in one file
+# Bad example — Multiple domains in one file
 rules/frontend-rules.md  # globs: "**/*.ts" — all components, services, tests
 
-# ✅ Separate by domain
+# Good example — Separate by domain
 rules/component-rules.md  # globs: "**/*.component.ts"
 rules/service-rules.md    # globs: "**/*.service.ts"
 rules/testing-rules.md    # globs: "**/*.spec.ts"

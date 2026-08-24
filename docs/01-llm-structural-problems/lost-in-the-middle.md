@@ -87,6 +87,8 @@ This is the scientific basis for why `/compact` should be run before 50% usage i
 
 ## Countermeasures in Claude Code
 
+The following are representative examples in Claude Code.
+
 | Countermeasure           | Mechanism                           | Why It Works                                                                |
 | :----------------------- | :---------------------------------- | :-------------------------------------------------------------------------- |
 | **`/compact`**           | Summarize and compress chat history | Keeps context usage below 50%, preventing U-curve collapse                  |
@@ -103,6 +105,18 @@ Lost in the Middle is part of Context Rot while simultaneously amplifying other 
 - **Priority Saturation**: Instructions in the middle being ignored reduces the effective number of instructions
 - **Instruction Decay**: As conversations lengthen, the middle grows, accelerating forgotten initial instructions
 - **Sycophancy**: Overlooking important constraints makes it easier to comply directly with user requests
+
+## This constraint is not unique to Claude
+
+Lost in the Middle comes from positional encoding. Attention leans toward the beginning and the end. The middle becomes a blind spot. The same shape appears in document search and in long prompts.
+
+How it shows up elsewhere:
+
+- Constraints in the middle of a long spec never reach the implementation
+- Decisions made mid-conversation disappear from later replies
+- The heuristic that repeating important points at the end "works" is this positional bias
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

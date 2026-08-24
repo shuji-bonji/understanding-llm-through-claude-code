@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Understanding LLMs
   text: Through Claude Code
-  tagline: Understand the structural constraints of LLMs and learn "why" configurations are designed the way they are.
+  tagline: Understand the structural constraints of LLMs and learn why designs look the way they do. The subject is Claude Code. The principles are not product-specific.
   actions:
     - theme: brand
       text: Start Reading
@@ -43,22 +43,34 @@ features:
     details: Agent Teams as the root-cause fix for Context Rot at scale.
     link: /10-multi-session/
   - title: "Part 11: Cross-LLM Principles"
-    details: Universal patterns that apply to Cursor, Cline, Copilot, and beyond.
+    details: The destination of the whole work. Extract product-independent principles and apply them to Cursor, Cline, and plain prompt design.
     link: /11-cross-llm-principles/
   - title: "Appendix"
     details: Maps, configuration reference, FAQ, plugins, and glossary.
     link: /appendix/problem-countermeasure-map
 ---
 
-## 📚 Sister Projects
+## About this site
 
-A 3-phase learning path: "Know LLMs → Know Agent Design → Apply to Systems."
+LLMs are not omnipotent. Transformer-based models have structural constraints: quality falls as input grows, information in the middle is missed, and content that contradicts facts is generated.
+
+This site is a "bookshelf of Why." It is for learning those constraints and the design principles that transfer across prompt and agent design.
+
+The intended reader is a developer who uses cloud LLMs daily. The goal is to understand the constraints and apply them in one's own environment.
+
+Claude Code is the main subject because it is a representative example that can be described in detail and accurately today. The structural constraints and design principles here do not depend on a specific product. The same constraints appear in Cursor, Cline, or plain prompt design. The same way of thinking applies.
+
+The destination is [Part 11: Cross-LLM Principles](/11-cross-llm-principles/). Parts 1–10 confirm the principles through Claude Code as a representative example. Part 11 then extracts what does not depend on the product.
+
+## Sister projects
+
+Three sister projects can be read in order: "Know LLMs → Know Agent Design → Apply to Systems." This site is the "bookshelf of Why."
 
 | Phase | Project | Focus |
 | --- | --- | --- |
-| **1. Know LLMs** | 👈 **This site** | LLM structural constraints and the *why* behind configuration design |
-| **2. Know Agent Design** | [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/) | MCP, Skills, and Agent composition with implementation patterns (*what/how*) |
-| **3. Apply to Systems** | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | _Coming soon_ — System operations in the AI era |
+| **1. Know LLMs** | **This site** | LLM structural constraints and why designs look the way they do (bookshelf of Why) |
+| **2. Know Agent Design** | [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/) | MCP, Skills, and Agent composition with implementation patterns (map of What/How) |
+| **3. Apply to Systems** | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | Coming soon — system operations in the AI era |
 
 > [!TIP]
-> **For readers who learned the "why" here** — for concrete implementation patterns (MCP catalog, Skills design, Agent taxonomy, A2A protocol, etc.), read the sister site [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/) alongside this one to connect the *why* with the *how*.
+> After the Why is clear, read the sister site [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/) for concrete implementation patterns (MCP catalog, Skills design, Agent taxonomy, A2A protocol, and so on). Why and How then connect.

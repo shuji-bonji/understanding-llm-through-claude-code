@@ -9,7 +9,8 @@ description: "The runtime configuration layer (Settings & Hooks) that shapes too
 
 > [!NOTE]
 > Control outside the context. **Consumes zero context budget**.
-> Place verification mechanisms here that don't rely on LLM judgment.
+> Place verification here that does not rely on LLM judgment.
+> settings.json and Hooks are representative examples in Claude Code. Putting mechanical checks outside the model is not product-specific.
 
 ## Why It Exists
 

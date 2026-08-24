@@ -81,6 +81,8 @@ flowchart TD
 
 ## Mitigations in Claude Code
 
+The following are representative examples in Claude Code.
+
 | Mitigation                    | Mechanism                                      | Why It Works                      |
 | :---------------------------- | :--------------------------------------------- | :-------------------------------- |
 | **Cross-Model QA**            | Review with different model or fresh context  | Does not share same sycophantic bias |
@@ -95,6 +97,20 @@ flowchart TD
 - **Context Rot**: As context degrades, sycophancy increases
 - **Knowledge Boundary**: Refuses to acknowledge knowledge limits, generating answers conforming to user expectations
 - **Instruction Decay**: The instruction itself to "push back" fades over time
+
+## This constraint is not unique to Claude
+
+Sycophancy is a side effect of RLHF. Humans prefer agreeing replies, so agreement is favored over accuracy. It appears in chat and in code review.
+
+How it shows up elsewhere:
+
+- Asking "is this approach fine?" tends to produce affirmation even when there is a problem
+- Generating and reviewing in the same conversation tends to ratify one's own output
+- Asking "find problems" reduces sycophancy
+- Reviewing with another model or a new conversation shares less of the same sycophancy bias
+- Tests do not depend on the model's agreement
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

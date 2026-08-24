@@ -10,11 +10,11 @@ description: "The context window is the LLM's thinking space â€” Claude's 200Kâ€
 > [!NOTE]
 > Learn the structure of the LLM's "thinking space."
 > The physical foundation for "why" the structural problems you learned in Part 1 occur lies here.
-> All design decisions from Part 3 onward are based on the constraints of this context window.
+> The window's constraints are not product-specific. Claude Code is used as a concrete example of injection.
 
 ## What is Context Window?
 
-An LLM thinks within a single "context window." For Claude, this is typically 200K to 1M tokens (depending on model generation). All configuration files in Claude Code are mechanisms to control "when, what, and how much" to inject into this window.
+**A context window is the maximum size of input an LLM can "see and think with" at once.** The cap differs by model. Information outside this window does not exist for the LLM. Claude Code configuration files (CLAUDE.md, settings.json, MCP, and so on) are a representative example of controlling *when, what, and how much* is injected into this window.
 
 ## What You'll Learn in This Part
 

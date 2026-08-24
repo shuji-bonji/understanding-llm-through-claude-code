@@ -4,7 +4,8 @@
 
 > [!NOTE]
 > Information that is always loaded when a session begins.
-> This is a "fixed cost" in your context budget and requires the most careful management.
+> This is a "fixed cost" in the context budget and requires the most careful management.
+> CLAUDE.md is a representative example in Claude Code. Keeping always-on instructions short is not product-specific.
 
 ## Why It Matters
 

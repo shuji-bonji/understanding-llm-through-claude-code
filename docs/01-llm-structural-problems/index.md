@@ -8,19 +8,26 @@ description: "Overview of the eight structural constraints every LLM faces: cont
 # Part 1: Understanding the Structural Constraints of LLMs
 
 > [!NOTE]
-> LLMs are not omnipotent. They have structural constraints.
-> Understanding these is the first step to grasping the design philosophy behind Claude Code.
+> LLMs are not omnipotent. Transformer-based models have structural constraints that come from input length and how attention is allocated.
+> This Part defines those constraints. The subject is the constraints themselves, not a product setup guide.
 
 ## Why You Need to Know About Structural Problems
 
-Claude Code's configuration files (CLAUDE.md, rules/, skills/, hooks, etc.) are not mere "convenience features." They are **deliberate design responses** to the structural problems inherent in LLMs.
+The intended reader is a developer who uses cloud LLMs. The goal is to understand the mechanisms and apply them in one's own environment.
 
-For example:
-- CLAUDE.md's 200-line limit → Countermeasure for **Priority Saturation**
-- `.claude/rules/` conditional injection → Countermeasure for **Lost in the Middle**
-- Hooks for mechanical verification → Countermeasure for **Hallucination**
+Claude Code's configuration (CLAUDE.md, rules/, skills/, hooks, and so on) is a **design response** to structural problems in LLMs. Claude Code is the subject because it is a representative example that can be described in detail and accurately today.
 
-To understand "why configurations are designed this way" (the Why), you first need to understand "what problems LLMs inherently have."
+The principles here apply directly to Cursor, Cline, or plain prompt design. The same constraints appear. The same way of thinking applies.
+
+The destination is [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md). This Part defines the constraints. Parts 2 onward show countermeasures in the representative example. Part 11 extracts what does not depend on the product.
+
+Concrete examples in Claude Code:
+
+- CLAUDE.md's 200-line limit → countermeasure for **Priority Saturation**
+- `.claude/rules/` conditional injection → countermeasure for **Lost in the Middle**
+- Hooks for mechanical verification → countermeasure for **Hallucination**
+
+To understand why configurations are designed this way (the Why), you first need to understand what problems LLMs have.
 
 ## The 8 Structural Problems
 
@@ -61,14 +68,14 @@ These problems do not exist in isolation — they amplify each other. The diagra
 ```mermaid
 graph TD
     %% ── Node definitions ──
-    CR["🔴 Context Rot<br/>Quality degrades as tokens increase"]
-    LM["🟠 Lost in the Middle<br/>Information loss in the middle"]
-    PS["🟡 Priority Saturation<br/>Compliance drops with too many instructions"]
-    HL["🔵 Hallucination<br/>Structurally unavoidable confabulation"]
-    SY["🟣 Sycophancy<br/>Agreement over accuracy"]
-    KB["🟤 Knowledge Boundary<br/>Unable to say 'I don't know'"]
-    PM["🟢 Prompt Sensitivity<br/>Results vary by phrasing"]
-    ID["⚫ Instruction Decay<br/>Rules forgotten in long conversations"]
+    CR["Context Rot<br/>Quality degrades as tokens increase"]
+    LM["Lost in the Middle<br/>Information loss in the middle"]
+    PS["Priority Saturation<br/>Compliance drops with too many instructions"]
+    HL["Hallucination<br/>Structurally unavoidable confabulation"]
+    SY["Sycophancy<br/>Agreement over accuracy"]
+    KB["Knowledge Boundary<br/>Unable to say 'I don't know'"]
+    PM["Prompt Sensitivity<br/>Results vary by phrasing"]
+    ID["Instruction Decay<br/>Rules forgotten in long conversations"]
 
     %% ── Cascade from Context Rot ──
     CR -->|"Attention dilution<br/>creates blind spots"| LM
@@ -101,15 +108,23 @@ graph TD
     PM -->|"Phrasing shifts<br/>accumulate over time"| ID
 
     %% ── Styles ──
-    classDef context fill:#fee2e2,stroke:#dc2626,color:#000
-    classDef output fill:#dbeafe,stroke:#2563eb,color:#000
-    classDef input fill:#dcfce7,stroke:#16a34a,color:#000
-    classDef time fill:#f3f4f6,stroke:#374151,color:#000
+    classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000
+    classDef lm fill:#ffedd5,stroke:#c2410c,color:#000
+    classDef ps fill:#fef9c3,stroke:#a16207,color:#000
+    classDef hl fill:#dbeafe,stroke:#1d4ed8,color:#000
+    classDef sy fill:#f3e8ff,stroke:#7c3aed,color:#000
+    classDef kb fill:#e8d5b7,stroke:#78350f,color:#000
+    classDef pm fill:#dcfce7,stroke:#15803d,color:#000
+    classDef id fill:#f3f4f6,stroke:#374151,color:#000
 
-    class CR,LM,PS context
-    class HL,SY,KB output
-    class PM input
-    class ID time
+    class CR cr
+    class LM lm
+    class PS ps
+    class HL hl
+    class SY sy
+    class KB kb
+    class PM pm
+    class ID id
 ```
 
 **3 Major Cascades**:
@@ -120,7 +135,7 @@ graph TD
 
 ## Structural Problems × Claude Code Countermeasures Map
 
-LLMs have 8 structural problems, and each Claude Code feature is a deliberate design response to these problems. From Part 2 onward, we will examine in detail how each feature addresses these problems.
+LLMs have 8 structural problems. The countermeasures in the table below are representative examples in Claude Code. From Part 2 onward, we examine how each feature addresses these problems. Product-independent principles are extracted in [Part 11](../11-cross-llm-principles/index.md).
 
 | Structural Problem | Overview | Primary Countermeasures (Claude Code) | Related Docs |
 |:--|:--|:--|:--|
@@ -134,6 +149,18 @@ LLMs have 8 structural problems, and each Claude Code feature is a deliberate de
 | [**Instruction Decay**](instruction-decay.md) | Rules forgotten in long conversations (compound of 7 problems) | `/compact`, `/clear`, Hooks, session splitting | Part 7, 8 |
 
 > For the detailed version, see [Structural Problems × Claude Code Countermeasures Map (Appendix)](../appendix/problem-countermeasure-map.md).
+
+## This constraint is not unique to Claude
+
+The eight problems are not defects of a specific product. They arise from Transformer-based models and their training. In any environment that uses cloud LLMs, the same constraints appear, to varying degrees.
+
+How they show up elsewhere:
+
+- As chat history grows, agreements made in the middle stop showing up in later replies
+- When a long spec is pasted in one shot, requirements in the middle drop out
+- When too many rules are listed at once, none of them is followed well
+
+The Claude Code countermeasure table is a representative set of concrete responses. Other tools do not necessarily ship features at the same granularity. What transfers is the way of thinking: keep input short, do not bury important instructions, put verification outside the model. The details are collected in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ---
 

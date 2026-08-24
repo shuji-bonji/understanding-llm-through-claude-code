@@ -118,10 +118,10 @@ Once you understand Chat, Claude Code's countermeasures become visible as "Chat 
 ```mermaid
 flowchart TD
     CHAT["Chat / Session"]
-    COMPACT(["⚡ /compact<br>Compress Chat and continue"])
-    CLEAR(["🔄 /clear<br>End Chat and start new"])
-    AGENTS(["🤖 Agents<br>Execute in separate Chat"])
-    HOOKS(["🔧 Hooks<br>Verify outside Chat"])
+    COMPACT(["/compact<br>Compress Chat and continue"])
+    CLEAR(["/clear<br>End Chat and start new"])
+    AGENTS(["Agents<br>Execute in separate Chat"])
+    HOOKS(["Hooks<br>Verify outside Chat"])
 
     CHAT -->|"When approaching 50% threshold"| COMPACT
     CHAT -->|"If task complete or degradation evident"| CLEAR

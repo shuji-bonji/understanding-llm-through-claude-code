@@ -135,12 +135,12 @@ Key aspects of this design:
 > As mitigation for **Prompt Sensitivity**, concrete and directive language is essential.
 
 ```markdown
-# ❌ Vague (High Prompt Sensitivity)
+# Bad example — Vague (High Prompt Sensitivity)
 
 - Write tests properly
 - Keep code clean
 
-# ✅ Concrete (Low Prompt Sensitivity)
+# Good example — Concrete (Low Prompt Sensitivity)
 
 - Create Jasmine tests for all public methods
 - Place test files in *.spec.ts

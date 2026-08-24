@@ -229,7 +229,7 @@ Commit `.claude/CLAUDE.md` and `.claude/rules/` to share. Splitting rules makes 
 > [!WARNING]
 > Root CLAUDE.md **survives `/compact`** (re-read from disk and re-injected), but **subdirectory CLAUDE.md files are not re-injected**. Put must-always-persist instructions in the root CLAUDE.md. Conversation-only instructions are also lost on compaction, so write anything you need to keep into CLAUDE.md.
 
-## 🔗 Go deeper: why memory is needed
+## Go deeper: why memory is needed
 
 This page covered the **What/How** of memory mechanisms (what goes where and how). For **why** information is lost between sessions, and **what** to remember and **when** to recall it — from the LLM's structural constraints — see Part 8.
 

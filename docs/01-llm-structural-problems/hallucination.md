@@ -58,7 +58,7 @@ It has been proven that complete hallucination control is fundamentally impossib
 
 ## Mitigation Strategies in Claude Code
 
-Hallucination cannot be eliminated. Mitigation is based on a **detection and management paradigm**:
+Hallucination cannot be eliminated. Mitigation is based on a **detection and management paradigm**. The following are representative examples in Claude Code.
 
 | Strategy | Mechanism | Why It Works |
 |:--|:--|:--|
@@ -105,6 +105,18 @@ LLM hallucination management:
 - **Sycophancy**: User agreement may reinforce hallucinated content
 - **Context Rot**: Hallucination rate increases as context length grows
 - **Instruction Decay**: The instruction itself to "verify facts" may be forgotten
+
+## This constraint is not unique to Claude
+
+Hallucination comes from next-token prediction. Regardless of model size or product, content that contradicts facts can be generated with confidence. It cannot be reduced to zero. Detection and management are the response.
+
+How it shows up elsewhere:
+
+- Non-existent APIs or papers are presented as if they had a source
+- Version or date questions get a plausible value from training data
+- Compilers, tests, and checks against primary sources work outside the model, on any tool
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

@@ -4,7 +4,8 @@
 
 > [!NOTE]
 > Expanded only when called.
-> Skills are "import"; Agents are "delegation to separate process."
+> Skills are "import"; Agents are "delegation to a separate process."
+> The file names are representative examples in Claude Code. Read only when needed, and separate generation from verification, are not product-specific.
 
 ## Why They Exist
 
