@@ -2,20 +2,28 @@
 
 # Claude を通じて LLM を知る
 
-> **LLM の構造的制約を理解し、「なぜそう設定するのか」を知る。**
+> **LLM の構造的制約を理解し、「なぜそう設計するのか」を知る。**
 >
-> 「What（何を設定するか）」「How（どう設定するか）」はもちろん、
-> **「Why（なぜその設定が必要か）」** を重視した学習リポジトリです。
+> Claude Code は題材であり、代表例である。学ぶ対象は製品の設定手順ではない。
+> Transformer 系モデルに共通する制約と、それに対する設計原則である。
+
+## 読者と題材
+
+想定読者は、クラウド LLM を日常的に使う開発者である。構造的制約を理解し、自分の環境へ横断して適用したい人を対象とする。
+
+Claude Code を主な題材とする。これは現時点で詳細かつ正確に記述できる代表例だからである。本リポジトリで扱う構造的制約と設計原則は、特定の製品に依存しない。Cursor や Cline、あるいは素のプロンプト設計においても、同じ制約が現れる。同じ考え方で対処できる。
+
+最終的な到達点は [Part 11: 他LLMへの応用](docs/ja/11-cross-llm-principles/index.md) である。Part 1〜10 では代表例を通じて原理を確認する。Part 11 で製品に依存しない原則を抽出する。
 
 ## このプロジェクトの位置づけ
 
-3つのプロジェクトが「学ぶ → 知る → 適用する」の順序で繋がります。
+3つのプロジェクトが「学ぶ → 知る → 適用する」の順序でつながる。本リポジトリはそのうち「Why の本棚」である。
 
-| フェーズ                              | プロジェクト                                                                                                              | 内容 / 状態                                                                              |
-| :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
-| **1. LLM を知る**                     | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | 👈 **このリポジトリ** — LLM の構造的制約と「なぜそう設計するのか」（Why の本棚）         |
-| 2. AI エージェントの設計を知る        | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | ✅ 公開中 — MCP・Skills・Agent・Memory・Agent ID の構成と実装パターン（What/How の地図） |
-| 3. システム・サービスに AI を適用する | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 🚧 準備中                                                                                |
+| フェーズ | プロジェクト | 内容 / 状態 |
+| :------- | :----------- | :---------- |
+| **1. LLM を知る** | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code) | **このリポジトリ** — LLM の構造的制約と「なぜそう設計するのか」（Why の本棚） |
+| 2. AI エージェントの設計を知る | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture) | 公開中 — MCP・Skills・Agent・Memory・Agent ID の構成と実装パターン（What/How の地図） |
+| 3. システム・サービスに AI を適用する | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 準備中 |
 
 ## 目次
 
@@ -119,7 +127,7 @@
 
 ### Part 11: 他LLMへの応用
 
-> Claude Code 固有の知識を他ツール・他LLMに応用可能な形に昇華する。
+> 全体の到達点。製品に依存しない原則を抽出し、Cursor / Cline / 汎用プロンプト設計へ応用する。
 
 - [概要](docs/ja/11-cross-llm-principles/index.md)
 - [構造的制約は全モデル共通](docs/ja/11-cross-llm-principles/universal-patterns.md)
