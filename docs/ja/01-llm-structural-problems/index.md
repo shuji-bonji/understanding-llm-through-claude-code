@@ -3,19 +3,26 @@
 # Part 1: LLMの構造的制約を知る
 
 > [!NOTE]
-> LLM は万能ではない。構造的な制約がある。
-> これを理解することが、Claude Code の設計思想を理解する第一歩になる。
+> LLM は万能ではない。Transformer 系モデルには、入力の長さや注意の配分に起因する構造的な制約がある。
+> 本 Part はその制約を定義する。対象は製品の設定手順ではなく、制約そのものである。
 
 ## なぜ構造的問題を知る必要があるのか
 
-Claude Code の設定ファイル（CLAUDE.md, rules/, skills/, hooks 等）は、単なる「便利機能」ではない。LLM が抱える構造的問題への**設計的な回答**である。
+想定読者は、クラウド LLM を使う開発者である。目的は、制約の機序を理解し、自分の環境へ適用することである。
 
-例えば、
+Claude Code の設定（CLAUDE.md、rules/、skills/、hooks など）は、LLM が抱える構造的問題への**設計的な回答**である。Claude Code を題材にするのは、現時点で詳細かつ正確に記述できる代表例だからである。
+
+ここで学ぶ原則は、Cursor や Cline、あるいは素のプロンプト設計にも直接使える。同じ制約が現れる。同じ考え方で対処できる。
+
+最終的な到達点は [Part 11: 他LLMへの応用](../11-cross-llm-principles/index.md) である。本 Part で制約を定義し、Part 2 以降で代表例の対策を見る。Part 11 で製品に依存しない原則を抽出する。
+
+Claude Code における具体策の例は次のとおりである。
+
 - CLAUDE.md の200行制限 → **Priority Saturation** への対策
 - `.claude/rules/` の条件付き注入 → **Lost in the Middle** への対策
 - Hooks の機械的検証 → **Hallucination** への対策
 
-「なぜそう設定するのか（Why）」を理解するには、まず「LLMがどんな問題を抱えているか」を知る必要がある。
+「なぜそう設定するのか（Why）」を理解するには、まず「LLM がどんな問題を抱えているか」を知る必要がある。
 
 ## 8つの構造的問題
 
@@ -56,14 +63,14 @@ LLM には以下の8つの構造的問題がある。これらは「バグ」で
 ```mermaid
 graph TD
     %% ── ノード定義 ──
-    CR["🔴 Context Rot<br/>トークン増で品質劣化"]
-    LM["🟠 Lost in the Middle<br/>中間部の情報喪失"]
-    PS["🟡 Priority Saturation<br/>指示過多で遵守率低下"]
-    HL["🔵 Hallucination<br/>構造的に不可避な幻覚"]
-    SY["🟣 Sycophancy<br/>正確性より同意を優先"]
-    KB["🟤 Knowledge Boundary<br/>「知らない」と言えない"]
-    PM["🟢 Prompt Sensitivity<br/>表現で結果が変動"]
-    ID["⚫ Instruction Decay<br/>長会話でルール忘却"]
+    CR["Context Rot<br/>トークン増で品質劣化"]
+    LM["Lost in the Middle<br/>中間部の情報喪失"]
+    PS["Priority Saturation<br/>指示過多で遵守率低下"]
+    HL["Hallucination<br/>構造的に不可避な幻覚"]
+    SY["Sycophancy<br/>正確性より同意を優先"]
+    KB["Knowledge Boundary<br/>「知らない」と言えない"]
+    PM["Prompt Sensitivity<br/>表現で結果が変動"]
+    ID["Instruction Decay<br/>長会話でルール忘却"]
 
     %% ── Context Rot 起点の連鎖 ──
     CR -->|"注意希薄化で<br/>中間部が死角に"| LM
@@ -96,15 +103,23 @@ graph TD
     PM -->|"表現が累積的に<br/>変化しズレる"| ID
 
     %% ── スタイル ──
-    classDef context fill:#fee2e2,stroke:#dc2626,color:#000
-    classDef output fill:#dbeafe,stroke:#2563eb,color:#000
-    classDef input fill:#dcfce7,stroke:#16a34a,color:#000
-    classDef time fill:#f3f4f6,stroke:#374151,color:#000
+    classDef cr fill:#fee2e2,stroke:#b91c1c,color:#000
+    classDef lm fill:#ffedd5,stroke:#c2410c,color:#000
+    classDef ps fill:#fef9c3,stroke:#a16207,color:#000
+    classDef hl fill:#dbeafe,stroke:#1d4ed8,color:#000
+    classDef sy fill:#f3e8ff,stroke:#7c3aed,color:#000
+    classDef kb fill:#e8d5b7,stroke:#78350f,color:#000
+    classDef pm fill:#dcfce7,stroke:#15803d,color:#000
+    classDef id fill:#f3f4f6,stroke:#374151,color:#000
 
-    class CR,LM,PS context
-    class HL,SY,KB output
-    class PM input
-    class ID time
+    class CR cr
+    class LM lm
+    class PS ps
+    class HL hl
+    class SY sy
+    class KB kb
+    class PM pm
+    class ID id
 ```
 
 **3つの主要カスケード**:
@@ -115,7 +130,7 @@ graph TD
 
 ## 構造的問題 × Claude Code 対策マップ
 
-LLM には 8 つの構造的問題があり、Claude Code の各機能はそれぞれの問題に対する設計的な回答である。Part 2 以降で、各機能がこれらの問題にどう対応しているかを詳しく見ていく。
+LLM には 8 つの構造的問題がある。下表の対策は Claude Code における代表例である。Part 2 以降で、各機能がこれらの問題にどう対応しているかを詳しく見る。製品に依存しない原則の抽出は [Part 11](../11-cross-llm-principles/index.md) で行う。
 
 | 構造的問題 | 概要 | 主な対策（Claude Code） | 対応ドキュメント |
 |:--|:--|:--|:--|
@@ -129,6 +144,12 @@ LLM には 8 つの構造的問題があり、Claude Code の各機能はそれ�
 | [**Instruction Decay**](instruction-decay.md) | 長会話でルール忘却（7問題の複合結果） | `/compact`, `/clear`, Hooks, セッション分割 | Part 7, 8 |
 
 > 詳細版は [構造的問題 × Claude Code 対策マップ（付録）](../appendix/problem-countermeasure-map.md) を参照。
+
+## この制約は Claude に限らない
+
+8つの問題は、特定の製品の欠陥ではない。Transformer 系モデルと、その訓練プロセスに起因する。クラウド LLM を使う環境であれば、程度の差はあれ同じ制約が現れる。
+
+Claude Code の対策表は、その制約に対する具体策の代表例である。同じ粒度の機能が他ツールに揃っているとは限らない。横断して使えるのは、次の考え方である。入力を短く保つ。重要な指示を埋もれさせない。検証をモデルの外に置く。詳細は [Part 11: 他LLMへの応用](../11-cross-llm-principles/index.md) にまとめる。
 
 ---
 

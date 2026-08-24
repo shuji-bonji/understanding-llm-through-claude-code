@@ -3,7 +3,7 @@ layout: home
 hero:
   name: LLMを理解する
   text: Claude Code を通じて
-  tagline: LLMの構造的制約を理解し、設定が「なぜ」そのように設計されているかを学ぶ
+  tagline: LLM の構造的制約を理解し、「なぜ」そう設計するかを学ぶ。題材は Claude Code。原則は製品を問わない。
   actions:
     - theme: brand
       text: 読み始める
@@ -43,22 +43,34 @@ features:
     details: Agent Teams によるスケール時の Context Rot 根本対策。
     link: /ja/10-multi-session/
   - title: "Part 11: 他LLMへの応用"
-    details: Cursor、Cline、Copilot にも適用できる普遍的パターン。
+    details: 全体の到達点。製品に依存しない原則を抽出し、Cursor / Cline / 汎用プロンプト設計へ応用する。
     link: /ja/11-cross-llm-principles/
   - title: "付録"
     details: 各種マップ、設定リファレンス、FAQ、Plugins、用語集。
     link: /ja/appendix/problem-countermeasure-map
 ---
 
-## 📚 姉妹プロジェクト
+## このサイトについて
 
-「LLM を知る → AI Agent 設計を知る → システムに適用する」を順序立てて学べる 3 つの姉妹プロジェクトです。
+LLM は万能ではない。Transformer 系モデルには、入力が長くなるほど品質が落ちる、中間の情報を見落とす、事実と異なる内容を生成する、といった構造的な制約がある。
+
+本サイトは、それらの制約を理解し、プロンプトやエージェント設計に横断して使える原則を学ぶための「Why の本棚」である。
+
+想定読者は、クラウド LLM を日常的に使う開発者である。構造的制約を理解し、自分の環境へ横断して適用したい人を対象とする。
+
+Claude Code を主な題材とする。これは現時点で詳細かつ正確に記述できる代表例だからである。ここで扱う構造的制約と設計原則は、特定の製品に依存しない。Cursor や Cline、あるいは素のプロンプト設計においても、同じ制約が現れる。同じ考え方で対処できる。
+
+最終的な到達点は [Part 11: 他LLMへの応用](/ja/11-cross-llm-principles/) である。Part 1〜10 では Claude Code を代表例として原理を確認する。そのうえで、製品に依存しない原則を抽出する。
+
+## 姉妹プロジェクト
+
+「LLM を知る → AI Agent 設計を知る → システムに適用する」を順序立てて学べる 3 つの姉妹プロジェクトがある。本サイトはそのうち「Why の本棚」にあたる。
 
 | フェーズ | プロジェクト | 内容 |
 | --- | --- | --- |
-| **1. LLM を知る** | 👈 **このサイト** | LLM の構造的制約と「なぜそう設計するのか」（Why の本棚） |
+| **1. LLM を知る** | **このサイト** | LLM の構造的制約と「なぜそう設計するのか」（Why の本棚） |
 | **2. AI Agent 設計を知る** | [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/ja/) | MCP・Skills・Agent の構成と実装パターン（What/How の地図） |
-| **3. システムに適用する** | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | _準備中_ — AI 時代のシステム運用 |
+| **3. システムに適用する** | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | 準備中 — AI 時代のシステム運用 |
 
 > [!TIP]
-> **このサイトで Why を理解した方へ** — 具体的な実装パターン（MCP カタログ、Skills 設計、Agent 分類、A2A プロトコル等）を求める場合は、姉妹サイトの [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/ja/) を併読すると、Why と How が繋がります。
+> Why を理解したあと、具体的な実装パターン（MCP カタログ、Skills 設計、Agent 分類、A2A プロトコルなど）を求める場合は、姉妹サイトの [ai-agent-architecture](https://shuji-bonji.github.io/ai-agent-architecture/ja/) を併読するとよい。Why と How がつながる。
