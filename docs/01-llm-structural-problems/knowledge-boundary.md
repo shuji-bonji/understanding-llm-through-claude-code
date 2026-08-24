@@ -66,6 +66,8 @@ The same question can be answered correctly or incorrectly depending on how it's
 
 ## Mitigation Strategies in Claude Code
 
+The following are representative examples in Claude Code.
+
 | Mitigation | Mechanism | Why It Works |
 | :--- | :--- | :--- |
 | **MCP (External Knowledge Reference)** | Query external trusted sources directly | Extends knowledge boundaries beyond the LLM's internal knowledge |
@@ -107,6 +109,18 @@ flowchart TD
     style ID fill:#f3f4f6,stroke:#374151,color:#000
     style D fill:#fef9c3,stroke:#a16207,color:#000
 ```
+
+## This constraint is not unique to Claude
+
+LLMs are trained for next-token prediction. Reward for "I don't know" is weak. They answer with high confidence even outside their knowledge. This is especially visible with post-cutoff APIs and internal code.
+
+How it shows up elsewhere:
+
+- New framework idioms are produced confidently from old knowledge
+- Non-existent methods on internal tools are generated with type definitions
+- Grounding in official docs, language servers, and tests reduces dependence on internal knowledge
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

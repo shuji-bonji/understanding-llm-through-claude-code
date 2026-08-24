@@ -424,7 +424,7 @@ Replace the terminal's bottom status line with the output of any command.
 #!/usr/bin/env bash
 branch=$(git -C "$CLAUDE_PROJECT_DIR" branch --show-current 2>/dev/null)
 model="${ANTHROPIC_MODEL:-default}"
-echo "🌱 $branch | 🧠 $model"
+echo " $branch |  $model"
 ```
 
 #### `apiKeyHelper` — Custom Auth Script

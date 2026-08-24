@@ -8,7 +8,8 @@ description: "Detailed mapping of LLM structural problems to the Claude Code des
 # Structural Problems × Claude Code Countermeasures Map (Detailed)
 
 > [!NOTE]
-> Detailed correspondence between the 8 structural problems and Claude Code features.
+> Correspondence between the eight structural problems and countermeasures in Claude Code.
+> The countermeasure column is a set of representative examples. Other tools do not necessarily ship features at the same granularity.
 
 ## Countermeasure Map
 

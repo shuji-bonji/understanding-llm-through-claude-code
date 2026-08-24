@@ -142,14 +142,14 @@ To set expectations honestly:
 
 | Failure Mode | LSP catches? | Where to address |
 |:--|:--|:--|
-| Symbol does not exist | ✅ Definition returns null | Part 9 |
-| Wrong function signature | ✅ Hover shows real signature | Part 9 |
-| Wrong import path | ✅ Definition resolves canonical path | Part 9 |
-| Non-existent method on real type | ✅ Hover shows real surface | Part 9 |
-| Outdated idiom (both versions compile) | ⚠️ Partial — needs CLAUDE.md | Part 3 + Part 9 |
-| Correct types, wrong logic | ❌ | Part 7 Hooks (tests), Part 5 Agents (review) |
-| Race conditions, async ordering | ❌ | Part 7 Hooks (integration tests) |
-| Security flaws (e.g., SQL injection) | ❌ | Part 7 Hooks (lint, SAST), Part 5 Agents |
+| Symbol does not exist | Yes. Definition returns null | Part 9 |
+| Wrong function signature | Yes. Hover shows real signature | Part 9 |
+| Wrong import path | Yes. Definition resolves canonical path | Part 9 |
+| Non-existent method on real type | Yes. Hover shows real surface | Part 9 |
+| Outdated idiom (both versions compile) | Partial. Needs CLAUDE.md | Part 3 + Part 9 |
+| Correct types, wrong logic | No | Part 7 Hooks (tests), Part 5 Agents (review) |
+| Race conditions, async ordering | No | Part 7 Hooks (integration tests) |
+| Security flaws (e.g., SQL injection) | No | Part 7 Hooks (lint, SAST), Part 5 Agents |
 
 The pattern across the table: **LSP closes the symbol-level gaps. Tests and review close the semantic-level gaps.** They stack.
 

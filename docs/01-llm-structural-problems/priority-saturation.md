@@ -105,6 +105,8 @@ The 200-line limit in CLAUDE.md is a design decision grounded in this research:
 
 ## Mitigation Strategies in Claude Code
 
+The following are representative examples in Claude Code.
+
 | Strategy                | Mechanism              | Why It Works                                     |
 | :---------------------- | :--------------------- | :----------------------------------------------- |
 | **CLAUDE.md 200-line limit** | Limit resident instructions | Keeps simultaneously active instructions below degradation threshold |
@@ -121,6 +123,18 @@ Priority Saturation compounds with the following issues:
 - **Lost in the Middle**: Instructions placed in the middle are ignored both due to saturation and positional effects
 - **Prompt Sensitivity**: With more instructions, attention spreads thinner, making outputs more susceptible to phrasing variations
 - **Hallucination**: Missing compliance constraints leads to increased output inaccuracy
+
+## This constraint is not unique to Claude
+
+As simultaneous instructions increase, compliance with each instruction falls. The degradation curve differs by model. That instruction density has a ceiling is shared.
+
+How it shows up elsewhere:
+
+- Packing rules into a system prompt or custom instructions makes important rules and trivial ones equally ignored
+- Listing ten review criteria at once causes more than half to be missed
+- What works is not "write everything." It is keeping the number of simultaneously active instructions down
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

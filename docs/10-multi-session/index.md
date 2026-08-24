@@ -8,8 +8,9 @@ description: "Why session boundaries themselves become a design surface: how mul
 # Part 10: Multi-Session Coordination — Agent Teams
 
 > [!NOTE]
-> When a single session cannot complete a task without degrading, the answer is not "a better single session" but **multiple sessions, each with bounded scope, coordinating peer-to-peer**.
-> Where Part 5 Subagents are *delegated children* of a parent session, Agent Teams are *peers* with their own lifespans.
+> When a single session cannot complete a task without degrading, the answer is not "a better single session." It is **multiple sessions, each with bounded scope, coordinating peer-to-peer**.
+> Where Part 5 Subagents are delegated children of a parent session, Agent Teams are peers with their own lifespans.
+> Agent Teams are a representative example in Claude Code. Designing session boundaries is not product-specific.
 
 ## Why This Part Exists
 
@@ -100,6 +101,10 @@ A useful rule: if the work fits in a single call-and-return, a Subagent is enoug
 | [Session Boundary Design](session-boundary-design.md) | Splitting work by role, by stage, by layer, or by feature — and how to choose |
 | [Peer Messaging](peer-messaging.md) | How sessions communicate: shared queues, direct messages, artifacts, and conflict resolution |
 | [Long-Running Tasks](long-running-tasks.md) | Parallel decomposition as the root-cause fix for Context Rot at scale |
+
+## Where this leads
+
+Through this Part, the layers of countermeasures using Claude Code as a representative example are in place. Product-independent principles are extracted in [Part 11: Applying to Other LLMs](../11-cross-llm-principles/index.md).
 
 ## References
 

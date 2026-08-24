@@ -249,7 +249,7 @@ Every Claude Code feature you'll learn in Part 3 and beyond is a mechanism to **
 | `/clear`                 | Reset Context                                     |
 | Hooks                    | Consume zero Context                              |
 
-The next page explores the full picture of **what, when, and how** enters the context window.
+The next page looks at what enters this Context Window, when, and how.
 
 ---
 

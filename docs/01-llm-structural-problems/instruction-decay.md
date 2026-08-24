@@ -47,13 +47,15 @@ Instruction Decay is not an isolated phenomenon but the **result of the seven pr
 
 ## Mitigation in Claude Code
 
+The following are representative examples in Claude Code.
+
 ```mermaid
 flowchart TB
     subgraph phases ["Session Progression and Instruction Adherence Degradation Phases"]
         direction LR
         P1["Phase 1<br>0-30%<br>━━━━━<br>Stable<br>High adherence rate"]
-        P2["Phase 2<br>30-50%<br>━━━━━<br>Gradual degradation<br>⚡ /compact recommended"]
-        P3["Phase 3<br>50-70%<br>━━━━━<br>Noticeable degradation<br>⚡ /clear recommended"]
+        P2["Phase 2<br>30-50%<br>━━━━━<br>Gradual degradation<br> /compact recommended"]
+        P3["Phase 3<br>50-70%<br>━━━━━<br>Noticeable degradation<br> /clear recommended"]
         P4["Phase 4<br>70%+<br>━━━━━<br>Collapse<br>Recovery difficult"]
         P1 -->|"Degradation begins"| P2 -->|"50% threshold exceeded"| P3 -->|"Uncontrollable"| P4
     end
@@ -120,6 +122,20 @@ flowchart TB
     style PS fill:#dcfce7,stroke:#15803d,color:#000
     style End fill:#f3f4f6,stroke:#374151,color:#000
 ```
+
+## This constraint is not unique to Claude
+
+Compliance with early instructions falls in long conversations. It is the previous seven problems stacked over time. It is widely observed in multi-turn chat.
+
+How it shows up elsewhere:
+
+- Coding conventions and test policy from the start of a thread drop out at the end
+- Once a wrong premise is accepted, later replies rarely recover
+- Keep conversations short
+- Persist important decisions in files or commits
+- Put verification outside the model
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

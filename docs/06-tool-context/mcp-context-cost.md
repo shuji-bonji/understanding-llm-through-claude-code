@@ -25,7 +25,7 @@ graph TB
         direction LR
         SP["System Prompt<br>~5K"]
         CM["CLAUDE.md<br>~2K"]
-        MCP["⚠️ MCP Tools Definitions<br>~25K"]
+        MCP["MCP Tools Definitions<br>~25K"]
         CH["Conversation History<br>~50K"]
         FREE["Remaining ~118K<br>(for actual work)"]
     end
@@ -56,7 +56,7 @@ While MCP carries Context Rot risk, it is also the most fundamental mitigation f
 - Monitor that total MCP consumption doesn't exceed 20K tokens
 - Connect infrequently-used MCPs only when needed
 
-## 🔗 See implementation patterns, catalog, and security
+## See implementation patterns, catalog, and security
 
 This page covers the **context cost structure (why)** of MCP. For concrete "what MCPs exist, how to build them, and what security requirements apply" — see the sister site for implementation views.
 

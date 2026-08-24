@@ -118,7 +118,7 @@ The erosion of the three capabilities is structural, but it can be mitigated. Ev
 - [Part 1: Structural Problems](../01-llm-structural-problems/) — overview of the eight problems
 - [Instruction Decay](../01-llm-structural-problems/instruction-decay.md) / [Sycophancy](../01-llm-structural-problems/sycophancy.md) / [Context Rot](../01-llm-structural-problems/context-rot.md) — details of the main eroding problems
 
-## 🔗 Going Deeper: Designing Gradual Delegation from Permission to Authority
+## Going Deeper: Designing Gradual Delegation from Permission to Authority
 
 This page covered **why** durable authority is hard to hand over (Why). For **how** to delegate gradually from permission to authority (What/How), see the sister site.
 

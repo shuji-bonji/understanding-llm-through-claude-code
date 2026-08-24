@@ -3,19 +3,19 @@
 # Practical Application Without Tool Support
 
 > [!NOTE]
-> Even in environments where CLAUDE.md, Rules, Skills, and MCP are unavailable, the principle for dealing with LLM structural constraints remains the same.
-> Here we cover "prompt-driven development," a practical method of manually reproducing the same patterns.
+> Even without dedicated rule files or MCP, the principle for dealing with structural constraints is the same.
+> This page covers "prompt-driven development": reproducing that principle by hand.
 
 ## Real-World Constraints
 
-Not all development environments have tool support like Claude Code.
+Not every development environment has injection control at the same granularity as Claude Code.
 
-- GitHub Copilot's agent model has no equivalent to CLAUDE.md
-- Source control is CodeCommit, task management is a separate tool, authentication is fragmented
-- MCP cannot directly reference tickets or repositories
-- Commit message conventions are not unified, and `git log` doesn't function as context
+- Always-on instructions and conditional injection are not equally fine-grained
+- Source control, task tracking, and auth are split across tools
+- Tickets and repositories cannot be reached through an MCP-equivalent
+- Commit message conventions are missing, so `git log` does not work as Context
 
-Even in such environments, understanding the principles from Parts 1–8 allows you to **manually implement the same solutions**.
+Even then, the principles confirmed in Parts 1–10 still apply. Whether a dedicated command exists does not decide whether the principle can be used.
 
 ## Workflow for Prompt-Driven Development
 
@@ -25,52 +25,52 @@ Below is a step-by-step development method actually used in environments where C
 
 ```mermaid
 flowchart LR
-    subgraph PREP["📋 Preparation Phase"]
+    subgraph PREP["Preparation Phase"]
         direction TB
-        U1["👤 Create Instructions"] --> Spec[("Instructions")]
-        Spec --> L1["🤖 Create Implementation Plan"]
+        U1["Create Instructions"] --> Spec[("Instructions")]
+        Spec --> L1["Create Implementation Plan"]
         L1 --> Plan[("Implementation Plan")]
-        Plan --> U2["👤 Review Plan"]
-        U2 --> L2["🤖 Create E2E Test Items"]
+        Plan --> U2["Review Plan"]
+        U2 --> L2["Create E2E Test Items"]
         Spec --> L2
         L2 --> E2E[("E2E Test Items")]
-        E2E --> U3["👤 Review Test Items"]
-        U3 --> L3["🤖 Reflect Review Feedback"]
+        E2E --> U3["Review Test Items"]
+        U3 --> L3["Reflect Review Feedback"]
         L3 --> Plan
         L3 --> E2E
-        Plan --> L4["🤖 Create Checklist"]
+        Plan --> L4["Create Checklist"]
         L4 --> CL[("Checklist")]
     end
 
-    subgraph IMPL["🔨 Implementation Phase"]
+    subgraph IMPL["Implementation Phase"]
         direction TB
-        Plan2["Plan + Checklist"] --> U4["👤 Request Implementation"]
-        U4 --> L5["🤖 Implement"]
+        Plan2["Plan + Checklist"] --> U4["Request Implementation"]
+        U4 --> L5["Implement"]
         L5 --> Code[("Implementation Code")]
-        Code --> U5["👤 Content Check & Decision"]
+        Code --> U5["Content Check & Decision"]
         U5 -->|"Feedback"| L5
-        U5 -->|"OK"| U6["👤 Commit"]
+        U5 -->|"OK"| U6["Commit"]
         U6 -->|"Next Task"| U4
     end
 
-    subgraph TEST["🧪 Testing & Quality Phase"]
+    subgraph TEST["Testing & Quality Phase"]
         direction TB
-        E2E2["E2E Test Items"] --> L6["🤖 Create Test Code"]
+        E2E2["E2E Test Items"] --> L6["Create Test Code"]
         Code2["Implementation Code"] --> L6
         L6 --> Test[("Test Code")]
-        Test --> U7["👤 Review Test Code"]
-        U7 --> L7["🤖 Run Tests"]
+        Test --> U7["Review Test Code"]
+        U7 --> L7["Run Tests"]
         L7 -->|"Failure"| L6
-        L7 -->|"Success"| L8["🤖 Code Review"]
-        L8 --> L9["🤖 Refactoring"]
+        L7 -->|"Success"| L8["Code Review"]
+        L8 --> L9["Refactoring"]
         L9 --> Code2
     end
 
-    subgraph DONE["📝 Completion Phase"]
+    subgraph DONE["Completion Phase"]
         direction TB
-        AllDocs["Plan + Code + Tests"] --> L10["🤖 Create Work Summary Report"]
+        AllDocs["Plan + Code + Tests"] --> L10["Create Work Summary Report"]
         L10 --> Report[("Work Summary Report")]
-        Report --> L11["🤖 Create PR Details"]
+        Report --> L11["Create PR Details"]
         L11 --> PR["PR"]
     end
 
@@ -116,9 +116,9 @@ flowchart LR
 
 Color coding:
 
-- 🟢 Green — User actions (review, judgment, commit)
-- 🔵 Blue — LLM actions (generation, implementation, testing)
-- 🟡 Yellow (cylinders) — Deliverables (6 items + checklist + PR)
+- Green — User actions (review, judgment, commit)
+- Blue — LLM actions (generation, implementation, testing)
+- Yellow (cylinders) — Deliverables (6 items + checklist + PR)
 
 ## Why Separate Steps?
 
@@ -217,9 +217,9 @@ The principles of addressing problems are the same regardless of tool support.
 
 ## Approach of Defining the Workflow Itself as Skills
 
-Up to this point, we've discussed "manually applying principles without tool support." Conversely, in environments where Skills-compatible tools like Claude Code or Cursor are available, you can **define this workflow itself as a Skill**, enabling process standardization and reuse.
+Up to this point, this page has applied the principles by hand where dedicated machinery is missing. If procedures can be stored as Markdown, the workflow itself can be fixed in a procedure file.
 
-Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) systematizes exactly this approach, defining production-level development workflows as Plain Markdown Skills.
+Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) is an example of defining a development workflow as Plain Markdown Skills.
 
 - **Spec before code** — Define specification before implementation (corresponds to "create instructions in advance")
 - **Plan-mode task breakdown** — Break tasks into verifiable units (corresponds to "create plan first → review")
@@ -228,7 +228,7 @@ Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) systema
 - **Anti-rationalization table** — Pre-define agent excuses for skipping steps and counter-arguments (Sycophancy mitigation)
 
 > [!TIP]
-> The important thing is that these are **Plain Markdown**. They work with Claude Code, Cursor, Windsurf, Copilot, Codex—any tool. The manual processes introduced on this page can be reused in tool-supported environments once defined as Skills.
+> What matters is that the procedure is Plain Markdown. Even without a product-specific loader, you can pass a path and have it read. That does not mean every product has the same Skills machinery.
 
 ## References
 
@@ -236,6 +236,6 @@ Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) systema
 
 ---
 
-> **Previous**: [Structural Constraints Are Universal Across All Models](universal-patterns.md)
+> **Previous**: [Structural Constraints Are Universal Across Models](universal-patterns.md)
 
-> **Next**: [Cursor / Cline / Copilot Reference Table](cursor-cline-mapping.md)
+> **Next**: [Cursor / Cline / Copilot Mapping](cursor-cline-mapping.md)

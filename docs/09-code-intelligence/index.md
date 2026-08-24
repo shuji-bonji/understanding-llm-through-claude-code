@@ -10,6 +10,7 @@ description: "Why LSP integration is the most direct mitigation for code-symbol 
 > [!NOTE]
 > Connection to the **facts of the code world**.
 > Where MCP grounds the LLM in external facts, LSP grounds it in the symbols, types, and references that exist *inside the repository at this moment*.
+> Claude Code's Code Intelligence is a representative example. Grounding symbols through a language server is not product-specific.
 
 ## Why This Part Exists
 

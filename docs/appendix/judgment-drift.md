@@ -175,7 +175,7 @@ Judgment drift is not a ninth structural problem. It is a compound symptom that 
 - [Prompt Sensitivity](../01-llm-structural-problems/prompt-sensitivity.md) — how underspecification produces non-determinism
 - [Why Not in Context](../07-runtime-layer/why-not-in-context.md) — where LLM judgement ends and code begins
 
-## 🔗 Going Deeper: Where Should the Verdict Live?
+## Going Deeper: Where Should the Verdict Live?
 
 This page covered **why** LLM verdicts do not reproduce. For **where to put the judgment layer and how to design it (What/How)**, see the sister site.
 

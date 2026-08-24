@@ -93,6 +93,8 @@ The sister site ai-agent-architecture organizes the **seven conditions** of a we
 
 ## Mitigation in Claude Code
 
+The following are representative examples in Claude Code.
+
 | Mitigation Strategy | Mechanism | Why It Works |
 | :--- | :--- | :--- |
 | **CLAUDE.md writing style** | Concrete, imperative language with code examples | Eliminates ambiguous expressions, improves compliance rate |
@@ -104,12 +106,12 @@ The sister site ai-agent-architecture organizes the **seven conditions** of a we
 ### Writing Effective CLAUDE.md
 
 ```markdown
-# ❌ Ambiguous (high sensitivity)
+# Bad example — Ambiguous (high sensitivity)
 
 - Please write good tests
 - I want clean code
 
-# ✅ Concrete (low sensitivity)
+# Good example — Concrete (low sensitivity)
 
 - Create Jasmine tests for all public methods
 - Place test files in *.spec.ts
@@ -119,10 +121,10 @@ The sister site ai-agent-architecture organizes the **seven conditions** of a we
 ### Writing Effective Skills Descriptions
 
 ```yaml
-# ❌ Ambiguous (auto-invocation often fails)
+# Bad example — Ambiguous (auto-invocation often fails)
 description: Component-related tasks
 
-# ✅ Concrete (covers diverse expressions)
+# Good example — Concrete (covers diverse expressions)
 description: >
   Create new Angular components. Generate scaffolding with OnPush
   change detection, NgRx Store integration, and Jasmine tests.
@@ -157,6 +159,19 @@ flowchart TD
 
 > [!TIP]
 > **Solid arrows (→)**: Direction in which each problem amplifies Prompt Sensitivity / **Dashed arrows (⇢)**: Feedback loops where Prompt Sensitivity worsens each problem
+
+## This constraint is not unique to Claude
+
+Even when the meaning is the same, wording and format change the output. Models depend on statistical patterns in tokens, so this occurs regardless of product.
+
+How it shows up elsewhere:
+
+- "Refactor this" and "improve this" change the scope of the edit
+- If the output format is unspecified, it differs from session to session
+- Make axes you do not want to vary (role, success criteria, output format) explicit
+- Put verification outside the prompt
+
+Other tools do not necessarily ship features at the same granularity. Product-independent principles are extracted in [Part 11: Cross-LLM Principles](../11-cross-llm-principles/index.md).
 
 ## References
 

@@ -3,7 +3,8 @@
 🌐 [日本語](../ja/appendix/feature-index.md)
 
 > [!NOTE]
-> One-page lookup of every configuration feature, when it loads, what problem it solves, and where to read more.
+> One-page lookup of each Claude Code feature: when it loads, which problem it addresses, and which chapter to read.
+> Feature names are representative examples. Principles are extracted in [Part 11](../11-cross-llm-principles/index.md).
 
 ## Feature × Loading × Chapter
 

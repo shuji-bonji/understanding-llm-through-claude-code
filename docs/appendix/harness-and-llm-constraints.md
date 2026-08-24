@@ -170,9 +170,9 @@ Some constraints are not addressed — or only partially addressed — by the fo
 
 | Structural Problem | Harness Response | Additional Measures Required |
 | --- | --- | --- |
-| **Prompt Sensitivity** | ❌ No direct prescription | Prompt structuring, benchmarks, A/B testing |
-| **Instruction Decay** (severe) | ⚠️ Only loop re-injection | Always-loaded context (CLAUDE.md), conditional injection (`.claude/rules/`) |
-| **Hallucination** (full eradication) | ⚠️ External verification stops, but does not eliminate | Structurally unavoidable. Full eradication is impossible. |
+| **Prompt Sensitivity** | No direct prescription | Prompt structuring, benchmarks, A/B testing |
+| **Instruction Decay** (severe) | Only loop re-injection | Always-loaded context (CLAUDE.md), conditional injection (`.claude/rules/`) |
+| **Hallucination** (full eradication) | External verification stops, but does not eliminate | Structurally unavoidable. Full eradication is impossible. |
 
 > [!CAUTION]
 > Harness is a prescription for *operating* and **does not change the LLM's limits themselves**. Hallucination cannot be reduced to zero; sycophancy can be mitigated but never eliminated. Treat these as constraints to **accept and operate around at design time**.
@@ -185,7 +185,7 @@ Some constraints are not addressed — or only partially addressed — by the fo
 - [Part 7: Runtime Layer](../07-runtime-layer/) — details on Guardrails (Hooks)
 - [Part 10: Multi-Session Coordination](../10-multi-session/) — the structurally stronger form of Orchestration
 
-## 🔗 Go Deeper: Designing the Harness With the 5-Layer Model
+## Go Deeper: Designing the Harness With the 5-Layer Model
 
 This page covered **diagnosing harness elements through the 8 problems (Why)**. For **how to incorporate each harness element into design (What/How)**, see the sister site.
 

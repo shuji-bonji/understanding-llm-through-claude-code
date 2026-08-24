@@ -46,10 +46,10 @@ Skills     = import/require (load when needed)        ← Task-specific details
 > Whether an LLM auto-invokes a Skill depends on the `description` field. During inference, the LLM evaluates semantic similarity between the user's request and the description to decide whether to invoke.
 
 ```yaml
-# ❌ Vague (auto-invocation often fails)
+# Bad example — Vague (auto-invocation often fails)
 description: Tasks related to components
 
-# ✅ Specific (covers diverse expressions)
+# Good example — Specific (covers diverse expressions)
 description: >
   Create new Angular components with OnPush change detection,
   NgRx Store integration, and Jasmine tests. Used for requests like
@@ -146,7 +146,7 @@ Using `!` backtick syntax, you can execute shell commands when a Skill is invoke
 - Changed files list: !`gh pr diff --name-only`
 ```
 
-## 🔗 See implementation patterns and catalog
+## See implementation patterns and catalog
 
 This page covers the **design principles (why)** of Skills. For concrete "how to write, how to place, and how to decide between Skills and MCP" — see the sister site for implementation patterns and examples.
 

@@ -45,9 +45,9 @@ Scientific basis: When context usage exceeds 50%, the Lost in the Middle U-shape
 flowchart LR
     Q1{"Still working on the same task?"}
     Q2{"Is the task complete?"}
-    COMPACT(["⚡ /compact<br>Compress conversation and continue"])
-    CLEAR(["🔄 /clear<br>Reset for a new task"])
-    COMPACT2(["⚡ /compact then reassess"])
+    COMPACT(["/compact<br>Compress conversation and continue"])
+    CLEAR(["/clear<br>Reset for a new task"])
+    COMPACT2(["/compact then reassess"])
 
     Q1 -->|"Yes"| COMPACT
     Q1 -->|"No"| Q2

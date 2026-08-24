@@ -8,9 +8,9 @@ description: "How session boundaries and memory persistence shape what the LLM r
 # Part 8: Session Management and Memory Persistence
 
 > [!NOTE]
-> The lifecycle of a conversation and memory operation.
-> `/compact` and `/clear` are placed here (practical operations) rather than in Part 2 (theory).
-> The theoretical basis exists in Parts 1 and 2; this part covers practical operations.
+> The lifecycle of a conversation and how memory is operated.
+> `/compact` and `/clear` are representative examples in Claude Code. Keeping conversations short and persisting decisions in files are not product-specific.
+> The theoretical basis is in Parts 1 and 2. This Part covers operations.
 
 ## Why It Matters
 

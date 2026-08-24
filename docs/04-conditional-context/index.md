@@ -3,8 +3,9 @@
 # Part 4: Conditional Context — Rules
 
 > [!NOTE]
-> Injection mechanism that activates only when needed.
-> A "conditional distribution" approach that solves the Priority Saturation problem in CLAUDE.md.
+> Injection that activates only when needed.
+> Conditional distribution keeps Priority Saturation in CLAUDE.md in check.
+> `.claude/rules/` is a representative example in Claude Code. Not loading unused rules all the time is not product-specific.
 
 ## Why It Exists
 

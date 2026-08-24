@@ -79,6 +79,8 @@ The former is part of designing "the data the LLM reads" and falls within the sc
 
 ## In Claude Code
 
+The following are representative examples in Claude Code.
+
 | Feature | Mechanism | Layer |
 | :--- | :--- | :--- |
 | **tool use `input_schema`** | Tool-call arguments are validated against the JSON Schema on the API side. Reasoning in the body is free-form; only the arguments are bound to the format | Binding |

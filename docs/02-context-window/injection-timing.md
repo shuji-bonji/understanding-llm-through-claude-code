@@ -73,17 +73,17 @@ flowchart TD
     Q3{"Limited to specific<br/>file types?"}
     Q4{"Should it run in<br/>independent context?"}
 
-    R1["⚙️ settings.json / Hooks<br/>Processed mechanically at runtime"]
-    R2["📋 .claude/rules/<br/>Conditional glob injection"]
-    R3["📘 CLAUDE.md<br/>⚠️ Always verify 200 lines max"]
-    R4["🛠️ .claude/skills/<br/>Deployed only when task runs"]
-    R5["🤖 .claude/agents/<br/>Runs in independent context"]
+    R1["settings.json / Hooks<br/>Processed mechanically at runtime"]
+    R2[".claude/rules/<br/>Conditional glob injection"]
+    R3["CLAUDE.md<br/> Always verify 200 lines max"]
+    R4[".claude/skills/<br/>Deployed only when task runs"]
+    R5[".claude/agents/<br/>Runs in independent context"]
 
-    W1(["⛔ Not affected by Context Rot"])
-    W2(["🔸 Cost occurs only when conditions match"])
-    W3(["🔴 Consumed every turn (fixed cost)"])
-    W4(["🔸 Cost occurs only when invoked"])
-    W5(["✅ Does not consume main context"])
+    W1(["Not affected by Context Rot"])
+    W2(["Cost occurs only when conditions match"])
+    W3(["Consumed every turn (fixed cost)"])
+    W4(["Cost occurs only when invoked"])
+    W5(["Does not consume main context"])
 
     START --> Q1
     Q1 -->|No| R1

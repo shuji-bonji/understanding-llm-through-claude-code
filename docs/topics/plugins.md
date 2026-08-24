@@ -23,7 +23,7 @@
 
 ## Beyond structural problems
 
-Plugins also solve **operational** problems that aren't LLM constraints — and this is the main reason they exist as a layer above individual Skills/MCP/Hooks:
+Plugins also solve operational problems, not only LLM constraints. That is why they exist as a layer above Skills / MCP / Hooks.
 
 - **Reproducibility** — the same setup works on every machine, every teammate, every session.
 - **Versioning** — a plugin pins exact Skills/MCP/Hooks versions, so behavior doesn't silently drift.
