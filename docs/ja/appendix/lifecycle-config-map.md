@@ -4,7 +4,7 @@
 
 > [!NOTE]
 > Claude Code のタスクフローの各フェーズで、どの設定レイヤーが作用するかを示す。
-> Part 3〜7 で学んだ設定の全体像を、ライフサイクルの視点から横断的に整理したリファレンス。
+> 設定名は代表例である。Part 3〜7 で学んだ層を、ライフサイクルの視点から横断する。
 >
 > 関連 Issue: [#21](https://github.com/shuji-bonji/understanding-llm-through-claude-code/issues/21)
 
