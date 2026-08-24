@@ -101,6 +101,10 @@ flowchart TB
 | [ピアメッセージング](peer-messaging.md)            | セッションがどう通信するか: 共有キュー、ダイレクトメッセージ、成果物、コンフリクト解決 |
 | [長期実行タスク](long-running-tasks.md)            | スケールにおける Context Rot の根本対策としての並列分割                                |
 
+## 次に到達する場所
+
+本 Part までで、Claude Code を代表例とした対策の層は揃う。製品に依存しない原則の抽出は [Part 11: 他LLMへの応用](../11-cross-llm-principles/index.md) で行う。
+
 ## 参考文献
 
 - Anthropic. (2025). "How we built our multi-agent research system." Anthropic Engineering. [anthropic.com/engineering](https://www.anthropic.com/engineering/built-multi-agent-research-system) — プロダクションのマルチエージェントシステムの背後にある設計判断についての Anthropic 自身による解説
