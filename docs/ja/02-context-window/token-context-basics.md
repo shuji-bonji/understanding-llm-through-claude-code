@@ -244,7 +244,7 @@ Part 3 以降で学ぶ Claude Code の各機能は、この Context Window を**
 | `/clear`            | Context をリセットする                            |
 | Hooks               | Context を一切消費しない                          |
 
-次のページでは、この Context Window の中に**何が・いつ・どう入るか**の全体像を見ていく。
+次のページでは、この Context Window の中に何が、いつ、どう入るかを見る。
 
 ---
 

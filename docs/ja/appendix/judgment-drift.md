@@ -175,7 +175,7 @@ graph LR
 - [Prompt Sensitivity](../01-llm-structural-problems/prompt-sensitivity.md) — 指定欠落が非決定性を生む機構
 - [なぜコンテキスト外に置くのか](../07-runtime-layer/why-not-in-context.md) — LLM の判断とコードの判断の分岐点
 
-## 🔗 さらに深く: では判定をどこに置くか
+## さらに深く: 判定をどこに置くか
 
 本ページは「**なぜ** LLM の判定は再現しないか (Why)」を扱った。「では判定層を **どこに置き、どう設計するか** (What/How)」は姉妹サイトを参照。
 

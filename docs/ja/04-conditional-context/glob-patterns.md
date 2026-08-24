@@ -30,20 +30,20 @@ globs: '**/*.actions.ts,**/*.effects.ts,**/*.reducer.ts'
 ### 広すぎるパターンを避ける
 
 ```yaml
-# ❌ 広すぎる — ほぼ全てのファイルで発火し、Rules の意味がない
+# 悪い例 — 広すぎる。ほぼ全てのファイルで発火し、Rules の意味がない
 globs: "**/*.ts"
 
-# ✅ 適切な範囲
+# 良い例 — 適切な範囲
 globs: "src/app/**/*.component.ts"
 ```
 
 ### ドメインごとに分離する
 
 ```
-# ❌ 1ファイルに複数ドメイン
+# 悪い例 — 1ファイルに複数ドメイン
 rules/frontend-rules.md  # globs: "**/*.ts" — コンポーネント、サービス、テスト全部
 
-# ✅ ドメインごとに分離
+# 良い例 — ドメインごとに分離
 rules/component-rules.md  # globs: "**/*.component.ts"
 rules/service-rules.md    # globs: "**/*.service.ts"
 rules/testing-rules.md    # globs: "**/*.spec.ts"

@@ -23,7 +23,7 @@
 
 ## 構造的問題の外にある価値
 
-Plugins は **LLM の制約**ではなく**運用上の課題**も解く — そして実はこちらが、Skills/MCP/Hooks の上位レイヤーとして Plugin が独立して存在する本来の理由でもある:
+Plugins は LLM の制約だけでなく、運用上の課題も解く。Skills / MCP / Hooks の上位レイヤーとして Plugin が独立して存在する理由は、ここにある。
 
 - **再現性 (Reproducibility)** — どのマシンでも、どのチームメンバーでも、どのセッションでも同じ構成が動く
 - **バージョン管理 (Versioning)** — Plugin が Skills/MCP/Hooks の正確なバージョンを固定し、挙動が静かにドリフトしない

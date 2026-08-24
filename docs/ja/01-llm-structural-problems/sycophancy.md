@@ -54,7 +54,7 @@ SycEval（2025年）の測定結果:
 
 ## Context Rot・Hallucination との相互作用
 
-以下のMermaid図は、Sycophancyが他の構造的問題とどのように連鎖・悪循環を生むかを視覚化したものです。
+以下の図は、Sycophancy が他の構造的問題とどのように連鎖し、悪循環を生むかを視覚化したものである。
 
 ```mermaid
 flowchart TD

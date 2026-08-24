@@ -11,14 +11,14 @@
 
 | 問題                | 原因                               | GPT | Claude | Gemini | LLaMA |
 | :------------------ | :--------------------------------- | :-- | :----- | :----- | :---- |
-| Context Rot         | 自己注意の O(N²)                   | ✓   | ✓      | ✓      | ✓     |
-| Lost in the Middle  | RoPE / 位置エンコーディング        | ✓   | ✓      | ✓      | ✓     |
-| Priority Saturation | in-context learning の限界         | ✓   | ✓      | ✓      | ✓     |
-| Hallucination       | 次トークン予測の構造               | ✓   | ✓      | ✓      | ✓     |
-| Sycophancy          | RLHF の副作用                      | ✓   | ✓      | ✓      | ✓     |
-| Knowledge Boundary  | 目的関数に「知らない」の報酬がない | ✓   | ✓      | ✓      | ✓     |
-| Prompt Sensitivity  | 埋め込み空間の非クラスタリング     | ✓   | ✓      | ✓      | ✓     |
-| Instruction Decay   | 上記7問題の時間軸複合              | ✓   | ✓      | ✓      | ✓     |
+| Context Rot         | 自己注意の O(N²)                   | 該当 | 該当   | 該当   | 該当  |
+| Lost in the Middle  | RoPE / 位置エンコーディング        | 該当 | 該当   | 該当   | 該当  |
+| Priority Saturation | in-context learning の限界         | 該当 | 該当   | 該当   | 該当  |
+| Hallucination       | 次トークン予測の構造               | 該当 | 該当   | 該当   | 該当  |
+| Sycophancy          | RLHF の副作用                      | 該当 | 該当   | 該当   | 該当  |
+| Knowledge Boundary  | 目的関数に「知らない」の報酬がない | 該当 | 該当   | 該当   | 該当  |
+| Prompt Sensitivity  | 埋め込み空間の非クラスタリング     | 該当 | 該当   | 該当   | 該当  |
+| Instruction Decay   | 上記7問題の時間軸複合              | 該当 | 該当   | 該当   | 該当  |
 
 ## 対策の原理も共通
 
