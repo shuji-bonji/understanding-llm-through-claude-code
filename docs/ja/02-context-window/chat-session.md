@@ -113,10 +113,10 @@ Chat を理解すると、Claude Code の対策が「Chat の管理戦略」で�
 ```mermaid
 flowchart TD
     CHAT["Chat / Session"]
-    COMPACT(["⚡ /compact<br>Chat を圧縮して継続"])
-    CLEAR(["🔄 /clear<br>Chat を終了し新規開始"])
-    AGENTS(["🤖 Agents<br>別の Chat で実行"])
-    HOOKS(["🔧 Hooks<br>Chat の外で検証"])
+    COMPACT(["/compact<br>Chat を圧縮して継続"])
+    CLEAR(["/clear<br>Chat を終了し新規開始"])
+    AGENTS(["Agents<br>別の Chat で実行"])
+    HOOKS(["Hooks<br>Chat の外で検証"])
 
     CHAT -->|"50%閾値に近づいたら"| COMPACT
     CHAT -->|"タスク完了 or 劣化が顕著なら"| CLEAR

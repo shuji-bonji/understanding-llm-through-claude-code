@@ -73,17 +73,17 @@ flowchart TD
     Q3{"特定ファイル種別に<br/>限定されるか？"}
     Q4{"独立コンテキストで<br/>実行すべきか？"}
 
-    R1["⚙️ settings.json / Hooks<br/>ランタイムで機械的に処理"]
-    R2["📋 .claude/rules/<br/>glob 条件付き注入"]
-    R3["📘 CLAUDE.md<br/>⚠️ 200行以内を常にチェック"]
-    R4["🛠️ .claude/skills/<br/>タスク時のみ展開"]
-    R5["🤖 .claude/agents/<br/>独立コンテキストで実行"]
+    R1["settings.json / Hooks<br/>ランタイムで機械的に処理"]
+    R2[".claude/rules/<br/>glob 条件付き注入"]
+    R3["CLAUDE.md<br/>200行以内を常にチェック"]
+    R4[".claude/skills/<br/>タスク時のみ展開"]
+    R5[".claude/agents/<br/>独立コンテキストで実行"]
 
-    W1(["⛔ Context Rot の影響を受けない"])
-    W2(["🔸 条件一致時のみコスト発生"])
-    W3(["🔴 毎ターン消費（固定費）"])
-    W4(["🔸 呼び出し時のみコスト発生"])
-    W5(["✅ メインコンテキストを消費しない"])
+    W1(["Context Rot の影響を受けない"])
+    W2(["条件一致時のみコスト発生"])
+    W3(["毎ターン消費（固定費）"])
+    W4(["呼び出し時のみコスト発生"])
+    W5(["メインコンテキストを消費しない"])
 
     START --> Q1
     Q1 -->|No| R1

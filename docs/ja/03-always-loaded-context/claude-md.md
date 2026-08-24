@@ -135,12 +135,12 @@ generate_trial_balance / generate_profit_loss / calculate_consumption_tax ...
 > **Prompt Sensitivity** 対策として、具体的・命令的な記述が重要。
 
 ```markdown
-# ❌ 曖昧（Prompt Sensitivity が高い）
+# 悪い例 — 曖昧（Prompt Sensitivity が高い）
 
 - テストをちゃんと書いてね
 - コードはきれいにしてほしい
 
-# ✅ 具体的（Prompt Sensitivity が低い）
+# 良い例 — 具体的（Prompt Sensitivity が低い）
 
 - 全ての public メソッドに対して Jasmine テストを作成する
 - テストファイルは \*.spec.ts に配置する

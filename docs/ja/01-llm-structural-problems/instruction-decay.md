@@ -52,8 +52,8 @@ flowchart TB
     subgraph phases ["セッション進行と指示遵守率の劣化フェーズ"]
         direction LR
         P1["Phase 1<br>0-30%<br>━━━━━<br>安定<br>指示遵守率: 高い"]
-        P2["Phase 2<br>30-50%<br>━━━━━<br>緩やかな劣化<br>⚡ /compact 推奨"]
-        P3["Phase 3<br>50-70%<br>━━━━━<br>顕著な劣化<br>⚡ /clear 推奨"]
+        P2["Phase 2<br>30-50%<br>━━━━━<br>緩やかな劣化<br>/compact 推奨"]
+        P3["Phase 3<br>50-70%<br>━━━━━<br>顕著な劣化<br>/clear 推奨"]
         P4["Phase 4<br>70%+<br>━━━━━<br>崩壊<br>回復困難"]
         P1 -->|"劣化開始"| P2 -->|"50%閾値超過"| P3 -->|"制御不能"| P4
     end

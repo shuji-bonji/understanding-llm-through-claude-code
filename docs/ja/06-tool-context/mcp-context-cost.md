@@ -25,7 +25,7 @@ graph TB
         direction LR
         SP["System Prompt<br>~5K"]
         CM["CLAUDE.md<br>~2K"]
-        MCP["⚠️ MCP Tools 定義<br>~25K"]
+        MCP["MCP Tools 定義<br>~25K"]
         CH["会話履歴<br>~50K"]
         FREE["残り ~118K<br>（実作業用）"]
     end
@@ -56,7 +56,7 @@ MCP は Context Rot のリスクを持つ一方で、**Knowledge Boundary** の�
 - MCP の合計が 20K トークンを超えないよう監視
 - 使用頻度の低い MCP は必要な時だけ接続
 
-## 🔗 実装パターン・カタログ・セキュリティを見る
+## 実装パターン・カタログ・セキュリティを見る
 
 本ページは MCP の **コンテキストコスト構造（Why）** を扱った。具体的な「**どんな MCP が存在するか・どう作るか・セキュリティ要件は何か**」を実装観点で学びたい場合は、姉妹サイトを参照。
 

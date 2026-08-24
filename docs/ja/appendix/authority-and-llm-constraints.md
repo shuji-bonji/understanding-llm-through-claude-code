@@ -118,7 +118,7 @@ permission モデルはこの能力に依存しない。承認は外部の人間
 - [Part 1: 構造的問題](../01-llm-structural-problems/) — 8 問題の全体像
 - [Instruction Decay](../01-llm-structural-problems/instruction-decay.md) / [Sycophancy](../01-llm-structural-problems/sycophancy.md) / [Context Rot](../01-llm-structural-problems/context-rot.md) — 3 能力を侵食する主要問題の詳細
 
-## 🔗 さらに深く: permission から authority への段階的委譲を設計する
+## さらに深く: permission から authority への段階的委譲を設計する
 
 本ページは「なぜ持続的 authority を渡しにくいか (Why)」を扱った。「では permission から authority へ **どう段階的に委譲するか (What/How)**」は姉妹サイト参照。
 

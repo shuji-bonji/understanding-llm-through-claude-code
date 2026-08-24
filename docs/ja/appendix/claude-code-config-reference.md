@@ -419,7 +419,7 @@ permissions ルールは `Tool` または `Tool(specifier)` の形式で記述�
 #!/usr/bin/env bash
 branch=$(git -C "$CLAUDE_PROJECT_DIR" branch --show-current 2>/dev/null)
 model="${ANTHROPIC_MODEL:-default}"
-echo "🌱 $branch | 🧠 $model"
+echo "$branch | $model"
 ```
 
 #### `apiKeyHelper` — カスタム認証スクリプト

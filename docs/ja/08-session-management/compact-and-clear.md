@@ -45,9 +45,9 @@
 flowchart LR
     Q1{"まだ同じタスクの途中？"}
     Q2{"タスクは完了した？"}
-    COMPACT(["⚡ /compact<br>会話を圧縮して継続"])
-    CLEAR(["🔄 /clear<br>新しいタスクに向けてリセット"])
-    COMPACT2(["⚡ /compact してから判断"])
+    COMPACT(["/compact<br>会話を圧縮して継続"])
+    CLEAR(["/clear<br>新しいタスクに向けてリセット"])
+    COMPACT2(["/compact してから判断"])
 
     Q1 -->|"Yes"| COMPACT
     Q1 -->|"No"| Q2

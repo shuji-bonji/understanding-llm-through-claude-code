@@ -142,14 +142,14 @@ source$.pipe(takeUntilDestroyed()).subscribe(...);
 
 | 失敗モード                                     | LSP で捕捉？                   | 対応箇所                                          |
 | :--------------------------------------------- | :----------------------------- | :------------------------------------------------ |
-| シンボルが存在しない                           | ✅ Definition が null を返す   | Part 9                                            |
-| 関数シグネチャが間違い                         | ✅ Hover が実シグネチャを返す  | Part 9                                            |
-| import パスが間違い                            | ✅ Definition が正準パスに解決 | Part 9                                            |
-| 実在する型に対する架空メソッド                 | ✅ Hover が実 surface を返す   | Part 9                                            |
-| 古いイディオム（両バージョンともコンパイル可） | ⚠️ 部分的 — CLAUDE.md が必要   | Part 3 + Part 9                                   |
-| 型は正しいが、ロジックが間違い                 | ❌                             | Part 7 Hooks（テスト）, Part 5 Agents（レビュー） |
-| 競合状態、非同期の順序                         | ❌                             | Part 7 Hooks（結合テスト）                        |
-| セキュリティ欠陥（例: SQL インジェクション）   | ❌                             | Part 7 Hooks（lint, SAST）, Part 5 Agents         |
+| シンボルが存在しない                           | 可。Definition が null を返す  | Part 9                                            |
+| 関数シグネチャが間違い                         | 可。Hover が実シグネチャを返す | Part 9                                            |
+| import パスが間違い                            | 可。Definition が正準パスに解決 | Part 9                                            |
+| 実在する型に対する架空メソッド                 | 可。Hover が実 surface を返す  | Part 9                                            |
+| 古いイディオム（両バージョンともコンパイル可） | 部分的。CLAUDE.md が必要       | Part 3 + Part 9                                   |
+| 型は正しいが、ロジックが間違い                 | 不可                           | Part 7 Hooks（テスト）, Part 5 Agents（レビュー） |
+| 競合状態、非同期の順序                         | 不可                           | Part 7 Hooks（結合テスト）                        |
+| セキュリティ欠陥（例: SQL インジェクション）   | 不可                           | Part 7 Hooks（lint, SAST）, Part 5 Agents         |
 
 表全体に通底するパターンは：**LSP はシンボルレベルのギャップを閉じる。テストとレビューはセマンティックレベルのギャップを閉じる**。両者は積み重なる。
 
