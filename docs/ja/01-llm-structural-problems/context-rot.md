@@ -56,6 +56,8 @@ Context Rot はコーディングタスクで最も深刻になる。コード�
 
 ## Claude Code での対策
 
+以下は Claude Code における代表例である。
+
 | 対策                    | 仕組み                                           | 対応するメカニズム                          |
 | :---------------------- | :----------------------------------------------- | :------------------------------------------ |
 | **`/compact`**          | 会話履歴を要約・圧縮し、トークン数を削減         | Attention Dilution, Distractor Interference |
@@ -72,6 +74,18 @@ Context Rot はコーディングタスクで最も深刻になる。コード�
 - [Lost in the Middle](lost-in-the-middle.md) — Context Rot の最も具体的な発現
 - [Priority Saturation](priority-saturation.md) — 指示密度の観点からの劣化
 - [Instruction Decay](instruction-decay.md) — 時間軸での Context Rot の蓄積
+
+## この制約は Claude に限らない
+
+Context Rot は特定の製品の欠陥ではない。Transformer 系のモデルが長い入力を処理する際に共通して現れる現象である。プロンプトが長くなるほど、会話履歴が蓄積するほど、クラウド LLM でも出力品質の低下が観察される。本質は入力の長さと注意の配分にある。
+
+他の環境での現れ方の例:
+
+- チャットの履歴が増えると、途中の合意が後の応答に反映されなくなる
+- 長い仕様やログを一度に貼ると、本題と無関係な類似情報が干渉する
+- 表示上の容量が残っていても、品質はその前に落ち始める
+
+同じ粒度の機能が他ツールに揃っているとは限らない。製品に依存しない原則は [Part 11: 他LLMへの応用](../11-cross-llm-principles/index.md) で抽出する。
 
 ## 参考文献
 
