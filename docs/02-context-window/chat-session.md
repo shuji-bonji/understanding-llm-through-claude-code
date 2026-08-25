@@ -49,12 +49,12 @@ graph TD
     style CHAT fill:#f3e8ff,stroke:#7c3aed,color:#000
 ```
 
-| Concept            | Nature                      | Developer Analogy      |
-| :----------------- | :-------------------------- | :---------------------- |
-| **Token**          | Minimum unit of space       | Memory byte             |
-| **Context**        | Complete input at a moment  | HTTP request body       |
-| **Context Window** | Space limit                 | Process memory space    |
-| **Chat / Session** | Container of time           | TCP connection          |
+| Concept | Nature | Developer Analogy |
+| :-- | :-- | :-- |
+| **Token** | Minimum unit of space | Memory byte |
+| **Context** | Complete input at a moment | HTTP request body |
+| **Context Window** | Space limit | Process memory space |
+| **Chat / Session** | Container of time | TCP connection |
 
 > [!TIP]
 > **Developer analogy**: Chat is similar to a TCP connection. Multiple requests (turns) are exchanged within the connection, and state (Context) accumulates. When you close the connection (`/clear`), the state resets.
@@ -92,28 +92,28 @@ graph LR
 
 As Chat grows longer (more turns), the structural problems learned in Part 1 emerge in sequence.
 
-| Chat Stage       | Context State          | Emerging Problems                         |
-| :--------------- | :--------------------- | :---------------------------------------- |
-| Early (~30%)     | Small and stable       | Almost no issues                          |
-| Middle (30-50%)  | Expansion underway     | Context Rot begins                        |
-| Late (50-70%)    | Middle section fades   | Lost in the Middle, Priority Saturation   |
-| Final (70%+)     | Approaching limit      | Increased Hallucination, worse Sycophancy |
-| Throughout       | Complex over time axis | **Instruction Decay** (culmination)       |
+| Chat Stage | Context State | Emerging Problems |
+| :-- | :-- | :-- |
+| Early (~30%) | Small and stable | Almost no issues |
+| Middle (30-50%) | Expansion underway | Context Rot begins |
+| Late (50-70%) | Middle section fades | Lost in the Middle, Priority Saturation |
+| Final (70%+) | Approaching limit | Increased Hallucination, worse Sycophancy |
+| Throughout | Complex over time axis | **Instruction Decay** (culmination) |
 
 > [!IMPORTANT]
 > **Chat is the physical cause of Instruction Decay.** In Part 1, we learned "39% average performance degradation in multi-turn," but that "multi-turn" is precisely the accumulation of turns within a single Chat.
 
 ## The Idea of "Managing" Chat
 
-Once you understand Chat, Claude Code's countermeasures become visible as "Chat management strategies."
+Once you understand Chat, Claude Code's countermeasures become visible as "Chat management strategies." The table below is a representative example.
 
-| Countermeasure | Operation on Chat                              |
-| :------------- | :--------------------------------------------- |
+| Countermeasure | Operation on Chat |
+| :-- | :-- |
 | **`/compact`** | Compress the content within Chat (replace history with summary) |
-| **`/clear`**   | End Chat and start a new one                   |
-| **Agents**     | Execute in a separate Chat from the main one   |
-| **Hooks**      | Execute outside Chat (without going through LLM) |
-| **CLAUDE.md**  | "Initial Context" automatically injected at the beginning of each Chat |
+| **`/clear`** | End Chat and start a new one |
+| **Agents** | Execute in a separate Chat from the main one |
+| **Hooks** | Execute outside Chat (without going through LLM) |
+| **CLAUDE.md** | "Initial Context" automatically injected at the beginning of each Chat |
 
 ```mermaid
 flowchart TD
@@ -149,6 +149,6 @@ This principle is covered in detail in Part 8 (session management).
 
 ---
 
-> **Previous**: [Token, Context, Context Window](token-context-basics.md)
+> **Previous**: [Context Window — Capacity and the Safe Range](context-window.md)
 
 > **Next**: [What is the Context Window — What the LLM "Sees"](what-llm-sees.md)

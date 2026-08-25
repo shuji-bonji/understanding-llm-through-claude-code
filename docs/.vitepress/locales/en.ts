@@ -28,11 +28,14 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 				collapsed: false,
 				items: [
 					{ text: 'Overview', link: '/02-context-window/' },
-					{ text: 'Token, Context, Context Window', link: '/02-context-window/token-context-basics' },
+					{ text: 'Token', link: '/02-context-window/token' },
+					{ text: 'Context', link: '/02-context-window/context' },
+					{ text: 'Context Window', link: '/02-context-window/context-window' },
+					{ text: 'How the three relate', link: '/02-context-window/token-context-basics' },
+					{ text: 'Chat / Session', link: '/02-context-window/chat-session' },
 					{ text: 'What the LLM Sees', link: '/02-context-window/what-llm-sees' },
 					{ text: 'Injection Timing', link: '/02-context-window/injection-timing' },
 					{ text: 'Context Budget', link: '/02-context-window/context-budget' },
-					{ text: 'Chat Session Lifecycle', link: '/02-context-window/chat-session' },
 				],
 			},
 			{
