@@ -1,38 +1,45 @@
 ---
-title: "Part 2: What is a Context Window"
-description: "The context window is the LLM's thinking space — Claude's 200K–1M tokens. What goes in, when, and how much, as the foundation for every Claude Code configuration file."
+title: "Part 2: Understanding the Context Window"
+description: "Define Token, Context, and Context Window separately. Understand the structure of the LLM's thinking space and why quality degrades with input length."
 ---
 
 🌐 [日本語](../ja/02-context-window/index.md)
 
-# Part 2: Understanding Context Window
+# Part 2: Understanding the Context Window
 
 > [!NOTE]
 > Learn the structure of the LLM's "thinking space."
-> The physical foundation for "why" the structural problems you learned in Part 1 occur lies here.
-> The window's constraints are not product-specific. Claude Code is used as a concrete example of injection.
+> The physical basis for *why* the structural problems in Part 1 occur is here.
+> Window constraints are not product-specific. Claude Code is used as a concrete example of injection.
 
-## What is Context Window?
+## Three Concepts to Fix First
 
-**A context window is the maximum size of input an LLM can "see and think with" at once.** The cap differs by model. Information outside this window does not exist for the LLM. Claude Code configuration files (CLAUDE.md, settings.json, MCP, and so on) are a representative example of controlling *when, what, and how much* is injected into this window.
+Token, Context, and Context Window are prerequisites for every later design decision. Each is defined on its own page.
+
+| Document | Content |
+| :-- | :-- |
+| [Token](token.md) | The LLM's processing unit—neither character nor word |
+| [Context](context.md) | Everything passed in one inference; history is resent each turn |
+| [Context Window](context-window.md) | The ceiling, and the fact that the safe range is smaller |
+| [How the three relate](token-context-basics.md) | Relationship diagram for unit, content, and ceiling |
 
 ## What You'll Learn in This Part
 
 | Document | Content |
-|:--|:--|
-| [Token・Context・Context Window](token-context-basics.md) | Three foundational concepts. Prerequisites for understanding this entire repository |
-| [Chat / Session](chat-session.md) | The "temporal container" where context accumulates. Physical explanation for why context grows |
-| [What is Context Window](what-llm-sees.md) | The complete picture of what the LLM "sees" |
-| [Injection Timing Overview](injection-timing.md) | When and how each configuration file enters the context |
-| [Context Budget as a Strategy](context-budget.md) | How to allocate finite tokens strategically |
+| :-- | :-- |
+| [Chat / Session](chat-session.md) | Why Context grows over time |
+| [What the LLM "Sees"](what-llm-sees.md) | The view inside the window |
+| [Injection Timing](injection-timing.md) | When each setting enters Context |
+| [Context Budget](context-budget.md) | How to allocate finite tokens |
 
-## Why It's Between Part 1 and Part 3
+## Why This Sits Between Part 1 and Part 3
 
-In Part 1, you learn "LLMs have these problems." In Part 2, you understand "the LLM's thinking space has this structure." Then in Part 3 onward, you proceed to "therefore, configure it this way."
+Part 1 shows *what* goes wrong. Part 2 shows *the structure of the thinking space*. Part 3 onward shows *where to put controls*.
 
-This follows the same order as understanding the Node.js runtime before writing TypeScript. Without knowing the runtime's constraints, you can't understand why code doesn't work.
+Copying settings without knowing runtime constraints hides why those limits exist. This Part is that physical layer.
 
 ---
 
 > **Previous**: [Part 1: Understanding LLM Structural Constraints](../01-llm-structural-problems/index.md)
-> **Next**: [Part 3: Always-Loaded Context](../03-always-loaded-context/index.md)
+
+> **Next**: [Token — The LLM's Processing Unit](token.md)
