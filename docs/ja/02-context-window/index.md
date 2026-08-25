@@ -1,6 +1,6 @@
 ---
-title: "Part 2: コンテキストウィンドウとは何か"
-description: "コンテキストウィンドウは LLM の「思考空間」。Claude の 200K〜1M トークンの中に何が・いつ・どれだけ注入されるか、Claude Code の全設定ファイルの基盤となる概念を解説。"
+title: "Part 2: コンテキストウィンドウを理解する"
+description: "Token・Context・Context Window を分けて定義する。LLM の思考空間の構造と、なぜ品質が入力長で劣化するかを理解する。"
 ---
 
 🌐 [English](../../02-context-window/index.md)
@@ -12,30 +12,34 @@ description: "コンテキストウィンドウは LLM の「思考空間」。C
 > Part 1 で学んだ構造的問題が「なぜ起きるのか」の物理的基盤がここにある。
 > ウィンドウの制約は製品を問わない。注入の具体例として Claude Code を使う。
 
-## コンテキストウィンドウとは何か
+## 最初に押さえる3概念
 
-**コンテキストウィンドウ（Context Window）とは、LLM が一度に「見て・思考できる」入力の最大サイズ**である。上限はモデルによって異なる。このウィンドウの外にある情報は、LLM にとって存在しないのと同じである。Claude Code の設定ファイル（CLAUDE.md、settings.json、MCP など）は、このウィンドウに「いつ・何を・どれだけ注入するか」を制御する代表例である。
+Token / Context / Context Window は、後続のすべての設計判断の前提である。それぞれ独立したページで定義する。
 
-> [!TIP]
-> 「コンテキストウィンドウ = LLMの思考空間」とイメージするとよい。広いほど多くを「考慮」できるが、Part 1 の [Context Rot](../01-llm-structural-problems/context-rot.md) で見たように、**広ければ精度が上がるわけではない**。実用的な詳細は [Token・Context・Context Window の基礎](token-context-basics.md) と [LLM が「見る」もの](what-llm-sees.md) を参照。
+| ドキュメント | 内容 |
+| :-- | :-- |
+| [Token](token.md) | LLM の処理単位。文字でも単語でもない |
+| [Context](context.md) | 1回の推論に渡す全情報。履歴も毎回載る |
+| [Context Window](context-window.md) | 上限と、「安全に使える範囲はもっと狭い」という事実 |
+| [3概念の関係](token-context-basics.md) | 単位・中身・上限の関係図 |
 
 ## このパートで学ぶこと
 
 | ドキュメント | 内容 |
-|:--|:--|
-| [Token・Context・Context Window](token-context-basics.md) | 3つの基礎概念。本リポジトリ全体の前提知識 |
-| [Chat / Session](chat-session.md) | Context が蓄積する「時間の入れ物」。なぜ Context が膨らむのかの物理的説明 |
-| [コンテキストウィンドウとは何か](what-llm-sees.md) | LLM が「見る」ものの全体像 |
-| [注入タイミングの全体像](injection-timing.md) | 各設定ファイルがいつ・どうやってコンテキストに入るか |
-| [コンテキスト予算という考え方](context-budget.md) | 有限のトークンをどう配分するかの戦略 |
+| :-- | :-- |
+| [Chat / Session](chat-session.md) | Context が時間方向に膨らむ理由 |
+| [LLM が「見る」もの](what-llm-sees.md) | ウィンドウ内の見え方の全体像 |
+| [注入タイミングの全体像](injection-timing.md) | 各設定がいつ Context に入るか |
+| [コンテキスト予算](context-budget.md) | 有限のトークンをどう配分するか |
 
 ## なぜ Part 1 と Part 3 の間にあるのか
 
-Part 1 で「LLM にはこういう問題がある」を学び、このPart 2 で「LLM の思考空間はこういう構造」を理解し、Part 3 以降で「だからこう設定する」に進む。
+Part 1 で「LLM にはこういう問題がある」を学び、この Part 2 で「思考空間はこういう構造である」を理解し、Part 3 以降で「だからこう置く」に進む。
 
-これは Node.js のランタイムを理解してから TypeScript を書くのと同じ順序。ランタイムの制約を知らずにコードを書くと、なぜ動かないのか分からない。
+ランタイムの制約を知らずに設定だけを真似ると、なぜその制限があるのかが見えない。ここはその制約の物理である。
 
 ---
 
 > **前へ**: [Part 1: LLMの構造的制約を知る](../01-llm-structural-problems/index.md)
-> **次へ**: [Part 3: 常駐コンテキスト](../03-always-loaded-context/index.md)
+
+> **次へ**: [Token — LLM の処理単位](token.md)
