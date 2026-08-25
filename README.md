@@ -43,10 +43,14 @@ Three projects connect in a "Learn → Understand → Apply" sequence. This repo
 
 ### Part 2: Understanding the Context Window
 
-> The structure of LLM's "thinking space." Theoretical foundation for all design decisions from Part 3 onward.
+> The structure of the LLM's "thinking space." Theoretical foundation for all design decisions from Part 3 onward.
 
 - [Overview: The LLM's "Thinking Space"](docs/02-context-window/index.md)
-- [Token, Context, Context Window — 3 Fundamental Concepts](docs/02-context-window/token-context-basics.md)
+- [Token — The LLM's Processing Unit](docs/02-context-window/token.md)
+- [Context — Everything Passed in One Inference](docs/02-context-window/context.md)
+- [Context Window — Capacity and the Safe Range](docs/02-context-window/context-window.md)
+- [How the Three Relate](docs/02-context-window/token-context-basics.md)
+- [Chat / Session](docs/02-context-window/chat-session.md)
 - [What the Context Window Really Is](docs/02-context-window/what-llm-sees.md)
 - [Injection Timing Overview](docs/02-context-window/injection-timing.md)
 - [The Context Budget Concept](docs/02-context-window/context-budget.md)

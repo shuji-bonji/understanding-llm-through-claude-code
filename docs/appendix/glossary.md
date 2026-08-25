@@ -20,7 +20,7 @@ The smallest unit an LLM processes. Not a character and not a word. A fragment p
 
 **Why it matters**: Context caps, quality drop, and billing are all measured in tokens. Estimating in characters undercounts Japanese.
 
-**Details**: [Token, Context, Context Window](../02-context-window/token-context-basics.md)
+**Details**: [Token](../02-context-window/token.md)
 
 ### Context {#context}
 
@@ -28,7 +28,7 @@ Everything passed to the LLM for one inference: system prompt, project rules, co
 
 **Why it matters**: The model does not "remember." It reads the Context passed on that turn. What to include and what to leave out is a design problem.
 
-**Details**: [Token, Context, Context Window](../02-context-window/token-context-basics.md)
+**Details**: [Context](../02-context-window/context.md)
 
 ### Context Window {#context-window}
 
@@ -36,7 +36,7 @@ The cap on Context an LLM can process at once (in tokens). The cap differs by mo
 
 **Why it matters**: Window size is not "usable amount." The amount that still preserves quality is smaller than the advertised cap. That is the premise of Context Rot.
 
-**Details**: [What the Context Window Is](../02-context-window/what-llm-sees.md), [Context Budget](../02-context-window/context-budget.md)
+**Details**: [Context Window](../02-context-window/context-window.md), [Context Budget](../02-context-window/context-budget.md)
 
 ### Attention {#attention}
 
