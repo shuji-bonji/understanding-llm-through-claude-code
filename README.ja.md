@@ -46,8 +46,12 @@ Claude Code を主な題材とする。これは現時点で詳細かつ正確�
 > LLM の「思考空間」の構造。Part 3 以降の全設計判断の理論的基盤。
 
 - [概要：LLMの「思考空間」](docs/ja/02-context-window/index.md)
-- [Token・Context・Context Window — 3つの基礎概念](docs/ja/02-context-window/token-context-basics.md)
-- [コンテキストウィンドウとは何か](docs/ja/02-context-window/what-llm-sees.md)
+- [Token — LLM の処理単位](docs/ja/02-context-window/token.md)
+- [Context — 1回の推論に渡す全情報](docs/ja/02-context-window/context.md)
+- [Context Window — 上限と安全に使える範囲](docs/ja/02-context-window/context-window.md)
+- [3概念の関係](docs/ja/02-context-window/token-context-basics.md)
+- [Chat / Session](docs/ja/02-context-window/chat-session.md)
+- [LLM が「見る」もの](docs/ja/02-context-window/what-llm-sees.md)
 - [注入タイミングの全体像](docs/ja/02-context-window/injection-timing.md)
 - [コンテキスト予算という考え方](docs/ja/02-context-window/context-budget.md)
 
