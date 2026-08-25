@@ -34,11 +34,14 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					collapsed: false,
 					items: [
 						{ text: '概要', link: '/ja/02-context-window/' },
-						{ text: 'トークン・コンテキスト・コンテキストウィンドウ', link: '/ja/02-context-window/token-context-basics' },
+						{ text: 'Token', link: '/ja/02-context-window/token' },
+						{ text: 'Context', link: '/ja/02-context-window/context' },
+						{ text: 'Context Window', link: '/ja/02-context-window/context-window' },
+						{ text: '3概念の関係', link: '/ja/02-context-window/token-context-basics' },
+						{ text: 'Chat / Session', link: '/ja/02-context-window/chat-session' },
 						{ text: 'LLMが見ているもの', link: '/ja/02-context-window/what-llm-sees' },
 						{ text: '注入タイミング', link: '/ja/02-context-window/injection-timing' },
 						{ text: 'コンテキストバジェット', link: '/ja/02-context-window/context-budget' },
-						{ text: 'Chat = セッションの生存期間', link: '/ja/02-context-window/chat-session' },
 					],
 				},
 				{
