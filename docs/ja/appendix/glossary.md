@@ -22,7 +22,7 @@ LLM がテキストを処理する最小単位。文字でも単語でもない�
 
 **なぜ重要か**: コンテキストの上限も、品質劣化も、課金も、トークン数で測る。文字数で見積もると、日本語では足りなくなる。
 
-**詳細**: [Token・Context・Context Window](../02-context-window/token-context-basics.md)
+**詳細**: [Token](../02-context-window/token.md)
 
 ### Context（コンテキスト） {#context}
 
@@ -30,7 +30,7 @@ LLM がテキストを処理する最小単位。文字でも単語でもない�
 
 **なぜ重要か**: モデルは「覚えて」いるのではない。そのターンに渡された Context だけを読む。何を入れるか、何を入れないかが設計になる。
 
-**詳細**: [Token・Context・Context Window](../02-context-window/token-context-basics.md)
+**詳細**: [Context](../02-context-window/context.md)
 
 ### Context Window（コンテキストウィンドウ） {#context-window}
 
@@ -38,7 +38,7 @@ LLM が一度に処理できる Context の上限（トークン数）。上限�
 
 **なぜ重要か**: 窓の大きさは「使える量」ではない。実効的に品質を保てる量は、表示上の上限より小さい。これが Context Rot の前提である。
 
-**詳細**: [コンテキストウィンドウとは何か](../02-context-window/what-llm-sees.md)、[コンテキスト予算](../02-context-window/context-budget.md)
+**詳細**: [Context Window](../02-context-window/context-window.md)、[コンテキスト予算](../02-context-window/context-budget.md)
 
 ### Attention（注意） {#attention}
 
