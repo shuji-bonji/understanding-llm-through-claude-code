@@ -62,52 +62,29 @@ graph TD
 REST API に馴染みのある開発者なら直感しやすい。LLM の応答生成は HTTP リクエストと同じく、**リクエストごとに独立**している。
 
 ```mermaid
-block-beta
-  columns 4
-
-  block:all:5
-    columns 8
-
-    t1["ターン 1"]:8
-    sp1["System Prompt"] cm1["CLAUDE.md"] u1["ユーザー入力1"] r1<["→ 応答1"]>(right) space:4
-
-    space:8
-
-    t2["ターン 2"]:8
-    sp2["System Prompt"] cm2["CLAUDE.md"] u2a["ユーザー入力1"] a1["応答1"] u2b["ユーザー入力2"] r2<["→ 応答2"]>(right) space:2
-
-    space:8
-
-    t3["ターン 3"]:8
-    sp3["System Prompt"] cm3["CLAUDE.md"] u3a["ユーザー入力1"] a2["応答1"] u3b["ユーザー入力2"] a3["応答2"] u3c["ユーザー入力3"] r3<["→ 応答3"]>(right)
-  end
-
-  style t1 fill:#e5e7eb,stroke:none,color:#000
-  style t2 fill:#e5e7eb,stroke:none,color:#000
-  style t3 fill:#e5e7eb,stroke:none,color:#000
-
-  style r1 fill:#e5e7eb,stroke:none,color:#000
-  style r2 fill:#e5e7eb,stroke:none,color:#000
-  style r3 fill:#e5e7eb,stroke:none,color:#000
-
-  style sp1 fill:#eff6ff,stroke:#1d4ed8,color:#000
-  style sp2 fill:#eff6ff,stroke:#1d4ed8,color:#000
-  style sp3 fill:#eff6ff,stroke:#1d4ed8,color:#000
-
-  style cm1 fill:#dcfce7,stroke:#15803d,color:#000
-  style cm2 fill:#dcfce7,stroke:#15803d,color:#000
-  style cm3 fill:#dcfce7,stroke:#15803d,color:#000
-
-  style u1 fill:#fef9c3,stroke:#a16207,color:#000
-  style u2a fill:#fef9c3,stroke:#a16207,color:#000
-  style u2b fill:#fef9c3,stroke:#a16207,color:#000
-  style u3a fill:#fef9c3,stroke:#a16207,color:#000
-  style u3b fill:#fef9c3,stroke:#a16207,color:#000
-  style u3c fill:#fef9c3,stroke:#a16207,color:#000
-
-  style a1 fill:#f3e8ff,stroke:#7c3aed,color:#000
-  style a2 fill:#f3e8ff,stroke:#7c3aed,color:#000
-  style a3 fill:#f3e8ff,stroke:#7c3aed,color:#000
+timeline
+    title 毎ターン、アプリケーションが全履歴を Context として渡す
+    section ターン 1
+        渡す Context : System Prompt
+                     : CLAUDE.md
+                     : ユーザー入力1
+        出力         : → 応答1
+    section ターン 2
+        渡す Context : System Prompt
+                     : CLAUDE.md
+                     : ユーザー入力1
+                     : 応答1
+                     : ユーザー入力2
+        出力         : → 応答2
+    section ターン 3
+        渡す Context : System Prompt
+                     : CLAUDE.md
+                     : ユーザー入力1
+                     : 応答1
+                     : ユーザー入力2
+                     : 応答2
+                     : ユーザー入力3
+        出力         : → 応答3
 ```
 
 LLM は過去の会話を覚えているのではなく、毎ターン、全履歴を読んでいる。ターンが進むほど Context が膨らむ。

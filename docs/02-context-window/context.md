@@ -67,52 +67,29 @@ Other tools may not use the same file names. What is shared is the distinction a
 If you know REST APIs, this is intuitive. Generating a response is like an HTTP request: **each call is independent**.
 
 ```mermaid
-block-beta
-  columns 4
-
-  block:all:5
-    columns 8
-
-    t1["Turn 1"]:8
-    sp1["System Prompt"] cm1["CLAUDE.md"] u1["User Input 1"] r1<["→ Response 1"]>(right) space:4
-
-    space:8
-
-    t2["Turn 2"]:8
-    sp2["System Prompt"] cm2["CLAUDE.md"] u2a["User Input 1"] a1["Response 1"] u2b["User Input 2"] r2<["→ Response 2"]>(right) space:2
-
-    space:8
-
-    t3["Turn 3"]:8
-    sp3["System Prompt"] cm3["CLAUDE.md"] u3a["User Input 1"] a2["Response 1"] u3b["User Input 2"] a3["Response 2"] u3c["User Input 3"] r3<["→ Response 3"]>(right)
-  end
-
-  style t1 fill:#e5e7eb,stroke:none,color:#000
-  style t2 fill:#e5e7eb,stroke:none,color:#000
-  style t3 fill:#e5e7eb,stroke:none,color:#000
-
-  style r1 fill:#e5e7eb,stroke:none,color:#000
-  style r2 fill:#e5e7eb,stroke:none,color:#000
-  style r3 fill:#e5e7eb,stroke:none,color:#000
-
-  style sp1 fill:#eff6ff,stroke:#1d4ed8,color:#000
-  style sp2 fill:#eff6ff,stroke:#1d4ed8,color:#000
-  style sp3 fill:#eff6ff,stroke:#1d4ed8,color:#000
-
-  style cm1 fill:#dcfce7,stroke:#15803d,color:#000
-  style cm2 fill:#dcfce7,stroke:#15803d,color:#000
-  style cm3 fill:#dcfce7,stroke:#15803d,color:#000
-
-  style u1 fill:#fef9c3,stroke:#a16207,color:#000
-  style u2a fill:#fef9c3,stroke:#a16207,color:#000
-  style u2b fill:#fef9c3,stroke:#a16207,color:#000
-  style u3a fill:#fef9c3,stroke:#a16207,color:#000
-  style u3b fill:#fef9c3,stroke:#a16207,color:#000
-  style u3c fill:#fef9c3,stroke:#a16207,color:#000
-
-  style a1 fill:#f3e8ff,stroke:#7c3aed,color:#000
-  style a2 fill:#f3e8ff,stroke:#7c3aed,color:#000
-  style a3 fill:#f3e8ff,stroke:#7c3aed,color:#000
+timeline
+    title Each turn, the app passes the full history as Context
+    section Turn 1
+        Context : System Prompt
+                : CLAUDE.md
+                : User Input 1
+        Output  : → Response 1
+    section Turn 2
+        Context : System Prompt
+                : CLAUDE.md
+                : User Input 1
+                : Response 1
+                : User Input 2
+        Output  : → Response 2
+    section Turn 3
+        Context : System Prompt
+                : CLAUDE.md
+                : User Input 1
+                : Response 1
+                : User Input 2
+                : Response 2
+                : User Input 3
+        Output  : → Response 3
 ```
 
 The model does not remember past turns; it rereads the full history each time. As turns accumulate, Context grows.
