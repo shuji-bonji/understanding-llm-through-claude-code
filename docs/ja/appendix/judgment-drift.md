@@ -193,5 +193,5 @@ graph LR
 
 ---
 
-> **次へ**: [出力フォーマット制約と精度](./output-format-constraints.md)
+> **次へ**: [出力フォーマット制約と精度](./output-format-constraints.md)  
 > **前へ**: [Authority と LLM の構造的制約](./authority-and-llm-constraints.md)

@@ -3,8 +3,8 @@
 # Part 6: Context as Tool Definitions — MCP
 
 > [!NOTE]
-> Context consumed by tools.
-> As more MCP servers are connected, the context available for actual work decreases.
+> Context consumed by tools.  
+> As more MCP servers are connected, the context available for actual work decreases.  
 > MCP is both a representative example in Claude Code and an open way to connect external tools. That tool definitions are a fixed cost on Context is not product-specific.
 
 ## Why This Matters

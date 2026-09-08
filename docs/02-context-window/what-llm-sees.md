@@ -8,7 +8,7 @@ description: "What actually enters the LLM's context window each turn, and how t
 # What Is the Context Window? — What the LLM "Sees"
 
 > [!NOTE]
-> In the [previous page](chat-session.md), we learned the concepts of Chat / Session.
+> In the [previous page](chat-session.md), we learned the concepts of Chat / Session.  
 > On this page, we examine the overall structure of **what Claude Code specifically places inside the Context Window**.
 
 ## The LLM's Thinking Space

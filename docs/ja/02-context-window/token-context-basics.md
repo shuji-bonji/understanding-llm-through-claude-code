@@ -3,7 +3,7 @@
 # Token・Context・Context Window — 3つの関係
 
 > [!NOTE]
-> Token / Context / Context Window は、それぞれ独立したページで定義する。
+> Token / Context / Context Window は、それぞれ独立したページで定義する。  
 > 本ページは3概念の関係だけを示す。詳細な定義は各ページを読む。
 
 ## 各ページへ

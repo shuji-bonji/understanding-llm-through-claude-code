@@ -3,7 +3,7 @@
 # Injection Timing Overview
 
 > [!NOTE]
-> Each configuration file has a defined "when" and "how" it gets injected into the LLM's context window.
+> Each configuration file has a defined "when" and "how" it gets injected into the LLM's context window.  
 > Understanding this mechanism reveals principles that apply to other LLM tools (Cursor, Cline, Copilot, etc.).
 
 ## Injection Timing Inventory

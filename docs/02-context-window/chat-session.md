@@ -8,8 +8,8 @@ description: "How chat sessions act as the temporal container that accumulates c
 # Chat / Session — The "Container of Time" Where Context Accumulates
 
 > [!NOTE]
-> **In a nutshell**: Chat (conversation / session) is a "container" in which Context accumulates and expands over time.
-> If Token, Context, and Context Window represent "space," then Chat represents "time."
+> **In a nutshell**: Chat (conversation / session) is a "container" in which Context accumulates and expands over time.  
+> If Token, Context, and Context Window represent "space," then Chat represents "time."  
 > By understanding this container, we can physically explain "why Context expands" and "why Instruction Decay occurs."
 
 ## What is Chat?

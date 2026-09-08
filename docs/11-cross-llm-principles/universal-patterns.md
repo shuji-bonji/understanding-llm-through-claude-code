@@ -3,8 +3,8 @@
 # Structural Constraints Are Universal Across Models
 
 > [!NOTE]
-> The eight problems in Part 1 are not defects of Claude as a product.
-> They come from Transformer-based models and their training.
+> The eight problems in Part 1 are not defects of Claude as a product.  
+> They come from Transformer-based models and their training.  
 > In any environment that uses cloud LLMs, the same constraints appear, to varying degrees.
 
 ## Why they are shared

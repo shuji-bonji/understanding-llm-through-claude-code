@@ -8,7 +8,7 @@ description: 'コード調査ツールの選択基準。Grep / Read / LSP のト
 # Grep / Read / LSP — どれをいつ使うか？
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 緩和（適切なツールを選ぶことで、本当に必要なトークンだけを読み込む）
+> → Why: **Context Rot** 緩和（適切なツールを選ぶことで、本当に必要なトークンだけを読み込む）  
 > → Why: **Lost in the Middle** 緩和（コンテキストが小さいほど、関連情報が高アテンション位置に留まる）
 
 ## 3つのツール、3つのコストプロファイル

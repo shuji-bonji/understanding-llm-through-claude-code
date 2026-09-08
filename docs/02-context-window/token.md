@@ -8,7 +8,7 @@ description: 'Token is the smallest unit an LLM processes. Not a character, not 
 # Token — The LLM's Processing Unit
 
 > [!NOTE]
-> **In a nutshell**: A token is the smallest unit an LLM uses to process text. It is neither a character nor a word.
+> **In a nutshell**: A token is the smallest unit an LLM uses to process text. It is neither a character nor a word.  
 > Context limits, quality degradation, and billing are all measured in tokens.
 
 ## What Is a Token?

@@ -8,7 +8,7 @@ description: "Frequently asked questions about the structural problems of LLMs a
 # FAQ — Frequently Asked Questions and Design Decisions
 
 > [!NOTE]
-> A compilation of specific questions raised in the project's [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) and their answers.
+> A compilation of specific questions raised in the project's [Discussions](https://github.com/shuji-bonji/understanding-llm-through-claude-code/discussions) and their answers.  
 > We prioritize the thinking process behind "why we make these decisions."
 
 ## Configuration Placement Decisions

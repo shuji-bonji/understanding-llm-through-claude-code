@@ -8,7 +8,7 @@ description: "Decision criteria for code investigation tools, comparing token co
 # Grep / Read / LSP — Which Tool When?
 
 > [!IMPORTANT]
-> → Why: **Context Rot** mitigation (using the right tool means loading only the tokens that matter)
+> → Why: **Context Rot** mitigation (using the right tool means loading only the tokens that matter)  
 > → Why: **Lost in the Middle** mitigation (smaller context keeps relevant information at high-attention positions)
 
 ## Three Tools, Three Cost Profiles

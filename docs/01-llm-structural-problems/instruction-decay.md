@@ -8,8 +8,8 @@ description: "Why LLMs gradually forget instructions during long conversations, 
 # Instruction Decay — Forgetting Rules in Long Conversations
 
 > [!NOTE]
-> **In brief**: LLMs' adherence to initial instructions degrades throughout long conversations.
-> Performance in multi-turn conversations drops by an average of 39%.
+> **In brief**: LLMs' adherence to initial instructions degrades throughout long conversations.  
+> Performance in multi-turn conversations drops by an average of 39%.  
 > This results from the seven preceding structural problems compounding over time.
 
 ## What Is Instruction Decay?

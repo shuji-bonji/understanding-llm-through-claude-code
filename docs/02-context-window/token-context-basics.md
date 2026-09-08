@@ -8,7 +8,7 @@ description: 'How Token, Context, and Context Window relate. Definitions live on
 # Token, Context, and Context Window — Relationships
 
 > [!NOTE]
-> Token, Context, and Context Window are each defined on their own page.
+> Token, Context, and Context Window are each defined on their own page.  
 > This page only shows how the three relate. Read the dedicated pages for full definitions.
 
 ## Links to Each Page

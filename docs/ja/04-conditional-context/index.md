@@ -3,8 +3,8 @@
 # Part 4: 条件付きコンテキスト — Rules
 
 > [!NOTE]
-> 必要な時だけ注入する仕組みである。
-> CLAUDE.md の Priority Saturation を、条件付き分散で抑える。
+> 必要な時だけ注入する仕組みである。  
+> CLAUDE.md の Priority Saturation を、条件付き分散で抑える。  
 > `.claude/rules/` は Claude Code における代表例である。使わないルールを常時載せない、という考え方は製品を問わない。
 
 ## なぜ存在するのか
@@ -26,5 +26,5 @@ CLAUDE.md に全てのルールを書くと、API のバリデーションルー
 
 ---
 
-> **前へ**: [Part 3: 常駐コンテキスト](../03-always-loaded-context/index.md)
+> **前へ**: [Part 3: 常駐コンテキスト](../03-always-loaded-context/index.md)  
 > **次へ**: [Part 5: オンデマンドコンテキスト](../05-on-demand-context/index.md)

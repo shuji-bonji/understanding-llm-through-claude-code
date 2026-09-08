@@ -3,7 +3,7 @@
 # Claude Code のメモリ機構 — CLAUDE.md / rules / Auto Memory / server-memory
 
 > [!NOTE]
-> Claude Code の**セッションを越えて情報を持ち越す仕組み**を1ページに集約したリファレンス。
+> Claude Code の**セッションを越えて情報を持ち越す仕組み**を1ページに集約したリファレンス。  
 > 各セッションは毎回まっさらなコンテキストで始まる。それを埋めるのが CLAUDE.md（人が書く指示）と Auto Memory（Claude が書く学習メモ）の2系統であり、加えて MCP のサードパーティ実装 `server-memory` がある。この3つを混同しないことが出発点になる。
 
 ## 全体像 — 3つの記憶

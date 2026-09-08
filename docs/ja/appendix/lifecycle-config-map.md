@@ -3,7 +3,7 @@
 # ライフサイクル × 設定マップ
 
 > [!NOTE]
-> Claude Code のタスクフローの各フェーズで、どの設定レイヤーが作用するかを示す。
+> Claude Code のタスクフローの各フェーズで、どの設定レイヤーが作用するかを示す。  
 > 設定名は代表例である。Part 3〜7 で学んだ層を、ライフサイクルの視点から横断する。
 >
 > 関連 Issue: [#21](https://github.com/shuji-bonji/understanding-llm-through-claude-code/issues/21)
@@ -123,5 +123,5 @@ flowchart TB
 ---
 
 > [!NOTE]
-> Hook イベントの詳細（JSON 入出力スキーマ、matcher の仕様等）は公式リファレンスを参照:
+> Hook イベントの詳細（JSON 入出力スキーマ、matcher の仕様等）は公式リファレンスを参照:  
 > [Hooks reference](https://code.claude.com/docs/en/hooks) | [Hooks guide](https://code.claude.com/docs/en/hooks-guide)

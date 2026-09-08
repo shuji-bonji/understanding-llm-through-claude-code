@@ -8,7 +8,7 @@ description: "Complete reference for CLAUDE.md, settings.json, settings.local.js
 # Claude Code Configuration File Reference
 
 > [!NOTE]
-> Comprehensive reference of files and directories that make up Claude Code project configuration.
+> Comprehensive reference of files and directories that make up Claude Code project configuration.  
 > Designed to trace "what is this configuration for?" through links to relevant pages in this project.
 
 ## Directory Structure Overview

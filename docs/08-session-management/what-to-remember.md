@@ -3,7 +3,7 @@
 # What to Remember
 
 > [!NOTE]
-> Trying to remember everything causes Priority Saturation.
+> Trying to remember everything causes Priority Saturation.  
 > The selection of "what to remember" is the core of memory persistence.
 
 ## Information Worth Remembering

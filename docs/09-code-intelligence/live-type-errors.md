@@ -8,7 +8,7 @@ description: 'Why streaming LSP diagnostics — type errors and lint warnings de
 # Live Type Errors
 
 > [!IMPORTANT]
-> → Why: **Hallucination** mitigation (errors retrieved during generation, not after)
+> → Why: **Hallucination** mitigation (errors retrieved during generation, not after)  
 > → Why: **Instruction Decay** mitigation (verification happens at the runtime layer — does not depend on the LLM remembering to verify)
 
 ## The Feedback Loop Problem

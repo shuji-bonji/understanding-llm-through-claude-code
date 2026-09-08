@@ -92,6 +92,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 				items: [
 					{ text: 'Overview', link: '/08-session-management/' },
 					{ text: '/compact vs /clear', link: '/08-session-management/compact-and-clear' },
+					{ text: '/loop and Self-Driving Sessions', link: '/08-session-management/loop-and-self-driving-sessions' },
 					{ text: 'Why Memory Is a Problem', link: '/08-session-management/memory-problem' },
 					{ text: 'What to Remember', link: '/08-session-management/what-to-remember' },
 					{ text: 'When to Recall', link: '/08-session-management/when-to-recall' },

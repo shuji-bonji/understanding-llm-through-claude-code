@@ -126,5 +126,5 @@ permission モデルはこの能力に依存しない。承認は外部の人間
 
 ---
 
-> **次へ**: [判定ドリフト](./judgment-drift.md)
+> **次へ**: [判定ドリフト](./judgment-drift.md)  
 > **前へ**: [Harness と LLM の構造的制約](./harness-and-llm-constraints.md)

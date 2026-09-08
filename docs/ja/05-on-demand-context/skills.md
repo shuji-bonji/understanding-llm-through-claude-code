@@ -3,7 +3,7 @@
 # Skills の設計原理
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（必要時のみコンテキストに展開）
+> → Why: **Context Rot** 対策（必要時のみコンテキストに展開）  
 > → Why: **Prompt Sensitivity** 対策（description 設計で自動呼び出し精度を向上）
 
 ## Skills とは

@@ -3,8 +3,8 @@
 # /compact と /clear の使い分け
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（予防的圧縮でトークン蓄積を抑制）
-> → Why: **Lost in the Middle** 対策（50%使用率前に圧縮してU字カーブ崩壊を防ぐ）
+> → Why: **Context Rot** 対策（予防的圧縮でトークン蓄積を抑制）  
+> → Why: **Lost in the Middle** 対策（50%使用率前に圧縮してU字カーブ崩壊を防ぐ）  
 > → Why: **Instruction Decay** 対策（セッション分割で劣化をリセット）
 
 ## /compact — 予防的圧縮
@@ -72,4 +72,4 @@ flowchart LR
 
 > **前へ**: [Part 8: セッション管理と記憶の永続化](index.md)
 
-> **次へ**: [なぜメモリが問題になるのか](memory-problem.md)
+> **次へ**: [/loop と自走するセッション](loop-and-self-driving-sessions.md)

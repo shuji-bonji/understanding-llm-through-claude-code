@@ -8,7 +8,7 @@ description: "The documented failure mode where LLMs attend to the start and end
 # Lost in the Middle — Ignoring Information in the Middle of Context
 
 > [!NOTE]
-> **In short**: LLMs excel at remembering information at the beginning and end, but significantly ignore middle content.
+> **In short**: LLMs excel at remembering information at the beginning and end, but significantly ignore middle content.  
 > When searching across 20 documents, the accuracy of information positioned 5th through 15th drops by over 30%.
 
 ## What is Lost in the Middle?
@@ -38,7 +38,7 @@ xychart
 ```
 
 > [!NOTE]
-> Accuracy is high at the beginning (Primacy bias) and end (Recency bias), but drops by over 30% in the middle section (Blind spot).
+> Accuracy is high at the beginning (Primacy bias) and end (Recency bias), but drops by over 30% in the middle section (Blind spot).  
 > When given 20 documents, retrieval accuracy for information positioned 5th through 15th drops significantly.
 
 ### The Role of RoPE (Rotary Position Embedding)

@@ -3,8 +3,8 @@
 # Hooks のライフサイクル
 
 > [!IMPORTANT]
-> → Why: **Hallucination** 対策（テスト実行 Hook で機械的に検出）
-> → Why: **Sycophancy** 対策（コンパイラ・テストランナーは追従しない）
+> → Why: **Hallucination** 対策（テスト実行 Hook で機械的に検出）  
+> → Why: **Sycophancy** 対策（コンパイラ・テストランナーは追従しない）  
 > → Why: **Instruction Decay** 対策（コンテキストに依存しない強制実行）
 
 ## Hooks とは
@@ -128,7 +128,7 @@ flowchart TB
 | `ElicitationResult` | MCP 入力応答時       | 応答データの検証・修正 |
 
 > [!NOTE]
-> イベントの詳細（JSON 入出力スキーマ、matcher の仕様、非同期 Hook 等）は公式リファレンスを参照:
+> イベントの詳細（JSON 入出力スキーマ、matcher の仕様、非同期 Hook 等）は公式リファレンスを参照:  
 > [Hooks reference](https://code.claude.com/docs/en/hooks) | [Hooks guide](https://code.claude.com/docs/en/hooks-guide)
 
 ## Hook の種類

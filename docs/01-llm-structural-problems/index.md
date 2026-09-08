@@ -8,7 +8,7 @@ description: "Overview of the eight structural constraints every LLM faces: cont
 # Part 1: Understanding the Structural Constraints of LLMs
 
 > [!NOTE]
-> LLMs are not omnipotent. Transformer-based models have structural constraints that come from input length and how attention is allocated.
+> LLMs are not omnipotent. Transformer-based models have structural constraints that come from input length and how attention is allocated.  
 > This Part defines those constraints. The subject is the constraints themselves, not a product setup guide.
 
 ## Why You Need to Know About Structural Problems

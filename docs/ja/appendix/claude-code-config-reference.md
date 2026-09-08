@@ -8,7 +8,7 @@ description: 'CLAUDE.md / settings.json / settings.local.json / managed-settings
 # Claude Code 設定ファイル一覧
 
 > [!NOTE]
-> Claude Code のプロジェクト設定を構成するファイル・ディレクトリの網羅的リファレンス。
+> Claude Code のプロジェクト設定を構成するファイル・ディレクトリの網羅的リファレンス。  
 > 「この設定は何のためにあるのか？」を本プロジェクトの各ページへのリンクで辿れるようにしたもの。
 
 ## ディレクトリ構造の全体像

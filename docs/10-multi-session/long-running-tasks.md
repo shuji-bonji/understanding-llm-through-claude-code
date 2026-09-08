@@ -8,8 +8,8 @@ description: "Why parallel decomposition is the only structural remedy for Conte
 # Long-Running Tasks
 
 > [!IMPORTANT]
-> → Why: **Context Rot** root-cause mitigation (no single session ever has to hold the whole project)
-> → Why: **Lost in the Middle** root-cause mitigation (each session's history stays short enough that the U-shape never forms)
+> → Why: **Context Rot** root-cause mitigation (no single session ever has to hold the whole project)  
+> → Why: **Lost in the Middle** root-cause mitigation (each session's history stays short enough that the U-shape never forms)  
 > → Why: **Priority Saturation** root-cause mitigation (each session carries instructions for one role, not for all)
 
 ## The Problem at Scale

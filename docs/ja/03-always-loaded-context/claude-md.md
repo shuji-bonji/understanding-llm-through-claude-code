@@ -3,7 +3,7 @@
 # CLAUDE.md の設計原理
 
 > [!IMPORTANT]
-> → Why: **Priority Saturation** 対策（200行制限の根拠）
+> → Why: **Priority Saturation** 対策（200行制限の根拠）  
 > → Why: **Prompt Sensitivity** 対策（具体的・命令的記述）
 
 ## CLAUDE.md とは

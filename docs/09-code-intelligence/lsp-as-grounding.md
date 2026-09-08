@@ -8,8 +8,8 @@ description: "Breaking down the four LSP capabilities Claude Code uses — Defin
 # LSP as Grounding
 
 > [!IMPORTANT]
-> → Why: **Hallucination** mitigation (constrains generated symbols to real referents)
-> → Why: **Knowledge Boundary** mitigation (project-local types and post-cutoff APIs become inspectable)
+> → Why: **Hallucination** mitigation (constrains generated symbols to real referents)  
+> → Why: **Knowledge Boundary** mitigation (project-local types and post-cutoff APIs become inspectable)  
 > → Why: **Context Rot** mitigation (symbol-level retrieval avoids whole-file reads)
 
 ## What the LSP Provides

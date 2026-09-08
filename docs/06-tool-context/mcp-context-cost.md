@@ -3,7 +3,7 @@
 # MCP Context Cost
 
 > [!IMPORTANT]
-> → Why: **Context Rot** mitigation (constant consumption of tool definitions pressures context)
+> → Why: **Context Rot** mitigation (constant consumption of tool definitions pressures context)  
 > → Why: **Knowledge Boundary** mitigation (external knowledge retrieval reduces LLM's dependency on internal knowledge)
 
 ## How MCP Consumes Context

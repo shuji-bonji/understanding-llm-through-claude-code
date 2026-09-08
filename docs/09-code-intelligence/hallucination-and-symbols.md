@@ -8,7 +8,7 @@ description: "Concrete failure patterns of symbol-level Hallucination — TypeSc
 # Hallucination and Symbols
 
 > [!IMPORTANT]
-> → Why: **Hallucination** mitigation (symbol-level grounding stops the most common code-generation failures before they reach disk)
+> → Why: **Hallucination** mitigation (symbol-level grounding stops the most common code-generation failures before they reach disk)  
 > → Why: **Knowledge Boundary** mitigation (project-private and post-cutoff symbols become resolvable instead of guessable)
 
 ## The Most Dangerous Hallucinations Are Plausible Ones

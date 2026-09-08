@@ -8,8 +8,8 @@ description: "Why session boundaries themselves become a design surface: how mul
 # Part 10: Multi-Session Coordination — Agent Teams
 
 > [!NOTE]
-> When a single session cannot complete a task without degrading, the answer is not "a better single session." It is **multiple sessions, each with bounded scope, coordinating peer-to-peer**.
-> Where Part 5 Subagents are delegated children of a parent session, Agent Teams are peers with their own lifespans.
+> When a single session cannot complete a task without degrading, the answer is not "a better single session." It is **multiple sessions, each with bounded scope, coordinating peer-to-peer**.  
+> Where Part 5 Subagents are delegated children of a parent session, Agent Teams are peers with their own lifespans.  
 > Agent Teams are a representative example in Claude Code. Designing session boundaries is not product-specific.
 
 ## Why This Part Exists

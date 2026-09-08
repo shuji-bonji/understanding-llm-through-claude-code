@@ -3,7 +3,7 @@
 # Why Memory Becomes a Problem
 
 > [!NOTE]
-> Sessions are finite, but projects are permanent.
+> Sessions are finite, but projects are permanent.  
 > Information loss between sessions creates the "memory persistence" problem.
 
 ## The Finiteness of Sessions
@@ -33,6 +33,6 @@ Projects continue beyond sessions. A mechanism to carry information forward acro
 
 ---
 
-> **Previous**: [Using /compact and /clear](compact-and-clear.md)
+> **Previous**: [/loop and Self-Driving Sessions](loop-and-self-driving-sessions.md)
 
 > **Next**: [What to Remember](what-to-remember.md)

@@ -3,8 +3,8 @@
 # Cursor / Cline / Copilot Mapping
 
 > [!NOTE]
-> This page is not a one-to-one feature map.
-> It shows only where always-on instructions live, limited to official documentation that was checked.
+> This page is not a one-to-one feature map.  
+> It shows only where always-on instructions live, limited to official documentation that was checked.  
 > Unverified setting keys are not listed. A feature with the same name is not assumed to exist on other products.
 
 ## Principles first
@@ -42,7 +42,7 @@ The following are representative examples in Claude Code. Matching granularity o
 Their roles (read when needed, verify in another conversation, verify outside the model, compress or drop history) can be performed without dedicated commands. For a manual reproduction, see [Practice Without Tool Support](prompt-driven-development.md).
 
 > [!IMPORTANT]
-> It is not valid to say that writing the same file in Cursor solves the problem.
+> It is not valid to say that writing the same file in Cursor solves the problem.  
 > What transfers is the way of thinking: short always-on instructions, inject only what is needed, verify outside the model, keep sessions short.
 
 ---

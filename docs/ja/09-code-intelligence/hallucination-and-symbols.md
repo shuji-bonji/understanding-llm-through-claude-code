@@ -8,7 +8,7 @@ description: 'シンボルレベル Hallucination の具体的な失敗パター
 # Hallucination とシンボル
 
 > [!IMPORTANT]
-> → Why: **Hallucination** 緩和（シンボルレベルの接地で、最も頻発するコード生成失敗をディスク到達前に止める）
+> → Why: **Hallucination** 緩和（シンボルレベルの接地で、最も頻発するコード生成失敗をディスク到達前に止める）  
 > → Why: **Knowledge Boundary** 緩和（プロジェクト内部・学習後の API のシンボルが、推測ではなく解決対象になる）
 
 ## 最も危険な Hallucination は「もっともらしい」もの

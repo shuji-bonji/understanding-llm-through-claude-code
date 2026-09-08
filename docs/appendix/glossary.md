@@ -3,7 +3,7 @@
 # Glossary
 
 > [!NOTE]
-> This page is an entry point for newcomers. Return here when a term appears in the main text.
+> This page is an entry point for newcomers. Return here when a term appears in the main text.  
 > Definitions and why they matter live here. Mechanisms belong to each Part.
 
 - [Foundations](#basics)
