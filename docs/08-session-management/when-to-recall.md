@@ -3,7 +3,7 @@
 # When and How to Recall
 
 > [!NOTE]
-> Having memories is meaningless without using them.
+> Having memories is meaningless without using them.  
 > A mechanism to retrieve the right memory at the right time is needed.
 
 ## Memory Retrieval Patterns

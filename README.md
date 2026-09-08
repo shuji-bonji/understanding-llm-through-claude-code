@@ -4,7 +4,7 @@
 
 > **Understand the structural constraints of LLMs and learn why designs look the way they do.**
 >
-> Claude Code is the subject, and a representative example. The object of study is not a product setup guide.
+> Claude Code is the subject, and a representative example. The object of study is not a product setup guide.  
 > It is the constraints shared by Transformer-based models, and the design principles that respond to them.
 
 ## Readers and subject
@@ -19,11 +19,11 @@ The destination is [Part 11: Cross-LLM Principles](docs/11-cross-llm-principles/
 
 Three projects connect in a "Learn → Understand → Apply" sequence. This repository is the "bookshelf of Why."
 
-| Phase | Project | Focus / Status |
-| :---- | :------ | :------------- |
-| **1. Understand LLMs** | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code) | **This repository** — LLM structural constraints and why designs look the way they do (bookshelf of Why) |
-| 2. Understand AI Agent Architecture | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture) | Published — MCP, Skills, Agent, Memory & Agent ID — composition and implementation patterns (*what/how*) |
-| 3. Apply AI to Systems & Services | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | In progress |
+| Phase                               | Project                                                                                                                   | Focus / Status                                                                                           |
+| :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------- |
+| **1. Understand LLMs**              | [understanding-llm-through-claude-code](https://github.com/shuji-bonji/understanding-llm-through-claude-code)             | **This repository** — LLM structural constraints and why designs look the way they do (bookshelf of Why) |
+| 2. Understand AI Agent Architecture | [ai-agent-architecture](https://github.com/shuji-bonji/ai-agent-architecture)                                             | Published — MCP, Skills, Agent, Memory & Agent ID — composition and implementation patterns (_what/how_) |
+| 3. Apply AI to Systems & Services   | [Management-of-software-systems-and-services](https://github.com/shuji-bonji/Management-of-software-systems-and-services) | In progress                                                                                              |
 
 ## Table of Contents
 

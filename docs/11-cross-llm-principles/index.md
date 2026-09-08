@@ -3,8 +3,8 @@
 # Part 11: Applying to Other LLMs
 
 > [!NOTE]
-> This Part is the destination of the whole work.
-> Parts 1–10 used Claude Code as a representative example to match constraints with countermeasures.
+> This Part is the destination of the whole work.  
+> Parts 1–10 used Claude Code as a representative example to match constraints with countermeasures.  
 > Here we leave the representative example and extract what does not depend on the product.
 
 ## Why This Part Exists

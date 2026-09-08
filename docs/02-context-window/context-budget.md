@@ -8,7 +8,7 @@ description: "How to think about the context window as a finite token budget, an
 # Context Budget: Thinking in Terms of Token Allocation
 
 > [!NOTE]
-> How to allocate tokens in the context window and what to spend them on.
+> How to allocate tokens in the context window and what to spend them on.  
 > This "budget" concept becomes the quantitative basis for all design decisions in Parts 3–7.
 >
 > ※ This page explains using the typical 200K token context window for Claude Code as a reference. While Claude 4.6 has been extended to 1M tokens, the principles of budget management remain the same.

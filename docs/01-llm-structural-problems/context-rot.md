@@ -8,8 +8,8 @@ description: "Why output quality measurably degrades as token count grows, even 
 # Context Rot — Output Quality Degrades as Token Count Increases
 
 > [!NOTE]
-> **In short**: A phenomenon where LLM output quality deteriorates as the number of input tokens increases.
-> Even with a 200K token capacity, degradation begins around 50K tokens.
+> **In short**: A phenomenon where LLM output quality deteriorates as the number of input tokens increases.  
+> Even with a 200K token capacity, degradation begins around 50K tokens.  
 > Because it doesn't produce errors, it's the most insidious structural constraint in LLMs.
 
 ## What is Context Rot?

@@ -3,7 +3,7 @@
 # Claude Code Memory Mechanisms — CLAUDE.md / rules / Auto Memory / server-memory
 
 > [!NOTE]
-> A single-page reference for **how Claude Code carries information across sessions**.
+> A single-page reference for **how Claude Code carries information across sessions**.  
 > Every session starts with a fresh context window. Two mechanisms fill it: CLAUDE.md (instructions you write) and Auto Memory (learnings Claude writes), plus a third-party MCP implementation, `server-memory`. Not confusing these three is the starting point.
 
 ## Overview — three kinds of memory

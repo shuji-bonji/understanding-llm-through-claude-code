@@ -3,7 +3,7 @@
 # Design Principles of .claude/rules/
 
 > [!IMPORTANT]
-> → Why: **Priority Saturation** mitigation (reduces simultaneously active instructions through conditional distribution)
+> → Why: **Priority Saturation** mitigation (reduces simultaneously active instructions through conditional distribution)  
 > → Why: **Lost in the Middle** mitigation (injects only necessary rules at high-attention positions)
 
 ## What are Rules?

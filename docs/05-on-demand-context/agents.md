@@ -3,8 +3,8 @@
 # Agents Design Principles
 
 > [!IMPORTANT]
-> → Why: **Context Rot** mitigation (execution in independent context window)
-> → Why: **Sycophancy** mitigation (eliminate compliance bias via Cross-model QA)
+> → Why: **Context Rot** mitigation (execution in independent context window)  
+> → Why: **Sycophancy** mitigation (eliminate compliance bias via Cross-model QA)  
 > → Why: **Knowledge Boundary** mitigation (narrow knowledge domains to reduce boundary-crossing probability)
 
 ## What Are Agents?

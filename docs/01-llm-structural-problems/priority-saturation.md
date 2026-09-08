@@ -8,8 +8,8 @@ description: "Why LLM compliance with individual instructions drops as total ins
 # Priority Saturation — Compliance Rates Degrade When Instructions Accumulate
 
 > [!NOTE]
-> **In short**: The more instructions you give an LLM simultaneously, the lower the compliance rate for each individual instruction.
-> "Everything is important" is equivalent to "nothing is important."
+> **In short**: The more instructions you give an LLM simultaneously, the lower the compliance rate for each individual instruction.  
+> "Everything is important" is equivalent to "nothing is important."  
 > This is the scientific foundation behind CLAUDE.md's 200-line limit.
 
 ## What Is Priority Saturation?

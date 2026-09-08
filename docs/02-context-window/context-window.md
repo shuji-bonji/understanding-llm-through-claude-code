@@ -8,7 +8,7 @@ description: 'A context window is the maximum Context an LLM can process at once
 # Context Window — Capacity and the Safe Range
 
 > [!NOTE]
-> **In a nutshell**: A context window is the maximum Context an LLM can process at once. The unit is tokens.
+> **In a nutshell**: A context window is the maximum Context an LLM can process at once. The unit is tokens.  
 > You should not use the full capacity. Quality still falls as input grows, even when room remains.
 
 ## What Is a Context Window?

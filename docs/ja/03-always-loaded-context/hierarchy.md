@@ -3,7 +3,7 @@
 # 階層マージの仕組み
 
 > [!IMPORTANT]
-> → Why: **Context Rot** 対策（スコープごとの分離で不要な情報の蓄積を防ぐ）
+> → Why: **Context Rot** 対策（スコープごとの分離で不要な情報の蓄積を防ぐ）  
 > → Why: **Priority Saturation** 対策（必要な階層だけをマージし常駐トークンを最小化）
 
 ## CLAUDE.md の階層構造

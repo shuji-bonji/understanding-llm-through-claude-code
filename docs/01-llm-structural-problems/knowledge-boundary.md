@@ -8,9 +8,9 @@ description: "Why LLMs fabricate answers instead of saying \"I don't know,\" and
 # Knowledge Boundary — LLMs Cannot Admit What They Don't Know
 
 > [!NOTE]
-> **In a nutshell**: LLMs cannot accurately identify the limits of their own knowledge.
-> Instead of answering "I don't know" to questions about unfamiliar topics, they generate incorrect responses with high confidence.
-> This "poor calibration" is a direct source of hallucination and creates
+> **In a nutshell**: LLMs cannot accurately identify the limits of their own knowledge.  
+> Instead of answering "I don't know" to questions about unfamiliar topics, they generate incorrect responses with high confidence.  
+> This "poor calibration" is a direct source of hallucination and creates  
 > the most dangerous failure mode in coding agents.
 
 ## What is Knowledge Boundary?

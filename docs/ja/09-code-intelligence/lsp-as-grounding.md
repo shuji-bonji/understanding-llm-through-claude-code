@@ -8,8 +8,8 @@ description: 'Claude Code が使う LSP の4機能 — Definition / Hover / Refe
 # LSP は接地装置である
 
 > [!IMPORTANT]
-> → Why: **Hallucination** 緩和（生成シンボルを実在する参照先に拘束する）
-> → Why: **Knowledge Boundary** 緩和（プロジェクト固有の型や学習後の API が検査可能になる）
+> → Why: **Hallucination** 緩和（生成シンボルを実在する参照先に拘束する）  
+> → Why: **Knowledge Boundary** 緩和（プロジェクト固有の型や学習後の API が検査可能になる）  
 > → Why: **Context Rot** 緩和（シンボル単位の取得でファイル全文読み込みを回避）
 
 ## LSP が提供するもの

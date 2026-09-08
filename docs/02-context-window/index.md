@@ -8,8 +8,8 @@ description: "Define Token, Context, and Context Window separately. Understand t
 # Part 2: Understanding the Context Window
 
 > [!NOTE]
-> Learn the structure of the LLM's "thinking space."
-> The physical basis for *why* the structural problems in Part 1 occur is here.
+> Learn the structure of the LLM's "thinking space."  
+> The physical basis for *why* the structural problems in Part 1 occur is here.  
 > Window constraints are not product-specific. Claude Code is used as a concrete example of injection.
 
 ## Three Concepts to Fix First

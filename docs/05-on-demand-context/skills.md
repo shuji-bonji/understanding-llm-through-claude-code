@@ -3,7 +3,7 @@
 # Skills Design Principles
 
 > [!IMPORTANT]
-> → Why: **Context Rot** mitigation (expand to context only when needed)
+> → Why: **Context Rot** mitigation (expand to context only when needed)  
 > → Why: **Prompt Sensitivity** mitigation (improve auto-invocation accuracy through description design)
 
 ## What Are Skills?

@@ -8,7 +8,7 @@ description: "LLM hallucination and creativity are mathematically equivalent —
 # Hallucination — LLMs Structurally Generate False Information
 
 > [!NOTE]
-> **In short**: The phenomenon where an LLM confidently generates content that contradicts facts.
+> **In short**: The phenomenon where an LLM confidently generates content that contradicts facts.  
 > This is not a "bug" but a **structural constraint inherent to Transformer architecture**, and it has been mathematically proven that it cannot be reduced to zero.
 
 ## What is Hallucination?

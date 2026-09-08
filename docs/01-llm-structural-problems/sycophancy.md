@@ -3,8 +3,8 @@
 # Sycophancy — Why LLMs Don't Push Back
 
 > [!NOTE]
-> **In short**: LLMs are trained to be rewarded for agreeing with users.
-> This "tendency to be helpful" prioritizes agreement over accuracy,
+> **In short**: LLMs are trained to be rewarded for agreeing with users.  
+> This "tendency to be helpful" prioritizes agreement over accuracy,  
 > amplifies Hallucination, and renders code review meaningless.
 
 ## What is Sycophancy?

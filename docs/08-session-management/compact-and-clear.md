@@ -3,8 +3,8 @@
 # Using /compact and /clear
 
 > [!IMPORTANT]
-> → Why: **Context Rot** countermeasure (preventive compression reduces token accumulation)
-> → Why: **Lost in the Middle** countermeasure (compress before 50% usage to prevent U-shaped curve collapse)
+> → Why: **Context Rot** countermeasure (preventive compression reduces token accumulation)  
+> → Why: **Lost in the Middle** countermeasure (compress before 50% usage to prevent U-shaped curve collapse)  
 > → Why: **Instruction Decay** countermeasure (reset degradation by splitting sessions)
 
 ## /compact — Preventive Compression
@@ -72,4 +72,4 @@ flowchart LR
 
 > **Previous**: [Part 8: Session Management and Memory Persistence](index.md)
 
-> **Next**: [Why Memory Becomes a Problem](memory-problem.md)
+> **Next**: [/loop and Self-Driving Sessions](loop-and-self-driving-sessions.md)

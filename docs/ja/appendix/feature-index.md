@@ -3,7 +3,7 @@
 🌐 [English](../../appendix/feature-index.md)
 
 > [!NOTE]
-> Claude Code の各機能について、「いつロードされるか」「どの問題を解くか」「詳細はどの章か」を 1 ページに集約する。
+> Claude Code の各機能について、「いつロードされるか」「どの問題を解くか」「詳細はどの章か」を 1 ページに集約する。  
 > 機能名は代表例である。原則の抽出は [Part 11](../11-cross-llm-principles/index.md) を参照する。
 
 ## 機能 × ロードタイミング × 章
@@ -78,5 +78,5 @@ flowchart LR
 
 ---
 
-> **前へ**: [ライフサイクル × 設定マップ](/ja/appendix/lifecycle-config-map)
+> **前へ**: [ライフサイクル × 設定マップ](/ja/appendix/lifecycle-config-map)  
 > **次へ**: [Claude Code 設定リファレンス](/ja/appendix/claude-code-config-reference)

@@ -3,7 +3,7 @@
 # Context Window — 上限と安全に使える範囲
 
 > [!NOTE]
-> **一言で言うと**: Context Window とは、LLM が一度に処理できる Context の上限である。単位はトークン数である。
+> **一言で言うと**: Context Window とは、LLM が一度に処理できる Context の上限である。単位はトークン数である。  
 > 上限まで使ってよいわけではない。容量が残っていても、入力が増えるほど品質は下がる。
 
 ## Context Window とは何か

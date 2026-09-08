@@ -3,8 +3,8 @@
 # Part 3: Always-Loaded Context — CLAUDE.md
 
 > [!NOTE]
-> Information that is always loaded when a session begins.
-> This is a "fixed cost" in the context budget and requires the most careful management.
+> Information that is always loaded when a session begins.  
+> This is a "fixed cost" in the context budget and requires the most careful management.  
 > CLAUDE.md is a representative example in Claude Code. Keeping always-on instructions short is not product-specific.
 
 ## Why It Matters
@@ -28,5 +28,5 @@ CLAUDE.md is information that the LLM **reads every turn**. This means everythin
 
 ---
 
-> **Previous**: [Part 2: Understanding the Context Window](../02-context-window/index.md)
+> **Previous**: [Part 2: Understanding the Context Window](../02-context-window/index.md)  
 > **Next**: [Part 4: Conditional Context](../04-conditional-context/index.md)

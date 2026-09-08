@@ -3,8 +3,8 @@
 # Part 4: Conditional Context — Rules
 
 > [!NOTE]
-> Injection that activates only when needed.
-> Conditional distribution keeps Priority Saturation in CLAUDE.md in check.
+> Injection that activates only when needed.  
+> Conditional distribution keeps Priority Saturation in CLAUDE.md in check.  
 > `.claude/rules/` is a representative example in Claude Code. Not loading unused rules all the time is not product-specific.
 
 ## Why It Exists
@@ -26,5 +26,5 @@ If you put all rules in CLAUDE.md, then API validation rules are loaded alongsid
 
 ---
 
-> **Previous**: [Part 3: Always-Loaded Context](../03-always-loaded-context/index.md)
+> **Previous**: [Part 3: Always-Loaded Context](../03-always-loaded-context/index.md)  
 > **Next**: [Part 5: On-Demand Context](../05-on-demand-context/index.md)

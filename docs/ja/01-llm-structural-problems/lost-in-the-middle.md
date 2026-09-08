@@ -8,7 +8,7 @@ description: "Lost in the Middle は LLM が先頭と末尾の情報をよく覚
 # Lost in the Middle — コンテキスト中間部の情報を無視する
 
 > [!NOTE]
-> **一言で言うと**: LLM は先頭と末尾の情報をよく覚えているが、中間部の情報を著しく無視する。
+> **一言で言うと**: LLM は先頭と末尾の情報をよく覚えているが、中間部の情報を著しく無視する。  
 > 20個の文書から検索する場合、5番目〜15番目に配置された情報の精度は 30% 以上低下する。
 
 ## Lost in the Middle とは何か
@@ -38,7 +38,7 @@ xychart
 ```
 
 > [!NOTE]
-> 先頭（Primacy bias）と末尾（Recency bias）の精度が高く、中間部（Blind spot）で 30% 以上低下する。
+> 先頭（Primacy bias）と末尾（Recency bias）の精度が高く、中間部（Blind spot）で 30% 以上低下する。  
 > 20個の文書を与えた場合、5番目〜15番目に配置された情報の検索精度が著しく低下する。
 
 ### RoPE（Rotary Position Embedding）の役割

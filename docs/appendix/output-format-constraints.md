@@ -106,5 +106,5 @@ The following are representative examples in Claude Code.
 
 ---
 
-> **Next**: [Lifecycle × Config Map](./lifecycle-config-map.md)
+> **Next**: [Lifecycle × Config Map](./lifecycle-config-map.md)  
 > **Previous**: [Judgment Drift](./judgment-drift.md)

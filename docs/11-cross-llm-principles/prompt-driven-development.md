@@ -3,7 +3,7 @@
 # Practical Application Without Tool Support
 
 > [!NOTE]
-> Even without dedicated rule files or MCP, the principle for dealing with structural constraints is the same.
+> Even without dedicated rule files or MCP, the principle for dealing with structural constraints is the same.  
 > This page covers "prompt-driven development": reproducing that principle by hand.
 
 ## Real-World Constraints

@@ -3,7 +3,7 @@
 # Design Principles of CLAUDE.md
 
 > [!IMPORTANT]
-> → Why: **Priority Saturation** mitigation (rationale for the 200-line limit)
+> → Why: **Priority Saturation** mitigation (rationale for the 200-line limit)  
 > → Why: **Prompt Sensitivity** mitigation (concrete, directive language)
 
 ## What Is CLAUDE.md?

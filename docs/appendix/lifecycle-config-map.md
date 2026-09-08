@@ -3,7 +3,7 @@
 # Lifecycle × Configuration Map
 
 > [!NOTE]
-> Shows which configuration layers are active at each phase of Claude Code's task flow.
+> Shows which configuration layers are active at each phase of Claude Code's task flow.  
 > Configuration names are representative examples. Layers from Parts 3–7 are cut across the lifecycle.
 >
 > Related Issue: [#21](https://github.com/shuji-bonji/understanding-llm-through-claude-code/issues/21)
@@ -123,5 +123,5 @@ flowchart TB
 ---
 
 > [!NOTE]
-> For detailed Hook events (JSON input/output schema, matcher specs, etc.), see the official reference:
+> For detailed Hook events (JSON input/output schema, matcher specs, etc.), see the official reference:  
 > [Hooks reference](https://code.claude.com/docs/en/hooks) | [Hooks guide](https://code.claude.com/docs/en/hooks-guide)

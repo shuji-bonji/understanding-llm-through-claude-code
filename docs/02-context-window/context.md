@@ -8,7 +8,7 @@ description: 'Context is everything passed to an LLM for one inference. The mode
 # Context — Everything Passed in One Inference
 
 > [!NOTE]
-> **In a nutshell**: Context is all information passed to an LLM for a single inference.
+> **In a nutshell**: Context is all information passed to an LLM for a single inference.  
 > The model does not keep prior turns internally. It reads only the Context it is given.
 
 ## What Is Context?

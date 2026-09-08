@@ -8,7 +8,7 @@ description: "Claude Code がコンテキストウィンドウの中に配置す
 # コンテキストウィンドウとは何か — LLM が「見る」もの
 
 > [!NOTE]
-> [前のページ](chat-session.md) で Chat / Session の概念を学んだ。
+> [前のページ](chat-session.md) で Chat / Session の概念を学んだ。  
 > このページでは、Claude Code が Context Window の中に**具体的に何を配置するか**の全体像を見る。
 
 ## LLM の思考空間

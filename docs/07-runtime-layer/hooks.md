@@ -3,8 +3,8 @@
 # Hooks Lifecycle
 
 > [!IMPORTANT]
-> → Why: **Hallucination** mitigation (test execution Hooks detect mechanically)
-> → Why: **Sycophancy** mitigation (compilers and test runners don't follow along)
+> → Why: **Hallucination** mitigation (test execution Hooks detect mechanically)  
+> → Why: **Sycophancy** mitigation (compilers and test runners don't follow along)  
 > → Why: **Instruction Decay** mitigation (forced execution independent of context)
 
 ## What Are Hooks?
@@ -128,7 +128,7 @@ flowchart TB
 | `ElicitationResult` | MCP input response | Validate/correct response data |
 
 > [!NOTE]
-> For detailed event information (JSON input/output schema, matcher specification, async Hooks, etc.), refer to the official reference:
+> For detailed event information (JSON input/output schema, matcher specification, async Hooks, etc.), refer to the official reference:  
 > [Hooks reference](https://code.claude.com/docs/en/hooks) | [Hooks guide](https://code.claude.com/docs/en/hooks-guide)
 
 ## Hook Types

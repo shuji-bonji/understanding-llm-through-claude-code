@@ -8,8 +8,8 @@ description: "How session boundaries and memory persistence shape what the LLM r
 # Part 8: Session Management and Memory Persistence
 
 > [!NOTE]
-> The lifecycle of a conversation and how memory is operated.
-> `/compact` and `/clear` are representative examples in Claude Code. Keeping conversations short and persisting decisions in files are not product-specific.
+> The lifecycle of a conversation and how memory is operated.  
+> `/compact` and `/clear` are representative examples in Claude Code. Keeping conversations short and persisting decisions in files are not product-specific.  
 > The theoretical basis is in Parts 1 and 2. This Part covers operations.
 
 ## Why It Matters
@@ -28,6 +28,7 @@ LLM sessions are finite. As conversations grow longer, Context Rot progresses an
 | Document | Content |
 |:--|:--|
 | [Using /compact and /clear](compact-and-clear.md) | When to compress and when to reset |
+| [/loop and Self-Driving Sessions](loop-and-self-driving-sessions.md) | What an unattended loop amplifies, and the guards written into its specification |
 | [Why Memory Becomes a Problem](memory-problem.md) | Information loss between sessions |
 | [What to Remember](what-to-remember.md) | Selecting information to persist |
 | [When and How to Recall](when-to-recall.md) | Memory retrieval strategy |

@@ -126,5 +126,5 @@ This page covered **why** durable authority is hard to hand over (Why). For **ho
 
 ---
 
-> **Next**: [Judgment Drift](./judgment-drift.md)
+> **Next**: [Judgment Drift](./judgment-drift.md)  
 > **Previous**: [Harness and LLM Constraints](./harness-and-llm-constraints.md)

@@ -3,8 +3,8 @@
 # Chat / Session — Context が蓄積する「時間の入れ物」
 
 > [!NOTE]
-> **一言で言うと**: Chat（会話 / セッション）は、Context が時間とともに蓄積・膨張する「入れ物」である。
-> Token・Context・Context Window が「空間」の概念なら、Chat は「時間」の概念である。
+> **一言で言うと**: Chat（会話 / セッション）は、Context が時間とともに蓄積・膨張する「入れ物」である。  
+> Token・Context・Context Window が「空間」の概念なら、Chat は「時間」の概念である。  
 > この入れ物を理解することで、「なぜ Context が膨らむのか」「なぜ Instruction Decay が起きるのか」が物理的に説明できる。
 
 ## Chat とは何か

@@ -3,7 +3,7 @@
 # How Hierarchical Merging Works
 
 > [!IMPORTANT]
-> → Why: **Context Rot** mitigation (scope-based separation prevents accumulation of unnecessary information)
+> → Why: **Context Rot** mitigation (scope-based separation prevents accumulation of unnecessary information)  
 > → Why: **Priority Saturation** mitigation (merge only necessary layers to minimize resident tokens)
 
 ## CLAUDE.md Hierarchy

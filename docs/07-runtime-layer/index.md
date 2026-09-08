@@ -1,5 +1,5 @@
 ---
-title: "Part 7: Runtime Layer"
+title: 'Part 7: Runtime Layer'
 description: "The runtime configuration layer (Settings & Hooks) that shapes tool behavior without ever appearing in the LLM's context."
 ---
 
@@ -8,8 +8,8 @@ description: "The runtime configuration layer (Settings & Hooks) that shapes too
 # Part 7: The Layer LLMs Don't See — Settings & Hooks
 
 > [!NOTE]
-> Control outside the context. **Consumes zero context budget**.
-> Place verification here that does not rely on LLM judgment.
+> Control outside the context. **Consumes zero context budget**.  
+> Place verification here that does not rely on LLM judgment.  
 > settings.json and Hooks are representative examples in Claude Code. Putting mechanical checks outside the model is not product-specific.
 
 ## Why It Exists
@@ -21,6 +21,7 @@ If you instruct an LLM to "run eslint every time," it consumes context window ca
 ## → Why: Which Structural Problems Does It Address?
 
 > [!IMPORTANT]
+>
 > - **Hallucination**: Test execution Hooks mechanically detect hallucinated outputs
 > - **Sycophancy**: Compilers and test runners don't follow along. Objective verification
 > - **Instruction Decay**: Not dependent on context, ensuring reliable execution even in long conversations
@@ -28,11 +29,11 @@ If you instruct an LLM to "run eslint every time," it consumes context window ca
 
 ## Documentation for This Part
 
-| Document | Content |
-|:--|:--|
+| Document                                      | Content                                                          |
+| :-------------------------------------------- | :--------------------------------------------------------------- |
 | [The Role of settings.json](settings-json.md) | Runtime configuration. Permission control, environment variables |
-| [Hooks Lifecycle](hooks.md) | Event list, Hook types, Exit Codes |
-| [Why Not Show LLMs](why-not-in-context.md) | Design rationale for placing outside context |
+| [Hooks Lifecycle](hooks.md)                   | Event list, Hook types, Exit Codes                               |
+| [Why Not Show LLMs](why-not-in-context.md)    | Design rationale for placing outside context                     |
 
 ---
 

@@ -98,6 +98,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
 					items: [
 						{ text: '概要', link: '/ja/08-session-management/' },
 						{ text: '/compact vs /clear', link: '/ja/08-session-management/compact-and-clear' },
+						{ text: '/loop と自走するセッション', link: '/ja/08-session-management/loop-and-self-driving-sessions' },
 						{ text: '記憶が問題になる理由', link: '/ja/08-session-management/memory-problem' },
 						{ text: '何を記憶すべきか', link: '/ja/08-session-management/what-to-remember' },
 						{ text: 'いつ・どう思い出すか', link: '/ja/08-session-management/when-to-recall' },

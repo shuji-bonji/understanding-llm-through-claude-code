@@ -3,7 +3,7 @@
 🌐 [日本語](../ja/appendix/feature-index.md)
 
 > [!NOTE]
-> One-page lookup of each Claude Code feature: when it loads, which problem it addresses, and which chapter to read.
+> One-page lookup of each Claude Code feature: when it loads, which problem it addresses, and which chapter to read.  
 > Feature names are representative examples. Principles are extracted in [Part 11](../11-cross-llm-principles/index.md).
 
 ## Feature × Loading × Chapter
@@ -78,5 +78,5 @@ flowchart LR
 
 ---
 
-> **Previous**: [Lifecycle × Config Map](/appendix/lifecycle-config-map)
+> **Previous**: [Lifecycle × Config Map](/appendix/lifecycle-config-map)  
 > **Next**: [Configuration Reference](/appendix/claude-code-config-reference)

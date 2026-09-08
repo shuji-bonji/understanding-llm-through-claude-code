@@ -8,7 +8,7 @@ description: 'LSP の Diagnostics — 生成中に配信される型エラーと
 # ライブ型エラー
 
 > [!IMPORTANT]
-> → Why: **Hallucination** 緩和（エラーが生成中に取得される、生成後ではない）
+> → Why: **Hallucination** 緩和（エラーが生成中に取得される、生成後ではない）  
 > → Why: **Instruction Decay** 緩和（検証がランタイムレイヤーで起きる — LLM が検証を覚えていることに依存しない）
 
 ## フィードバックループの問題
