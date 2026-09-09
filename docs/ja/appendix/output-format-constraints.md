@@ -107,4 +107,4 @@ Tam らは、JSON モードのように厳格な形式を強制した場合と�
 ---
 
 > **次へ**: [ライフサイクル × 設定マップ](./lifecycle-config-map.md)  
-> **前へ**: [判定ドリフト](./judgment-drift.md)
+> **前へ**: [解説層に残る故障](./narrative-layer-failures.md)

@@ -169,6 +169,7 @@ Judgment drift is not a ninth structural problem. It is a compound symptom that 
 
 ## Related Pages
 
+- [Failures That Remain in the Narration Layer](./narrative-layer-failures.md) — the four failures left in the narration layer after judgment moves to code
 - [Authority and LLM Constraints](./authority-and-llm-constraints.md) — delegating discretion over *actions* (this page: delegating the power to *judge*)
 - [Harness and LLM Constraints](./harness-and-llm-constraints.md) — why verification must come from a mechanism that does not defer
 - [Sycophancy](../01-llm-structural-problems/sycophancy.md) — the limits of self-review and Cross-Model QA
@@ -193,5 +194,5 @@ This page covered **why** LLM verdicts do not reproduce. For **where to put the 
 
 ---
 
-> **Next**: [Output Format Constraints and Accuracy](./output-format-constraints.md)  
+> **Next**: [Failures That Remain in the Narration Layer](./narrative-layer-failures.md)  
 > **Previous**: [Authority and LLM Constraints](./authority-and-llm-constraints.md)

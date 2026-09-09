@@ -169,6 +169,7 @@ graph LR
 
 ## 関連ページ
 
+- [解説層に残る故障](./narrative-layer-failures.md) — 判定をコードへ移したあと、解説層に残る 4 つの故障
 - [Authority と LLM の構造的制約](./authority-and-llm-constraints.md) — 「行為の裁量」を渡せるか（本ページは「判定の権限」を渡せるか）
 - [Harness と LLM の構造的制約](./harness-and-llm-constraints.md) — 「LLM 自身に検証させない」外部機構の必要性
 - [Sycophancy](../01-llm-structural-problems/sycophancy.md) — 自己レビューの限界と Cross-Model QA
@@ -193,5 +194,5 @@ graph LR
 
 ---
 
-> **次へ**: [出力フォーマット制約と精度](./output-format-constraints.md)  
+> **次へ**: [解説層に残る故障](./narrative-layer-failures.md)  
 > **前へ**: [Authority と LLM の構造的制約](./authority-and-llm-constraints.md)

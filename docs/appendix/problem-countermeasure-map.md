@@ -419,6 +419,9 @@ graph TD
 | **Solid →** | Problem causes or amplifies another problem |
 | **Dotted -.->** | Countermeasure intervenes at this point |
 
+> [!NOTE]
+> The countermeasures listed here assume the LLM is doing the judging. For what remains once judgment itself moves into code, see [Failures That Remain in the Narration Layer](./narrative-layer-failures.md).
+
 ---
 
 > **Next**: [Claude Code Configuration File Reference](claude-code-config-reference.md)
